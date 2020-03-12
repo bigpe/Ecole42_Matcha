@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: rgba(255, 110, 0, 0.09);
+    margin: 0;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    font-family: 'Roboto Slab', serif;
+}
+
+
+.main_block{
+    display: flex;
+    flex-direction: row;
+}
+
+.header{
+    width: 100%;
+    height: 75px;
+    background-color: rgb(255, 110, 0);
+}
+.header a {
+    background: linear-gradient(to bottom, var(--mainColor) 0%, var(--mainColor) 100%);
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 3px 3px;
+    color: #000;
+    text-decoration: none;
+}
+
+.header a:hover {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .6s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23ffb400' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+    background-position: 0 100%;
+    background-size: auto 6px;
+    background-repeat: repeat-x;
+    text-decoration: none;
+}
+
+
+.header ul li {
+    list-style: none;
+    float: right;
+    text-align: center;
+    margin-right: 10px;
+    margin-left: 5px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.main{
+    display: flex;
+    position: relative;
+    height: 750px;
+    width: 65%;
+
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    justify-content: center;
+    flex: 1 0 auto;
+    align-content: center;
+}
+
+.side{
+    display: flex;
+    height: 750px;
+    width: 20%;
+    background-color: antiquewhite;
+    position: relative;
+    flex: 1 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.footer{
+    background-color: rgba(255, 110, 0, 0.54);
+    height: 75px;
+    width: 100%;
+    margin-top: auto;
+    flex: 0 0 auto;
+}
+
+.form{
+    margin: auto;
+    font-size: 25px;
+
+}
+.form table{
+     margin: auto;
+     text-align: center;
+    padding: unset;
+ }
+.form input{
+    text-align: center;
+    font-size: 16px;
+    padding: 10px;
+    display: block;
+    width: 300px;
+    border: none;
+    outline: none;
+}
+
+.form ul li {
+    align-content: center;
+    list-style: none;
+
+    text-align: center;
+    margin-right: 10px;
+    margin-left: 5px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+.form #bottom{
+    height: 25px;
+    width: 75px;
+    margin-top: 5px;
+    display: inline-block;
+    font-family: 'Roboto Slab', serif;
+    font-size: 13px;
+    color: rgb(0, 0, 0);
+    user-select: none;
+    padding: 1px 1.2em;
+    outline: none;
+    border-radius: 5px;
+    background: rgba(255, 119, 0, 0.18) linear-gradient(rgba(255, 110, 0, 0.47), rgb(255, 194, 110));
+}
+
+.form a {
+    font-size: 15px;
+    align-content: center;
+    text-align: center;
+}
+
+.form a {
+    background: linear-gradient(to bottom, var(--mainColor) 0%, var(--mainColor) 100%);
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 3px 3px;
+    color: #000;
+    text-decoration: none;
+}
+
+.form a:hover {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .5s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23ff9800' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+    background-position: 0 100%;
+    background-size: auto 6px;
+    background-repeat: repeat-x;
+    text-decoration: none;
+}
+
+#canvas{
+    display: none;
+}
+
+#photo{
+    display: none;
+}
+
+#userpic_profile
+{
+    height: 15%;
+}
