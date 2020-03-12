@@ -1,7 +1,8 @@
 <?php
 return array(
-    'host' => 'mysql:host=192.168.99.100;port=3307,dbname=cam_users',
-    'dbname' => 'cam_users',
+    'host' => '37.204.240.149',
+    'port' => '3307',
+    'dbname' => 'Matcha',
     'username' => 'root',
     'password' => 'root'
 ); ?>
