@@ -6,8 +6,9 @@ class Controller_Index extends Controller
         $this->view = new View();
     }
 
-    function action_index(){
-        $this->view->generate('index_view.php', 'template_view.php');
+    function action_index()
+    {
+        $this->view = $this->model->check_session($this->model);
     }
 }
 ?>

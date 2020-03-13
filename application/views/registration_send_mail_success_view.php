@@ -1,0 +1,1 @@
+<h2>Activation link send, check your mail</h2>
