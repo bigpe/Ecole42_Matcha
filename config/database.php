@@ -1,5 +1,4 @@
 <?php
-    $db = new database();
     class database
     {
         private $db;
@@ -8,7 +7,7 @@
         {
             $ini = include('config.php');
 
-            $DB_DSN = "mysql:dbname=" + $ini['dbname'] + ";host=" + $ini['host'] + ";port=" + $ini['port'];
+            $DB_DSN = "mysql:dbname=" . $ini['dbname'] . ";host=" . $ini['host'] . ";port=" . $ini['port'];
             $DB_USER = $ini['username'];
             $DB_PASSWORD = $ini['password'];
             $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
