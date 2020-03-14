@@ -8,7 +8,11 @@ class Controller_Auth extends Controller
     }
     function action_index()
     {
-        $this->view = $this->model->check_session($this->model);
+        if($this->model->check_session($this->model)) #Success
+            header("Location: /");
+        else
+            $this->view->generate("auth_view.php", "template_view.php",
+                array("error" => $this->model->error_handler($this->model->error_id)));
     }
     function action_sign_in()
     {
@@ -17,22 +21,27 @@ class Controller_Auth extends Controller
             $password = md5($_POST['password']);
             $error_code = $this->model->sign_in($login, $password);
             if (!$error_code) #Success
-                $this->view = $this->model->check_session($this->model);
+                header("Location: /Profile");
             else
-                $this->view = $this->model->check_session($this->model);
+                $this->view->generate("auth_view.php", "template_view.php",
+                    array("error" => $this->model->error_handler($this->model->error_id)));
         }
         else {
             $this->model->error_id = 11;
-            $this->view = $this->model->check_session($this->model);
+            if($this->model->check_session($this->model)) #Success
+                $this->view->generate("main_page_view.php", "template_view.php",
+                    array("error" => $this->model->error_handler($this->model->error_id)));
+            else
+                $this->view->generate("auth_view.php", "template_view.php",
+                    array("error" => $this->model->error_handler($this->model->error_id)));
         }
     }
     function action_sign_out()
     {
         $error_code = $this->model->sign_out();
-        if (!$error_code) #Success
-            $this->view = $this->model->check_session($this->model);
-        else
-            $this->view = $this->model->check_session($this->model);
+        if (!$error_code) { #Success
+            header("Location: /Auth");
+        }
     }
 }
 ?>

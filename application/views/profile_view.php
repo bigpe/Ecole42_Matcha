@@ -1,9 +1,9 @@
+<link rel="stylesheet" type="text/css" href="/css/profile.css">
 <div class="profile">
     <div class="user_pic" id="d_photo">
         <h3>Add your photo</h3>
-        <input id="user_pic" name="user_photo" type="file">
-        <input id="user_pic_upload" hidden>
-        <p id="upload_button">Upload</p>
+        <button id="upload_button">Upload</button>
+        <div id="images_block"></div>
     </div>
     <div class="f_name" id="dfname">
         <h3>Change first name</h3>
@@ -58,4 +58,4 @@
     </div>
 </div>
 
-<script src="js/change_info.js"></script>
+<script src="/js/change_info.js"></script>

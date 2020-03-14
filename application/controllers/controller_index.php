@@ -8,7 +8,10 @@ class Controller_Index extends Controller
 
     function action_index()
     {
-        $this->view = $this->model->check_session($this->model);
+        if($this->model->check_session($this->model)) #Success
+            header("Location: /Profile");
+        else
+            header("Location: /Auth");
     }
 }
 ?>

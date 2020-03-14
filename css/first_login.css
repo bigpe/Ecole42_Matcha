@@ -1,0 +1,16 @@
+.tags_labels, .sex_label, .sex_preference_label{
+    display: inline-table;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: bold;
+    width: 50px;
+    padding: 20px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+.tags, .sex, .sex_preference, #user_photo_input{
+    display: none;
+}
+.tags:checked + .tags_labels, .sex:checked + .sex_label, .sex_preference:checked + .sex_preference_label{
+    background: antiquewhite;
+}

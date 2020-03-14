@@ -10,7 +10,7 @@ class Controller_Activate extends Controller
         $this->model->error_id = 2; #Error_code 2 - Token is invalid
         $error_code = $this->model->error_id;
         $this->view->generate("auth_view.php", "template_view.php",
-            $this->model->error_handler($error_code));
+            array("error" => $this->model->error_handler($error_code)));
     }
 
     function action_verify_sign_up(){
@@ -20,14 +20,16 @@ class Controller_Activate extends Controller
             $email = $this->model->get_email_from_token($token);
             $error_id = $this->model->verify_token($token, $token_type);
             if (!($error_id)) #Success
-                $this->view->generate("registration_sign_up.php", "template_view.php", array("email" => $email));
+                $this->view->generate("registration_sign_up.php", "template_view.php",
+                    array("email" => $email, "error" => $this->model->error_handler($error_id)));
             else
-                $this->view->generate("registration_view.php", "template_view.php", $this->model->error_handler($error_id));
+                $this->view->generate("registration_view.php", "template_view.php",
+                    array("error" => $this->model->error_handler($error_id)));
         }
         else{
             $this->model->error_id = 11;
             $this->view->generate("registration_view.php", "template_view.php",
-                $this->model->error_handler($this->model->error_id));
+                array("error" => $this->model->error_handler($this->model->error_id)));
         }
     }
     function action_verify_restore_password(){
@@ -37,15 +39,15 @@ class Controller_Activate extends Controller
             $error_id = $this->model->verify_token($token, $token_type);
             if (!($error_id)) #Success
                 $this->view->generate("registration_restore_password_view.php", "template_view.php",
-                    $this->model->error_handler($error_id));
+                    array("error" => $this->model->error_handler($error_id)));
             else
                 $this->view->generate("registration_view.php", "template_view.php",
-                    $this->model->error_handler($error_id));
+                    array("error" => $this->model->error_handler($error_id)));
         }
         else{
             $this->model->error_id = 11;
             $this->view->generate("registration_view.php", "template_view.php",
-                $this->model->error_handler($this->model->error_id));
+                array("error" => $this->model->error_handler($this->model->error_id)));
         }
     }
 }

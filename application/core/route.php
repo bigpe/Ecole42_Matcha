@@ -4,6 +4,7 @@ class Route
 {
     static function start()
     {
+        session_start();
         $controller_name = "index";
         $action_name = 'index';
         $routes = explode('/', $_SERVER['REQUEST_URI']);

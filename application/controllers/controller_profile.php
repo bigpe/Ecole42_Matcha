@@ -7,9 +7,11 @@ class Controller_Profile extends Controller
     }
 
     function action_index(){
-        session_start();
-        $_SESSION['login'] = "ukaron";
-        $this->view->generate('profile_view.php', 'template_view.php');
+        if($this->model->check_session($this->model)) #Success
+            $this->view->generate("profile_view.php", "template_view.php",
+                $this->model->error_handler($this->model->error_id));
+        else
+            header("Location: /Auth");
     }
 
     function action_get_data()

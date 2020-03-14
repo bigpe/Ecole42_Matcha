@@ -4,5 +4,5 @@
     <input type="password" placeholder="Password" name="password">
     <input type="submit" value="Sign in">
 </form>
-<a href="/registration/index">Sign Up</a>
+<a href="/registration/">Sign Up</a>
 <a href="/registration/pre_restore_password">Restore password</a>

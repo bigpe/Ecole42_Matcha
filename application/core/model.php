@@ -7,7 +7,7 @@ class Model
 
     public function __construct()
     {
-        session_start();
+
     }
 
     public function get_data()
@@ -21,8 +21,6 @@ class Model
     }
     function error_handler($error_id){
         $db = new database();
-        if($error_id == 0)
-            return("OK");
         $error_name = $db->db_read("SELECT error_name FROM ERROR_HANDLER WHERE error_id='$error_id'");
         return($error_name);
     }
@@ -43,13 +41,8 @@ class Model
         $db->db_change("DELETE FROM TOKENS WHERE token='$token'");
     }
     function check_session($model){
-        $this->view = new View();
-        $this->model = $model;
         if(isset($_SESSION['login'])) #Success
-            return($this->view->generate("main_page_view.php", "template_view.php",
-                $this->model->error_handler($this->error_id)));
-        else
-            return($this->view->generate("auth_view.php", "template_view.php",
-                $this->model->error_handler($this->error_id)));
+            return (1);
+        return (0);
     }
 }
