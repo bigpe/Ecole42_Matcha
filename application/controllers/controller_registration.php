@@ -18,7 +18,7 @@ class Controller_Registration extends Controller{
             if ($this->check_post_arguments_exists(array("email"))) {
                 $email = $_POST['email'];
                 if (!($error_id = $this->model->pre_sign_up($email))) #Success
-                    $this->view->generate("registration_send_mail_success_view.php", "template_view.php",
+                    $this->view->generate("send_mail_success_view.php", "template_view.php",
                         array("error" => $this->model->error_handler($error_id)));
                 else
                     $this->view->generate("registration_view.php", "template_view.php",
@@ -90,7 +90,7 @@ class Controller_Registration extends Controller{
                 $email = $_POST['email'];
                 $error_id = $this->model->restore_password($email);
                 if (!$error_id) #Success
-                    $this->view->generate("registration_send_mail_success_view.php", "template_view.php",
+                    $this->view->generate("send_mail_success_view.php", "template_view.php",
                         array("error" => $this->model->error_handler($error_id)));
                 else
                     $this->view->generate("registration_pre_restore_password_view.php", "template_view.php",
