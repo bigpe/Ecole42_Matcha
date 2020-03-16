@@ -8,18 +8,20 @@ require $_SERVER['DOCUMENT_ROOT'] . '/mail/SMTP.php';
 
 function send_mail($email, $msg)
 {
+    $ini = include('config.php');
+
     $mail = new PHPMailer;
     $mail->isSMTP();
     $mail->SMTPDebug = 0;
-    $mail->Host = "smtp.yandex.ru";
-    $mail->Port = 587;
+    $mail->Host = $ini['mail']['Host'];
+    $mail->Port = $ini['mail']['Port'];
     $mail->SMTPSecure = 'tls';
     $mail->SMTPAuth = true;
-    $mail->Username = 'bigpewm@yandex.ru';
-    $mail->Password = 'ship0123';
-    $mail->setFrom('bigpewm@yandex.ru', 'Camagru');
+    $mail->Username = $ini['mail']['Username'];
+    $mail->Password = $ini['mail']['Password'];
+    $mail->setFrom($ini['mail']['Address'], $ini['mail']['Name']);
     $mail->addAddress("$email");
-    $mail->Subject = 'Camagru System Message';
+    $mail->Subject = $ini['mail']['Subject'];
     $mail->msgHTML($msg);
     $mail->AltBody = 'HTML messaging not supported';
     $mail->SMTPOptions = array(
