@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/css/first_login.css">
-<h2>Hello, Welcome to Matcha!</h2>
+<h2>Hello <?php print($data['login']) ?>, Welcome to Matcha!</h2>
 <p>This site help you to find your crush!</p>
 <p>At first let we know a little more about yourself</p>
 <p>Fulfil your profile to access to "Find mode"</p>

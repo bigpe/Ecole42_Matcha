@@ -10,7 +10,7 @@ class controller_first_login extends Controller{
             header("Location: /");
         else
             $this->view->generate("first_login_view.php", "template_view.php",
-                array("tags" => $this->action_get_tags()));
+                array("tags" => $this->action_get_tags(), "login" => $_SESSION['login']));
     }
     function action_end_tutorial(){
         if($this->check_post_arguments_exists(array("sex", "sex_preference", "info",

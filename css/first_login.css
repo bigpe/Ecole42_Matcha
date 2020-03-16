@@ -71,6 +71,5 @@ textarea{
     margin: 10px;
     display: flex;
     align-items: center;
-    height: 70px;
     border: 2px dashed black;
 }
