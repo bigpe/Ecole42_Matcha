@@ -8,7 +8,7 @@ class Controller_Auth extends Controller
     }
     function action_index()
     {
-        if($this->model->check_session($this->model)) #Success
+        if($this->model->check_session()) #Success
             header("Location: /");
         else
             $this->view->generate("auth_view.php", "template_view.php",
@@ -21,14 +21,14 @@ class Controller_Auth extends Controller
             $password = md5($_POST['password']);
             $error_code = $this->model->sign_in($login, $password);
             if (!$error_code) #Success
-                header("Location: /Profile");
+                header("Location: /");
             else
                 $this->view->generate("auth_view.php", "template_view.php",
                     array("error" => $this->model->error_handler($this->model->error_id)));
         }
         else {
             $this->model->error_id = 11;
-            if($this->model->check_session($this->model)) #Success
+            if($this->model->check_session()) #Success
                 $this->view->generate("main_page_view.php", "template_view.php",
                     array("error" => $this->model->error_handler($this->model->error_id)));
             else
@@ -40,7 +40,7 @@ class Controller_Auth extends Controller
     {
         $error_code = $this->model->sign_out();
         if (!$error_code) { #Success
-            header("Location: /Auth");
+            header("Location: /");
         }
     }
 }

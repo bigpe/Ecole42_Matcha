@@ -17,11 +17,9 @@ class Controller_Activate extends Controller
         if ($this->check_get_arguments_exists(array("token"))) {
             $token = $_GET['token'];
             $token_type = 1; #Type 1 - Pre-registration token
-            $email = $this->model->get_email_from_token($token);
             $error_id = $this->model->verify_token($token, $token_type);
             if (!($error_id)) #Success
-                $this->view->generate("registration_sign_up.php", "template_view.php",
-                    array("email" => $email, "error" => $this->model->error_handler($error_id)));
+                header("Location: /registration/complete_sign_up/?token=$token");
             else
                 $this->view->generate("registration_view.php", "template_view.php",
                     array("error" => $this->model->error_handler($error_id)));

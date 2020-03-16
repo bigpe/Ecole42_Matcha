@@ -28,6 +28,9 @@ class Model_Registration extends Model{
         }
         return($this->error_id);
     }
+    function complete_sign_up(){
+
+    }
     function sign_up($token, $email, $login, $password, $password_confirm, $password_len){
         if(!$this->check_email_fake($email, $token))
             return($this->error_id = 7); #Error_code 7 - Email not validating
@@ -87,6 +90,12 @@ class Model_Registration extends Model{
             $db->db_change("UPDATE USERS SET password='$password' WHERE user_id='$user_id'");
         }
         return ($this->error_id);
+    }
+    function create_first_login_tutorial($login){
+        $db = new database();
+        $tutorial_id = 1;
+        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $db->db_change("INSERT INTO USER_TUTORIAL (tutorial_id, user_id) VALUES ('$tutorial_id', '$user_id')");
     }
     function check_email($email){
         if (!preg_match("/[0-9a-z]+@[a-z]+\.[a-z]/", $email))

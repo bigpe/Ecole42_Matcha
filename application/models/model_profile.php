@@ -61,7 +61,7 @@ class Model_Profile extends Model{
             $value = 2;
         else
             $value = 0;
-        $db->db_change("UPDATE Matcha.USERS SET preference = '$value' WHERE login = '$login'");
+        $db->db_change("UPDATE Matcha.USERS SET sex_preference = '$value' WHERE login = '$login'");
         echo "nice";
     }
 

@@ -7,11 +7,12 @@ class Controller_Profile extends Controller
     }
 
     function action_index(){
-        if($this->model->check_session($this->model)) #Success
-            $this->view->generate("profile_view.php", "template_view.php",
-                $this->model->error_handler($this->model->error_id));
+        if($this->model->check_session()) #Success
+            if(!$this->model->check_tutorial($_SESSION['login']))
+                $this->view->generate("profile_view.php", "template_view.php",
+                    $this->model->error_handler($this->model->error_id));
         else
-            header("Location: /Auth");
+            header("Location: /");
     }
 
     function action_get_data()

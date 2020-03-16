@@ -19,7 +19,7 @@
         }
         public function db_read_multiple($query)
         {
-            $data = $this->db->query($query)->fetchAll();
+            $data = $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
             return($data);
         }
         public function db_change($query)
