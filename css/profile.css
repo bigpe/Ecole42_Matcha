@@ -1,5 +1,5 @@
 #profile_block{
-    width: 90%;
+    width: 98%;
     max-width: 500px;
     border-radius: 15px;
     box-shadow: 1px 1px 20px gray;
@@ -40,25 +40,14 @@
     font-size: 2em;
     color: black;
 }
-#sex_preference .tooltiptext{
-    display: none;
-    position: absolute;
-    margin-top: -36px;
-    font-size: .5em;
-    padding: 5px;
-    background: white;
-    color: black;
-    border-radius: 5px 5px 0 0;
-    margin-left: -42px;
-}
-#sex_preference:hover .tooltiptext{
-    display: unset;
-}
 #fame_rating{
     font-size: 2em;
-    color: crimson;
+    color: gray;
 }
-#fame_rating .tooltiptext{
+#fame_rating:hover .tooltiptext, #sex_preference:hover .tooltiptext{
+    display: unset;
+}
+#fame_rating .tooltiptext, #sex_preference .tooltiptext{
     display: none;
     position: absolute;
     margin-top: -36px;
@@ -67,15 +56,8 @@
     background: white;
     color: black;
     border-radius: 5px 5px 0 0;
-    margin-left: -37px;
-}
-#fame_rating:hover .tooltiptext{
-    display: unset;
-}
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
+    margin-left: -55px;
+    width: 60px;
 }
 #additional_photo{
     border: 1px solid black;
