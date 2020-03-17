@@ -28,7 +28,7 @@
 }
 .tags:checked + .tags_labels, .sex:checked + .sex_label, .sex_preference:checked + .sex_preference_label{
     background: antiquewhite;
-    transition: background .5s cubic-bezier(.68,-0.55,.27,1.55);
+    transition: background .5s cubic-bezier(.18,.89,.32,1.28);
 }
 
 .user_main_photo:checked + .user_photo{

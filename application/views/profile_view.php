@@ -1,61 +1,45 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
-<div class="profile">
-    <div class="user_pic" id="d_photo">
-        <h3>Add your photo</h3>
-        <button id="upload_button">Upload</button>
-        <div id="images_block"></div>
+<h3>It's your profile, another people see the same</h3>
+<div id="profile_block">
+    <div id="photo_block">
+        <div id="photo" style="background:
+        url('<?php $image = $data['user_data']['main_photo_src'];
+        $image_data = base64_encode(file_get_contents($image));
+        print("data: ".mime_content_type($image).";base64,$image_data"); ?>') no-repeat center;
+         background-size: cover;"></div>
     </div>
-    <div class="f_name" id="dfname">
-        <h3>Change first name</h3>
-        <form method="POST" action="">
-            <input type="text" id="f_name" placeholder="Input your first name">
-            <input type="submit" value="Change" onclick="changeFname()">
-        </form>
+    <div id="photo_button">
+        <div id="left_arrow"><i class="fas fa-arrow-left"></i></div>
+        <div id="right_arrow"><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="l_name" id="dlname">
-        <h3>Change last name</h3>
-        <form method="POST" action="">
-            <input type="text" id="l_name" placeholder="Input your last name">
-            <input type="submit" value="Change" onclick="changeLname()">
-        </form>
+    <div id="main_block">
+        <div id="connect_status"><i class="fas fa-circle"></i></div>
+        <div id="name"><?php print($_SESSION['login']); ?></div>
+        <div id="sex_preference">
+            <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
+            <span class="tooltiptext"><?php print($data['user_data']['user_sex_preference']['sex_preference_name']);?></span>
+        </div>
+        <div id="fame_rating"><i class="fas fa-tachometer-alt"></i><span class="tooltiptext">Low</span></div>
     </div>
-    <div class="sex" id="dsex">
-        <h3>Change sex</h3>
-        <form action=""  method="post">
-            <select class="sex" name="sex" id="sex">
-            <option value="none" hidden="">Сhoose gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            </select>
-            <p><input type="submit"  value="Change" onclick="changSex()"></p>
-        </form>
+    <div id="info_block">
+        <h3>About me</h3>
+        <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>
     </div>
-    <div class="sex_pref" id="dsex_pref">
-        <h3>Change sexual preferences</h3>
-        <form action=""  method="post">
-            <select class="sex_pref" id="sex_pref">
-            <option value="none" hidden="">Сhoose sexual preferences</option>
-            <option value="Heterosexual">Heterosexual</option>
-            <option value="Homosexual">Homosexual</option>
-            <option value="Bisexual">Bisexual</option>
-            </select>
-            <input type="submit" value="Change" onclick="changeSexPref()">
-        </form>
-    </div>
-    <div class="info" id="dinfo">
-        <h3>Change info</h3>
-        <form method="POST" action="">
-            <input type="text" id="info" placeholder="Input your info">
-            <input type="submit" value="Change" onclick="changeInfo()">
-        </form>
-    </div>
-    <div class="tags" id="dtags">
-        <h3>Change tags</h3>
-        <form method="POST" action="">
-            <input type="text" id="tags" placeholder="Input your tags">
-            <input type="submit" value="Change" onclick="changeTags()">
-        </form>
+    <div id="tags_block">
+        <?php
+        if(isset($data['user_data']['user_tags'])) {
+            $i = 1;
+            foreach ($data['user_data']['user_tags'] as $tag) {
+                $tag_name = $tag['tag_name'];
+                $tag_icon = $tag['tag_icon'];
+                $tag_color = $tag['tag_color'];
+                print("<input type='checkbox' class='tags' id='$tag_name' value='$i' checked>");
+                print("<label class='tags_labels' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
+                $i++;
+            }
+        }
+        else
+            print("Tags Error!");
+        ?>
     </div>
 </div>
-
-<script src="/js/change_info.js"></script>

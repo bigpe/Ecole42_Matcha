@@ -1,25 +1,158 @@
-img{
-    width: 100px;
+#profile_block{
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 1px 1px 20px gray;
+    margin: 50px auto 50px auto;
 }
-img:hover{
-    transform: scale(1.5);
+#photo_block{
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+    height: 300px;
+    margin: auto;
 }
-#images_block{
+#photo{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+}
+#main_block{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    height: 20px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 200px;
-    max-height: 200px;
+    box-shadow: 0 1px 5px gray;
 }
-#d_photo, #dfname, #dlname, #dsex, #dsex_pref, #dinfo, #dtags{
+#connect_status{
+    color: #5fe15f;
+    padding: 10px;
+    font-size: .7em;
+}
+#name{
+    font-size: 2em;
+    color: black;
+}
+#sex_preference{
+    padding: 10px;
+    font-size: 2em;
+    color: black;
+}
+#sex_preference .tooltiptext{
+    display: none;
+    position: absolute;
+    margin-top: -36px;
+    font-size: .5em;
+    padding: 5px;
+    background: white;
+    color: black;
+    border-radius: 5px 5px 0 0;
+    margin-left: -42px;
+}
+#sex_preference:hover .tooltiptext{
+    display: unset;
+}
+#fame_rating{
+    font-size: 2em;
+    color: crimson;
+}
+#fame_rating .tooltiptext{
+    display: none;
+    position: absolute;
+    margin-top: -36px;
+    font-size: .5em;
+    padding: 5px;
+    background: white;
+    color: black;
+    border-radius: 5px 5px 0 0;
+    margin-left: -37px;
+}
+#fame_rating:hover .tooltiptext{
+    display: unset;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+#additional_photo{
+    border: 1px solid black;
+    height: 20%;
+}
+#info_block{
+    width: 100%;
+}
+#info_block h3{
+    height: 5px;
+}
+#info{
+    outline: 0 solid transparent;
+    width: 90%;
+    padding: 10px;
+    margin: auto;
+    box-shadow: 1px 1px 5px gray;
+    border-radius: 15px;
+}
+#photo_button{
+    position: relative;
+    display: flex;
+    margin-top: -150px;
+    font-size: 3em;
+    color: gray;
+    margin-bottom: 150px;
+    opacity: .6;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black;
+}
+#left_arrow:hover, #right_arrow:hover{
+    color: white;
+}
+#left_arrow{
+    position: absolute;
+    left: 0;
+    margin-left: 2%;
+}
+#right_arrow{
+    position: absolute;
+    right: 0;
+    margin-right: 2%;
+}
+#left_arrow:hover{
+    opacity: 1;
+}
+#tags_block{
+    min-height: 50px;
+    padding: 15px;
+}
+.tags_labels, .sex_label, .sex_preference_label{
+    display: inline-table;
+    vertical-align: middle;
     text-align: center;
-    height: 150px;
-    max-height: 150px;
+    font-weight: bold;
+    padding: 20px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 2em;
 }
-#d_photo{
-    height: 300px;
-    max-height: 300px;
+.tags_labels{
+    width: 50px;
+    font-size: 1em;
 }
+.tags, .sex_preference, #user_photo_input{
+    width: 1px;
+    margin-right: -5px;
+    opacity: 0;
+}
+.tags:checked + .tags_labels, .sex_preference:checked + .sex_preference_label{
+    background: antiquewhite;
+    transition: background .5s cubic-bezier(.18,.89,.32,1.28);
+}
+.flood{
+    height: 500px;
+    border: 1px solid black;
+}
+
 .loading{
     font-size: 2em;
     position: absolute;
