@@ -1,9 +1,18 @@
+<<<<<<< HEAD
+<div class="profile">
+    <div class="user_pic" id="d_photo">
+        <h3>Add your photo</h3>
+        <input id="user_pic" name="user_photo" type="file">
+        <input id="user_pic_upload" hidden>
+        <p id="upload_button">Upload</p>
+=======
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
 <div class="profile">
     <div class="user_pic" id="d_photo">
         <h3>Add your photo</h3>
         <button id="upload_button">Upload</button>
         <div id="images_block"></div>
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21
     </div>
     <div class="f_name" id="dfname">
         <h3>Change first name</h3>
@@ -58,4 +67,8 @@
     </div>
 </div>
 
+<<<<<<< HEAD
+<script src="js/change_info.js"></script>
+=======
 <script src="/js/change_info.js"></script>
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21

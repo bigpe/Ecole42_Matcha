@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+window.onload = function()
+{
+    let dPhoto = document.getElementById('d_photo');
+    let dfname =  document.getElementById('dfname');
+    let dlname = document.getElementById('dlname');
+    let dsex=  document.getElementById('dsex');
+    let dsex_pref =  document.getElementById('dsex_pref');
+    let dinfo =  document.getElementById('dinfo');
+    let dtags =  document.getElementById('dtags');
+=======
 let userPic = document.createElement('input');
 let dPhoto = document.getElementById('d_photo');
 let dfname = document.getElementById('dfname');
@@ -23,12 +34,44 @@ function fil_profile(){
     loading(dlname);
     loading(dsex);
     loading(dsex_pref);
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21
     $.ajax({
         url: '/profile/get_data',
         method: 'POST',
         success: function (data) {
             let info = JSON.parse(data);
             console.log(info);
+<<<<<<< HEAD
+            let photo = document.createElement('img');
+            photo.setAttribute('src', info.user_pic);
+            dPhoto.appendChild(photo);
+            let f_name = document.createElement("h3");
+            f_name.setAttribute("style", "color:#ff0000")
+            f_name.innerText = info.f_name;
+            dfname.append(f_name);
+            let lname = document.createElement("h3");
+            lname.setAttribute("style", "color:#ff0000")
+            lname.innerText = info.l_name;
+            dlname.appendChild(lname);
+            let sex = document.createElement("h3");
+            sex.setAttribute("style", "color:#ff0000")
+            sex.innerText = info.sex;
+            dsex.appendChild(sex);
+            let sex_preference = document.createElement("h3");
+            sex_preference.setAttribute("style", "color:#ff0000")
+            sex_preference.innerText = info.preference;
+            dsex_pref.appendChild(sex_preference);
+            let user_info = document.createElement("h3");
+            user_info.setAttribute("style", "color:#ff0000")
+            user_info.innerText = info[7];
+            dinfo.appendChild(user_info);
+            for(var index in info.tags)
+            {
+                let tag = document.createElement("h3");
+            tag.setAttribute("style", "color:#ff0000")
+                tag.innerText = "#"+ info.tags[index]['name_tag'] + " ";
+                dtags.appendChild(tag);
+=======
             if(info.user_pic){
                 for (let i = 0; i < info.user_pic.length; i++){
                     let image = new Image();
@@ -77,11 +120,16 @@ function fil_profile(){
                 tag.innerText = "#"+ info.tags[index]['tag_name'] + " ";
                 dtags.append(tag);
                 loading_remove(dtags);
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21
             }
         }
     })
 }
 
+<<<<<<< HEAD
+document.getElementById("upload_button").onclick = function () {
+    let  userPic = document.getElementById('user_pic');
+=======
 function loading(node){
     let text_node = document.createElement("p");
     text_node.setAttribute("class", "loading");
@@ -110,20 +158,28 @@ upload_button.onclick = function () {
 
 function Refresh_image() {
     let image = new Image();
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21
     let userPicFile = userPic.files[0];
     let file_reader = new FileReader();
     file_reader.readAsDataURL(userPicFile);
     file_reader.onload = function () {
         let image_data = file_reader.result;
+<<<<<<< HEAD
+=======
         image.src = image_data;
         userPic.src = null;
         images_block.append(image);
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21
         $.ajax({
             url: '/profile/add_photo',
             method: 'POST',
             data: {"user_pic" : image_data},
             success: function (data) {
+<<<<<<< HEAD
+                alert( "Прибыли данные: " + data );
+=======
                 userPic.src = null;
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21
             }
         })
     }

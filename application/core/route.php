@@ -4,8 +4,12 @@ class Route
 {
     static function start()
     {
+<<<<<<< HEAD
+        $controller_name = 'index';
+=======
         session_start();
         $controller_name = "index";
+>>>>>>> 79609902b648424b2d63b7df49a7106cb548ae21
         $action_name = 'index';
         $routes = explode('/', $_SERVER['REQUEST_URI']);
         if ( !empty($routes[1]) )
