@@ -1,25 +1,29 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
+<script src="/js/profile.js"></script>
 <h3><?php
-    if(isset($_GET['login']))
-    {
-        if(isset($_SESSION['login'])) {
-            if ($_SESSION['login'] == $_GET['login'])
-                print("It's your profile, another people be look's same");
-            else
-                print(strtoupper($_GET['login']) . "'s Profile");
-        }
-        else
+    if(isset($_GET['login'])) {
+        if ($_GET['login'] != $_SESSION['login'])
             print(strtoupper($_GET['login']) . "'s Profile");
+        else
+            print("It's your profile, another people see the same");
     }
-    ?>
+    else
+        print("It's your profile, another people see the same"); ?>
 </h3>
 <div id="profile_block">
+    <div id="like_block" onclick="like()">
+        <img src="https://img.icons8.com/cotton/2x/like--v1.png" >
+    </div>
+    <div id="chat_block" onclick="chat()">
+        <img src="https://img.icons8.com/cotton/2x/chat.png" >
+    </div>
+
     <div id="photo_block">
         <div id="photo" style="background:
-        url('<?php $image = $data['user_data']['main_photo_src'];
+            url('<?php $image = $data['user_data']['main_photo_src'];
         $image_data = base64_encode(file_get_contents($image));
         print("data: ".mime_content_type($image).";base64,$image_data"); ?>') no-repeat center;
-         background-size: cover;"></div>
+            background-size: cover;"></div>
     </div>
     <div id="photo_button">
         <div id="left_arrow"><i class="fas fa-arrow-left"></i></div>
