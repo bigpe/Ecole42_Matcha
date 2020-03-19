@@ -5,7 +5,8 @@ class Model_Profile extends Model{
             "main_photo_src" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
             "user_tags" => $this->get_user_tags($login),
-            "user_sex_preference" => $this->get_user_sex_preference($login)));
+            "user_sex_preference" => $this->get_user_sex_preference($login),
+            "user_login" => $login));
     }
     function get_user_main_photo($login){
         $db = new database();
@@ -23,7 +24,7 @@ class Model_Profile extends Model{
         $db = new database();
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
         $user_tags = $db->db_read_multiple("SELECT tag_name, tag_icon, tag_color 
-                FROM USERS_TAGS JOIN TAGS T on USERS_TAGS.tag_id = T.tag_id 
+                FROM USER_TAGS JOIN TAGS T on USER_TAGS.tag_id = T.tag_id 
                 WHERE user_id='$user_id' ORDER BY tag_rate DESC");
         return($user_tags);
     }
@@ -32,8 +33,8 @@ class Model_Profile extends Model{
         $user_sex = $db->db_read("SELECT sex FROM USERS WHERE login='$login'");
         $user_sex_preference = $db->db_read("SELECT sex_preference from USERS WHERE login='$login'");
         if(!(int)$user_sex_preference)
-            return($db->db_read("SELECT sex_preference_name 
-                FROM SEX_PREFERENCE WHERE sex_preference_id='0'"));
+            return($db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon 
+                FROM SEX_PREFERENCE WHERE sex_preference_id='0'")[0]);
         $math = (int)$user_sex + (int)$user_sex_preference;
         $sex_preference = $db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon 
                 FROM SEX_PREFERENCE WHERE sex_preference_id='$math'")[0];

@@ -17,32 +17,35 @@
     border-radius: 10px 10px 0 0;
 }
 #main_block{
-    padding-top: 15px;
-    padding-bottom: 15px;
-    height: 20px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 1px 5px gray;
+    margin-top: -45px;
+    background: rgba(0, 0, 0, .5);
+    height: 45px;
 }
 #connect_status{
     color: #5fe15f;
     padding: 10px;
     font-size: .7em;
+    text-shadow: 1px 1px 1px black;
 }
 #name{
     font-size: 2em;
-    color: black;
+    color: white;
+    text-shadow: 1px 1px 1px black;
 }
 #sex_preference{
     padding: 10px;
     font-size: 2em;
-    color: black;
+    color: darkmagenta;
+    text-shadow: 0 0 15px white;
 }
 #fame_rating{
     font-size: 2em;
-    color: gray;
+    color: crimson;
+    text-shadow: 0 0 15px white;
 }
 #fame_rating:hover .tooltiptext, #sex_preference:hover .tooltiptext{
     display: unset;
@@ -74,8 +77,6 @@
     width: 90%;
     padding: 10px;
     margin: auto;
-    box-shadow: 1px 1px 5px gray;
-    border-radius: 15px;
 }
 #photo_button{
     position: relative;
