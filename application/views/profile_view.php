@@ -1,14 +1,18 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
 <script src="/js/profile.js"></script>
 <h3><?php
-    if(isset($_GET['login'])) {
-        if ($_GET['login'] != $_SESSION['login'])
-            print(strtoupper($_GET['login']) . "'s Profile");
+    if(isset($_GET['login']))
+    {
+        if(isset($_SESSION['login'])) {
+            if ($_SESSION['login'] == $_GET['login'])
+                print("It's your profile, another people be look's same");
+            else
+                print(strtoupper($_GET['login']) . "'s Profile");
+        }
         else
-            print("It's your profile, another people see the same");
+            print(strtoupper($_GET['login']) . "'s Profile");
     }
-    else
-        print("It's your profile, another people see the same"); ?>
+    ?>
 </h3>
 <div id="profile_block">
     <div id="like_block" onclick="like()">
