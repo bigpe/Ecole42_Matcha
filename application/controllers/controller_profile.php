@@ -27,5 +27,22 @@ class Controller_Profile extends Controller
     else
         header("Location: /");
     }
+
+    function action_like()
+    {
+        if($_POST['login']) { #Success
+            $this->model->put_like($_POST['login']);
+        }
+    }
+    function action_chat()
+    {
+        if($_POST['login']) { #Success
+            $login = $_POST['login'];
+            if($this->model->check_ready_to_chat($login) === true)
+                header("Location: /chat/?login=$login");
+            else
+                echo "The user is not ready to meet";
+        }
+    }
 }
 ?>
