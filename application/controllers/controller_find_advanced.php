@@ -10,7 +10,7 @@ class controller_find_advanced extends Controller{
     {
         if($this->model->check_session()){ #Success
             $users_data = $this->model->get_users_data($_SESSION['login']);
-            $this->view->generate("find_advanced.php", "template_view.php",
+            $this->view->generate("find_advanced_view.php", "template_view.php",
                 array("error" => $this->model->error_handler($this->model->error_id),
                     "users_data" => $users_data));
         }
