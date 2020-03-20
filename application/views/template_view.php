@@ -9,7 +9,6 @@
     <header>
         <a href="/">Main Page</a>
         <?php if(isset($_SESSION['login'])) print("<a href='/settings'>Settings</a>"); ?>
-        <?php if(isset($_SESSION['login'])) print("<a href='/find_advanced'>Find what You Want</a>"); ?>
         <?php if(isset($_SESSION['login'])) print("<a href='/auth/sign_out'>Sign Out</a>"); ?>
     </header>
     <?php include "application/views/" . $content_view;?>
