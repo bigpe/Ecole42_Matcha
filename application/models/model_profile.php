@@ -41,7 +41,6 @@ class Model_Profile extends Model{
                 FROM SEX_PREFERENCE WHERE sex_preference_id='$math'")[0];
         return($sex_preference);
     }
-
     function put_history_view($omega_user_login){
         $omega_user_id = $this->get_user_id($omega_user_login);
         $alfa_user_login = $_SESSION['login'];
@@ -59,12 +58,10 @@ class Model_Profile extends Model{
         else
             $this->insert_history_view($alfa_user_id, $omega_user_id);
     }
-
     function get_user_id($login){
         $db = new database();
         return($db->db_read("SELECT user_id FROM USERS WHERE login = '$login';"));
     }
-
     function check_history_view($alfa_user_id, $omega_user_id)
     {
         $db = new database();
@@ -72,7 +69,6 @@ class Model_Profile extends Model{
                                     AND omega_user_id = '$omega_user_id' AND action = 1 order by update_date DESC;");
         return ($history_id);
     }
-
     function check_date_history_view($history_id){
         $db = new database();
         $history = $db->db_read("SELECT creation_date FROM HISTORY WHERE history_id = '$history_id'");
@@ -91,12 +87,10 @@ class Model_Profile extends Model{
         $db = new database();
         $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action) VALUES ('$alfa_user_id', '$omega_user_id', 1);");
     }
-
     function update_history_view($history_id){
         $db = new database();
         $db->db_change("UPDATE HISTORY SET update_date = CURRENT_TIMESTAMP WHERE history_id = '$history_id';");
     }
-
     function put_like($omega_user_login)
     {
         $omega_user_id = $this->get_user_id($omega_user_login);
@@ -110,7 +104,6 @@ class Model_Profile extends Model{
         else
             $this->insert_like($alfa_user_id, $omega_user_id);
     }
-
     function check_like_exist($alfa_user_id, $omega_user_id)
     {
         $db = new database();
@@ -118,7 +111,6 @@ class Model_Profile extends Model{
                                     AND omega_user_id = '$omega_user_id' AND action = 2 order by update_date DESC;");
         return ($like_id);
     }
-
     function insert_like($alfa_user_id, $omega_user_id){
         $db = new database();
         $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action) VALUES ('$alfa_user_id', '$omega_user_id', 2);");
@@ -128,7 +120,6 @@ class Model_Profile extends Model{
         $db = new database();
         $db->db_change("DELETE FROM HISTORY WHERE history_id = '$like_id';");
     }
-
     function  check_ready_to_chat($omega_user_login){
         $omega_user_id = $this->get_user_id($omega_user_login);
         $alfa_user_login = $_SESSION['login'];
