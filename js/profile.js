@@ -17,7 +17,7 @@ function like () {
         method: 'POST',
         data: {"login": params['login']},
         success: function () {
-            alert("ok");
+            // alert("ok");
         }
     });
 }
@@ -28,7 +28,7 @@ function chat () {
         method: 'POST',
         data: {"login": params['login']},
         success: function (data) {
-            alert(data)
+            // alert(data)
         }
     });
 }

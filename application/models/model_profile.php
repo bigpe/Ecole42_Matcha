@@ -78,14 +78,14 @@ class Model_Profile extends Model{
     function check_like_exist($alfa_user_id, $omega_user_id)
     {
         $db = new database();
-        $like_id = $db->db_read("SELECT history_id FROM USER_HISTORY where alfa_user_id = '$alfa_user_id'
-                                    AND omega_user_id = '$omega_user_id' AND action_id = 2");
+        $like_id = $db->db_read("SELECT history_id FROM USER_HISTORY WHERE alfa_user_id='$alfa_user_id'
+                                      AND omega_user_id='$omega_user_id' AND action_id=2");
         return ($like_id);
     }
     function insert_like($alfa_user_id, $omega_user_id){
         $db = new database();
-        $db->db_change("INSERT INTO USER_HISTORY (alfa_user_id, omega_user_id, action_id) 
-                                VALUES ('$alfa_user_id', '$omega_user_id', 2");
+        $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) 
+                                VALUES ('$alfa_user_id', '$omega_user_id', 2)");
     }
     function delete_like($like_id){
         $db = new database();

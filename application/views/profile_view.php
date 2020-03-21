@@ -46,7 +46,7 @@
         <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>
     </div>
     <div id="get_block">
-        <h3>Location</h3>
+        <h3><i class="fas fa-location-arrow"></i> Location</h3>
         <div id="geo"><?php print($data['user_data']['user_geo']);?></div>
     </div>
     <div id="tags_block">
