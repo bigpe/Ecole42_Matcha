@@ -16,12 +16,11 @@
 </h3>
 <div id="profile_block">
     <div id="like_block" onclick="like()">
-        <img src="https://img.icons8.com/cotton/2x/like--v1.png" >
+        <i class="far fa-heart"></i>
     </div>
     <div id="chat_block" onclick="chat()">
-        <img src="https://img.icons8.com/cotton/2x/chat.png" >
+        <i class="fas fa-comment"></i>
     </div>
-
     <div id="photo_block">
         <div id="photo" style="background:
             url('<?php $image = $data['user_data']['main_photo_src'];

@@ -21,9 +21,9 @@
         <input class="sex_preference" name="sex_preference" type="radio" id="preference_bisexual" value="0">
         <label class="sex_preference_label" for="preference_bisexual"><i class="fas fa-male"></i> + <i class="fas fa-female"></i></label>
     </div>
-    <h3>Еnter your date of birth</h3>
+    <h3>What's about your age?</h3>
     <div id="age_block">
-        <p>Date of birth <input type="date" name="user_age" min="1920-00-00" max="2002-03-01" required>
+        <input type="date" name="user_age" min="1920-00-00" max="2002-03-01" required>
     </div>
     <h3>Few words about you</h3>
     <div id="info_block">
@@ -31,15 +31,15 @@
     </div>
     <h3 id="tags_pin">Like this things?</h3>
     <div id="tags"><?php
+        $ini = include('./config/config.php');
+        $token = $ini['city_parser']['token'];
         if(isset($data['tags'])) {
-            $i = 1;
             foreach ($data['tags'] as $tag) {
                 $tag_name = $tag['tag_name'];
                 $tag_icon = $tag['tag_icon'];
                 $tag_color = $tag['tag_color'];
-                print("<input type='checkbox' class='tags' name='tags[]' id='$tag_name' value='$i'>");
+                print("<input type='checkbox' class='tags' name='tags[]' id='$tag_name' value='$tag_name'>");
                 print("<label class='tags_labels' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
-                $i++;
             }
         }
         else
@@ -62,4 +62,10 @@
     <br>
     <div id="submit_block"><input type="submit" id="mandatory_form_submit"></div>
 </form>
+<form>
+
+</form>
 <script type="text/javascript" src="/js/first_login.js"></script>
+<script type="text/javascript">
+    get_location("<?php print($token); ?>")
+</script>

@@ -6,7 +6,7 @@
 }
 .people{
     border-radius: 360px;
-    padding: 100px;
+    padding: 50px;
     margin: 10px;
     display: inline-block;
 }
@@ -27,7 +27,11 @@
     min-width: 300px;
     margin: auto;
 }
-#geo_block{
-    width: 50%;
-    margin: auto;
+
+h4{
+    margin-top: 75px;
+    background: rgba(255, 255, 255, .9);
+    margin-left: auto;
+    width: 132px;
+    height: 25px;
 }

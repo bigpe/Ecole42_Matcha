@@ -12,8 +12,6 @@ var params = window
         {}
     );
 function like () {
-
-
     $.ajax({
         url: '/profile/like',
         method: 'POST',
