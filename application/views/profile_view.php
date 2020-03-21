@@ -42,7 +42,7 @@
         <div id="fame_rating"><i class="fas fa-battery-quarter"></i><span class="tooltiptext">Low</span></div>
     </div>
     <div id="info_block">
-        <h3>About me</h3>
+        <h3><i class="fas fa-info-circle"></i> About me</h3>
         <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>
     </div>
     <div id="get_block">

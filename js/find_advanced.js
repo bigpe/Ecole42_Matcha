@@ -3,7 +3,6 @@ let people_block = document.getElementById("people_block");
 let geo = document.getElementById("address");
 
 onload = function () {
-    get_location();
 };
 
 function load_slider(age_from, age_to) {
