@@ -91,7 +91,7 @@ class Model_Profile extends Model{
 
     function insert_history_view($alfa_user_id, $omega_user_id){
         $db = new database();
-        $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action) VALUES ('$alfa_user_id', '$omega_user_id', 1);");
+        $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action, action_icon) VALUES ('$alfa_user_id', '$omega_user_id', 1, '<i class=\"far fa-eye\"></i>');");
     }
     function update_history_view($history_id){
         $db = new database();
@@ -119,12 +119,12 @@ class Model_Profile extends Model{
     }
     function insert_like($alfa_user_id, $omega_user_id){
         $db = new database();
-        $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action) VALUES ('$alfa_user_id', '$omega_user_id', 2);");
+        $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action, action_icon) VALUES ('$alfa_user_id', '$omega_user_id', 2, '<i class=\"far fa-heart\"></i>');");
     }
 
     function delete_like($like_id){
         $db = new database();
-        $db->db_change("DELETE FROM HISTORY WHERE history_id = '$like_id';");
+        $db->db_change("UPDATE HISTORY SET action=3, action_icon='<i class=\"fas fa-heart-broken\"></i>' WHERE history_id = '$like_id';");
     }
     function  check_ready_to_chat($omega_user_login){
         $omega_user_id = $this->get_user_id($omega_user_login);

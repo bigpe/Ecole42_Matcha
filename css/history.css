@@ -1,0 +1,37 @@
+#people_block{
+
+}
+#people_block a{
+    color: black;
+}
+.people{
+    border-radius: 360px;
+    padding: 50px;
+    margin: 10px;
+    display: inline-block;
+}
+.name{
+    position: absolute;
+    margin-top: 75px;
+    background: rgba(255, 255, 255, .9);
+    margin-left: -66px;
+    width: 132px;
+    height: 25px;
+}
+.name i{
+    font-size: .5em;
+}
+#age_block{
+    width: 50%;
+    max-width: 500px;
+    min-width: 300px;
+    margin: auto;
+}
+
+h4{
+    margin-top: 75px;
+    background: rgba(255, 255, 255, .9);
+    margin-left: auto;
+    width: 132px;
+    height: 25px;
+}
