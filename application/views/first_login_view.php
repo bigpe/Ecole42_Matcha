@@ -60,12 +60,37 @@
         </div>
     </div>
     <br>
+    <h3>You can make fil additional entry's</h3>
+    <p>The more fields are filled, the more fame-rating!</p>
+    <details>
+        <div id="geo_block">
+            <h3>It's your city?</h3>
+            <input id="address" name="user_geo" type="text" required>
+        </div>
+        <div id="full_name">
+            <h3>Enter your full name</h3>
+            <input type="text" name="user_full_name">
+        </div>
+    </details>
     <div id="submit_block"><input type="submit" id="mandatory_form_submit"></div>
 </form>
-<form>
-
-</form>
+<link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
 <script type="text/javascript" src="/js/first_login.js"></script>
 <script type="text/javascript">
     get_location("<?php print($token); ?>")
+</script>
+<script>
+    $("#address").suggestions({
+        token: "<?php print($token);?>",
+        type: "ADDRESS",
+        bounds: "city",
+        constraints: {
+            label: "",
+            locations: { city_type_full: "город" }
+        },
+        onSelect: function(suggestion) {
+            console.log(suggestion);
+        }
+    });
 </script>

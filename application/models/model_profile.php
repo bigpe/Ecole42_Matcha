@@ -5,6 +5,7 @@ class Model_Profile extends Model{
         return (array(
             "main_photo_src" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
+            "user_geo" =>$this->get_user_location($login),
             "user_tags" => $this->get_user_tags($login),
             "user_sex_preference" => $this->get_user_sex_preference($login),
             "user_login" => $login));
@@ -20,6 +21,11 @@ class Model_Profile extends Model{
         $db = new database();
         $user_info = $db->db_read("SELECT info FROM USERS WHERE login='$login'");
         return ($user_info);
+    }
+    function get_user_location($login){
+        $db = new database();
+        $user_location = $db->db_read("SELECT geo FROM USERS WHERE login='$login'");
+        return($user_location);
     }
     function get_user_tags($login){
         $db = new database();

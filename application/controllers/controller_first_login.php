@@ -14,7 +14,7 @@ class controller_first_login extends Controller{
     }
     function action_end_tutorial(){
         if($this->check_post_arguments_exists(array("sex", "sex_preference", "user_age", "info",
-            "tags", "user_main_photo"))) { #Success
+            "tags", "user_main_photo", "user_geo", "user_full_name"))) { #Success
             $this->model->end_tutorial($_POST, $_SESSION['login']);
             $this->model->remove_tutorial($_SESSION['login'], 1);
             header("Location: /");

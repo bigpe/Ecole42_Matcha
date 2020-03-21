@@ -8,6 +8,7 @@ let mandatory_form_submit = document.getElementById("mandatory_form_submit");
 let user_photo_tips = document.getElementById("user_photo_tips");
 let sex_block = document.getElementById("sex_block");
 let sex_preference_block = document.getElementById("sex_preference_block");
+let geo = document.getElementById("address");
 let user_photo_count = 0;
 let tag_offset = 5;
 let timeout;
@@ -15,7 +16,6 @@ let lastTap = 0;
 let animation_duration;
 let animation_node_name = ".highlight";
 let ajax_complete = false;
-let geo = null;
 
 onload = function () {
     get_animation_duration(animation_node_name);
@@ -209,6 +209,7 @@ function get_location(token) {
         contentType: "application/json",
         headers: {"Authorization": "Token " + token},
         success: function (data) {
-            console.log(data['location']['data']['city']);
+            let city = data['location']['data']['city'];
+            geo.valueOf().value = city;
     }})
 }

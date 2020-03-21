@@ -79,3 +79,7 @@ textarea{
     background: url(//www.gravatar.com/avatar/cbfaff96665b7567defe1b34a883db8b?s=16&d=identicon&r=PG) no-repeat center;
     background-size: contain;
 }
+#geo_block{
+    width: 50%;
+    margin: auto;
+}
