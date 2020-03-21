@@ -21,3 +21,13 @@
 .name i{
     font-size: .5em;
 }
+#age_block{
+    width: 50%;
+    max-width: 500px;
+    min-width: 300px;
+    margin: auto;
+}
+#geo_block{
+    width: 50%;
+    margin: auto;
+}

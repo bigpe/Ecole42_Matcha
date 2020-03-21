@@ -28,14 +28,12 @@
     <h3 id="tags_pin">Like this things?</h3>
     <div id="tags"><?php
         if(isset($data['tags'])) {
-            $i = 1;
             foreach ($data['tags'] as $tag) {
                 $tag_name = $tag['tag_name'];
                 $tag_icon = $tag['tag_icon'];
                 $tag_color = $tag['tag_color'];
-                print("<input type='checkbox' class='tags' name='tags[]' id='$tag_name' value='$i'>");
+                print("<input type='checkbox' class='tags' name='tags[]' id='$tag_name' value='$tag_name'>");
                 print("<label class='tags_labels' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
-                $i++;
             }
         }
         else

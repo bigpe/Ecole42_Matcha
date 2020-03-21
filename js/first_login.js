@@ -189,7 +189,7 @@ function fill_tags() {
                     tag.setAttribute("name", "tags[]");
                     tag.setAttribute("class", "tags");
                     tag.setAttribute("id", data[i]['tag_name']);
-                    tag.setAttribute("value", (i + tag_offset + 1).toString());
+                    tag.setAttribute("value", data[i]['tag_name']);
                     let tag_label = document.createElement("label");
                     tag_label.setAttribute("for", data[i]['tag_name']);
                     tag_label.setAttribute("class", "tags_labels");
