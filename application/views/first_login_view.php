@@ -21,6 +21,10 @@
         <input class="sex_preference" name="sex_preference" type="radio" id="preference_bisexual" value="0">
         <label class="sex_preference_label" for="preference_bisexual"><i class="fas fa-male"></i> + <i class="fas fa-female"></i></label>
     </div>
+    <h3>Еnter your date of birth</h3>
+    <div id="age_block">
+        <p>Date of birth <input type="date" name="user_age" min="1920-00-00" max="2002-03-01" required>
+    </div>
     <h3>Few words about you</h3>
     <div id="info_block">
         <textarea name="info" placeholder="What do you like to do?" autofocus maxlength="250" required></textarea>

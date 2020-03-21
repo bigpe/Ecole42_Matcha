@@ -8,11 +8,12 @@ class model_first_login extends Model{
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
         $sex = $data['sex'];
         $sex_preference = $data['sex_preference'];
+        $user_age = $data['user_age']. " 00:00:00";
         $info = $data['info'];
         $tags = $data['tags'];
         $user_main_photo_token = $data['user_main_photo'];
         $user_photo_id = $db->db_read("SELECT photo_id FROM USER_PHOTO WHERE photo_token='$user_main_photo_token'");
-        $db->db_change("UPDATE USERS SET sex='$sex', sex_preference='$sex_preference', info='$info' WHERE user_id='$user_id'");
+        $db->db_change("UPDATE USERS SET sex='$sex', sex_preference='$sex_preference', age='$user_age', info='$info' WHERE user_id='$user_id'");
         foreach($tags as $tag)
             $db->db_change("INSERT INTO USER_TAGS (user_id, tag_id) SELECT '$user_id', tag_id FROM TAGS WHERE tag_name='$tag'");
         $db->db_change("INSERT INTO USER_MAIN_PHOTO (user_id, photo_id) VALUES ('$user_id', '$user_photo_id')");

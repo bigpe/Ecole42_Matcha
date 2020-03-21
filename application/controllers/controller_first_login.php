@@ -13,7 +13,7 @@ class controller_first_login extends Controller{
                 array("tags" => $this->action_get_tags(), "login" => $_SESSION['login']));
     }
     function action_end_tutorial(){
-        if($this->check_post_arguments_exists(array("sex", "sex_preference", "info",
+        if($this->check_post_arguments_exists(array("sex", "sex_preference", "user_age", "info",
             "tags", "user_main_photo"))) { #Success
             $this->model->end_tutorial($_POST, $_SESSION['login']);
             $this->model->remove_tutorial($_SESSION['login'], 1);
