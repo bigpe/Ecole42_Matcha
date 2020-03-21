@@ -201,27 +201,14 @@ function fill_tags() {
                 }
             }})
 }
-
-window.onload = function() {
-    var startPos;
-    var geoOptions = {
-        enableHighAccuracy: true
-    };
-
-    var geoSuccess = function(position) {
-        startPos = position;
-        console.log(startPos.coords.latitude);
-        console.log(startPos.coords.longitude);
-        geo = startPos;
-    };
-
-    var geoError = function(error) {
-        console.log('Error occurred. Error code: ' + error.code);
-
-        //   0: unknown error
-        //   1: permission denied
-        //   2: position unavailable (error response from location provider)
-        //   3: timed out
-    };
-    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
-};
+function get_location(token) {
+    var serviceUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip=";
+    $.ajax({
+        url: serviceUrl,
+        method: "GET",
+        contentType: "application/json",
+        headers: {"Authorization": "Token " + token},
+        success: function (data) {
+            console.log(data['location']['data']['city']);
+    }})
+}
