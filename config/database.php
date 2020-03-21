@@ -7,7 +7,7 @@
         {
             $ini = include('config.php');
 
-            $DB_DSN = "mysql:dbname=" . $ini['db']['dbname'] . ";host=" . $ini['db']['host'] . ";port=" . $ini['db']['port'];
+            $DB_DSN = "mysql:dbname=" . $ini['db']['dbname'] . ";host=" . $ini['db']['host'] . ";port=" . $ini['db']['port'] . ";charset=UTF8";
             $DB_USER = $ini['db']['username'];
             $DB_PASSWORD = $ini['db']['password'];
             $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);

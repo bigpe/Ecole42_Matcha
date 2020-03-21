@@ -14,6 +14,8 @@ class Controller_Profile extends Controller
                     array("error" => $this->model->error_handler($this->model->error_id),
                         "user_data" => $user_data));
             }
+            else
+                header("Location: /");
         }
         else
             header("Location: /");

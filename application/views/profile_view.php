@@ -45,7 +45,10 @@
         <h3>About me</h3>
         <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>
     </div>
-
+    <div id="get_block">
+        <h3>Location</h3>
+        <div id="geo"><?php print($data['user_data']['user_geo']);?></div>
+    </div>
     <div id="tags_block">
         <?php
         if(isset($data['user_data']['user_tags'])) {

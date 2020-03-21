@@ -1,8 +1,9 @@
 let time = null;
 let people_block = document.getElementById("people_block");
+let geo = document.getElementById("address");
 
 onload = function () {
-    get_city();
+    get_location();
 };
 
 function load_slider(age_from, age_to) {
@@ -33,16 +34,26 @@ function load_slider(age_from, age_to) {
         }
     })
 }
-function get_city() {
-    let ip = "37.204.240.149";
-    let token = "470bf8c1890ac6915e8ed7b05ea27121a0c324c0";
-    $.ajax({
-        url: "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip=" + ip,
-        method: "GET",
-        headers: {"Authorization": "Token " + token},
-    success: function (data) {
-            console.log(data);
-    }})
+function load_city_input(token) {
+    $("#address").suggestions({
+        token: token,
+        type: "ADDRESS",
+        bounds: "city",
+        constraints: {
+            label: "",
+            locations: { city_type: "город" }
+        },
+        onSelect: function(suggestion) {
+            $.ajax({
+                url: "/find_advanced/save_filters",
+                method: "POST",
+                data: {"geo_filter": {"geo": suggestion['data']['city']}},
+                success: function (data) {
+                    data = JSON.parse(data);
+                    fil_users(data);
+                }})
+        }
+    });
 }
 
 function fil_users(data) {
