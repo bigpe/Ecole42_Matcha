@@ -58,8 +58,9 @@ class Model_Profile extends Model{
                                                 JOIN USERS O on omega_user_id=O.user_id
                                                 JOIN USER_ACTIONS UA on USER_HISTORY.action_id = UA.action_id
             WHERE (O.login='$login' AND USER_HISTORY.action_id=1 OR
-                USER_HISTORY.action_id=2 AND O.login='$login')
-            ORDER BY USER_HISTORY.creation_date DESC");
+                USER_HISTORY.action_id=2 AND O.login='$login') AND day(USER_HISTORY.creation_date) 
+                    BETWEEN DAY(CURRENT_TIMESTAMP) AND (DAY(CURRENT_TIMESTAMP) + 3) 
+                    ORDER BY USER_HISTORY.creation_date DESC");
         if($user_fame_rating_count >= 999)
             $user_fame_rating = $db->db_read_multiple("SELECT fame_rating_name, fame_rating_icon FROM FAME_RATING 
                 WHERE fame_rating_end=999")[0];

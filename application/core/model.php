@@ -89,25 +89,18 @@ class Model
     {
         $db = new database();
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
-        $last = $db->db_read("SELECT update_date, action_id FROM USER_HISTORY WHERE alfa_user_id = '$user_id' order by update_date desc;");
-        if ($last['action_id'] == 13)
-            return (array("status" => "Red",
-                        "last online" => $last['update_date']));
-        else
+        $last = $db->db_read("SELECT update_date FROM USER_HISTORY WHERE alfa_user_id = '$user_id' order by update_date desc;");
+        $today = date("Y-m-d H:i:s");
+        $d1 = strtotime($last);
+        $d2 = strtotime($today);
+        $diff = $d2-$d1;
+        $diff = $diff/(60);
+        if ($diff > 10)
         {
-            $today = date("Y-m-d H:i:s");
-            $d1 = strtotime($last);
-            $d2 = strtotime($today);
-            $diff = $d2-$d1;
-            $diff = $diff/(60);
-            if ($diff > 10)
-            {
-                return (array("status"=>"Red",
-                    "last online" => $last['update_date']));
-            }
-            else
-                return (array("status"=>"green"));
+            return (array("status"=>"Red",
+                "last online" => $last['update_date']));
         }
-
+        else
+            return (array("status"=>"green"));
     }
 }
