@@ -81,8 +81,33 @@ class Model
     function input_history_by_login($alfa_user_login, $omega_user_login, $action)
     {
         $db = new database();
-        $alfa_user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$alfa_user_login'");;
-        $omega_user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$omega_user_login'");;
+        $alfa_user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$alfa_user_login'");
+        $omega_user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$omega_user_login'");
         $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
+    }
+    function check_online($login)
+    {
+        $db = new database();
+        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $last = $db->db_read("SELECT update_date, action_id FROM USER_HISTORY WHERE alfa_user_id = '$user_id' order by update_date desc;");
+        if ($last['action_id'] == 13)
+            return (array("status" => "Red",
+                        "last online" => $last['update_date']));
+        else
+        {
+            $today = date("Y-m-d H:i:s");
+            $d1 = strtotime($last);
+            $d2 = strtotime($today);
+            $diff = $d2-$d1;
+            $diff = $diff/(60);
+            if ($diff > 10)
+            {
+                return (array("status"=>"Red",
+                    "last online" => $last['update_date']));
+            }
+            else
+                return (array("status"=>"green"));
+        }
+
     }
 }
