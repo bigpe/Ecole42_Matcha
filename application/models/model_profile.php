@@ -8,6 +8,7 @@ class Model_Profile extends Model{
             "user_geo" =>$this->get_user_location($login),
             "user_tags" => $this->get_user_tags($login),
             "user_sex_preference" => $this->get_user_sex_preference($login),
+            "user_fame_rating" => $this->get_user_fame_rating($login),
             "user_login" => $login));
     }
     function get_user_main_photo($login){
@@ -46,6 +47,26 @@ class Model_Profile extends Model{
         $sex_preference = $db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon 
                 FROM SEX_PREFERENCE WHERE sex_preference_id='$math'")[0];
         return($sex_preference);
+    }
+    function get_user_fame_rating($login){
+        $db = new database();
+        $user_fame_rating_count = $db->db_read("SELECT COUNT(DISTINCT A.user_id,O.user_id, 
+            DAY(USER_HISTORY.creation_date), USER_HISTORY.action_id) as COUNT
+                                                FROM USER_HISTORY
+                                                JOIN USERS A on alfa_user_id=A.user_id
+                                                JOIN USERS O on omega_user_id=O.user_id
+                                                JOIN USER_ACTIONS UA on USER_HISTORY.action_id = UA.action_id
+            WHERE (O.login='$login' AND USER_HISTORY.action_id=1 OR
+                USER_HISTORY.action_id=2 AND O.login='$login')
+            ORDER BY USER_HISTORY.creation_date DESC");
+        if($user_fame_rating_count >= 999)
+            $user_fame_rating = $db->db_read_multiple("SELECT fame_rating_name, fame_rating_icon FROM FAME_RATING 
+                WHERE fame_rating_end=999")[0];
+        else
+            $user_fame_rating = $db->db_read_multiple("SELECT fame_rating_name, fame_rating_icon, fame_rating_color 
+                FROM FAME_RATING WHERE '$user_fame_rating_count' >= fame_rating_start AND 
+                                        '$user_fame_rating_count' <= fame_rating_end")[0];
+        return($user_fame_rating);
     }
     function put_history_view($omega_user_login){
         $omega_user_id = $this->get_user_id($omega_user_login);

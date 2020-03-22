@@ -33,7 +33,9 @@
             <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
             <span class="tooltiptext"><?php print($data['user_data']['user_sex_preference']['sex_preference_name']);?></span>
         </div>
-        <div id="fame_rating"><i class="fas fa-battery-quarter"></i><span class="tooltiptext">Low</span></div>
+        <div id="fame_rating" style="color: <?php print($data['user_data']['user_fame_rating']['fame_rating_color']);?>">
+            <?php print($data['user_data']['user_fame_rating']['fame_rating_icon']); ?><span class="tooltiptext"><?php
+                print($data['user_data']['user_fame_rating']['fame_rating_name']); ?></span></div>
     </div>
     <div id="action_block">
         <div id="like_block" onclick="like()"><i class="fas fa-heart"></i></div>
