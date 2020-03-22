@@ -9,6 +9,7 @@ class Model_Profile extends Model{
             "user_tags" => $this->get_user_tags($login),
             "user_sex_preference" => $this->get_user_sex_preference($login),
             "user_fame_rating" => $this->get_user_fame_rating($login),
+            "online_status" => $this->check_online($login),
             "user_login" => $login));
     }
     function get_user_main_photo($login){
