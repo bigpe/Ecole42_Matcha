@@ -5,10 +5,13 @@ class Model_Auth extends Model{
             return($this->error_id = 10); #Error_code 10 - Login or password incorrect
         if(!$this->error_id){ #Success
             $_SESSION['login'] = $login;
+            $this->input_history_by_login($login, $login, 12);
         }
         return($this->error_id);
     }
     function sign_out(){
+        $login = $_SESSION['login'];
+        $this->input_history_by_login($login, $login, 13);
         $this->clear_session();
         return($this->error_id);
     }
