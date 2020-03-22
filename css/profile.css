@@ -1,6 +1,7 @@
 #profile_block{
     width: 98%;
     max-width: 500px;
+    min-width: 350px;
     border-radius: 15px;
     box-shadow: 1px 1px 20px gray;
     margin: 50px auto 50px auto;
@@ -108,7 +109,7 @@
     min-height: 50px;
     padding: 15px;
 }
-.tags_labels, .sex_label, .sex_preference_label{
+.tags_labels, .sex_label, .sex_preference_label, .tags_labels_another{
     display: inline-table;
     vertical-align: middle;
     text-align: center;
@@ -118,7 +119,7 @@
     border-radius: 5px;
     font-size: 2em;
 }
-.tags_labels{
+.tags_labels, .tags_labels_another{
     width: 50px;
     font-size: 1em;
 }
@@ -130,6 +131,9 @@
 .tags:checked + .tags_labels, .sex_preference:checked + .sex_preference_label{
     background: antiquewhite;
     transition: background .5s cubic-bezier(.18,.89,.32,1.28);
+}
+.tags_labels_another{
+    background: antiquewhite;
 }
 .flood{
     height: 500px;
@@ -147,4 +151,24 @@
 @keyframes loading {
     50%{transform: rotate(180deg)}
     100%{transform: rotate(360deg)}
+}
+#geo{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+#like_block{
+    color: crimson;
+    font-size: 2.5em;
+}
+#chat_block{
+    color: #c640a4;
+    font-size: 2.5em;
+    margin-left: 100px;
+}
+#action_block{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, .05);
 }

@@ -15,12 +15,6 @@
     ?>
 </h3>
 <div id="profile_block">
-    <div id="like_block" onclick="like()">
-        <i class="far fa-heart"></i>
-    </div>
-    <div id="chat_block" onclick="chat()">
-        <i class="fas fa-comment"></i>
-    </div>
     <div id="photo_block">
         <div id="photo" style="background:
             url('<?php $image = $data['user_data']['main_photo_src'];
@@ -41,13 +35,16 @@
         </div>
         <div id="fame_rating"><i class="fas fa-battery-quarter"></i><span class="tooltiptext">Low</span></div>
     </div>
+    <div id="action_block">
+        <div id="like_block" onclick="like()"><i class="fas fa-heart"></i></div>
+        <div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div>
+    </div>
     <div id="info_block">
-        <h3><i class="fas fa-info-circle"></i> About me</h3>
+        <h3><i class="fas fa-info-circle"></i> About Me</h3>
         <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>
     </div>
-    <div id="get_block">
-        <h3><i class="fas fa-location-arrow"></i> Location</h3>
-        <div id="geo"><?php print($data['user_data']['user_geo']);?></div>
+    <div id="geo_block">
+        <div id="geo"><i class="fas fa-location-arrow"></i> <?php print($data['user_data']['user_geo']);?></div>
     </div>
     <div id="tags_block">
         <?php
@@ -57,8 +54,8 @@
                 $tag_name = $tag['tag_name'];
                 $tag_icon = $tag['tag_icon'];
                 $tag_color = $tag['tag_color'];
-                print("<input type='checkbox' class='tags' id='$tag_name' value='$i' checked>");
-                print("<label class='tags_labels' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
+                print("<input class='tags' id='$tag_name' value='$i'>");
+                print("<label class='tags_labels_another' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
                 $i++;
             }
         }
