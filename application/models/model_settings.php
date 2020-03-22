@@ -43,6 +43,7 @@ class Model_Settings extends Model_Registration
         $login = $_SESSION['login'];
         $db = new database();
         $db->db_change("UPDATE Matcha.USERS SET password = '$new_pass' WHERE login = '$login'");
+        $this->input_history_by_login($login, $login, 7);
         return 1;
     }
 
@@ -51,6 +52,7 @@ class Model_Settings extends Model_Registration
         $login = $_SESSION['login'];
         $db = new database();
         $db->db_change("UPDATE Matcha.USERS SET email = '$email' WHERE login = '$login'");
+        $this->input_history_by_login($login, $login, 6);
     }
 
     public function save_new_email($token_id, $email){

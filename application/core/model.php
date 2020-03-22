@@ -72,4 +72,17 @@ class Model
         session_destroy();
         return (0);
     }
+
+    function input_history($alfa_user_id, $omega_user_id, $action)
+    {
+        $db = new database();
+        $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
+    }
+    function input_history_by_login($alfa_user_login, $omega_user_login, $action)
+    {
+        $db = new database();
+        $alfa_user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$alfa_user_login'");;
+        $omega_user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$omega_user_login'");;
+        $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
+    }
 }

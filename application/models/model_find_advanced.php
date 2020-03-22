@@ -15,6 +15,8 @@ class model_find_advanced extends Model{
         $users_data = $db->db_read_multiple("SELECT login, photo_src FROM USER_MAIN_PHOTO
                     JOIN USER_PHOTO UP on USER_MAIN_PHOTO.photo_id = UP.photo_id 
                     JOIN USERS U on UP.user_id = U.user_id WHERE login!='$login'" . $query_append);
+        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $this->input_history($user_id, $user_id, 14);
         return($users_data);
     }
     function get_user_filters($login){
