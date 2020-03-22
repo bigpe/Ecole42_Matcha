@@ -53,49 +53,16 @@ class Model_Profile extends Model{
         $alfa_user_id = $this->get_user_id($alfa_user_login);
         if ($alfa_user_id == $omega_user_id)
             return;
-        $history_id = $this->check_history_view($alfa_user_id, $omega_user_id);
-        if ($history_id)
-        {
-            if ((float)$this->check_date_history_view($history_id) > 0)
-                $this->insert_history_view($alfa_user_id, $omega_user_id);
-            else
-                $this->update_history_view($history_id);
-        }
-        else
-            $this->insert_history_view($alfa_user_id, $omega_user_id);
+        $this->insert_history_view($alfa_user_id, $omega_user_id);
     }
     function get_user_id($login){
         $db = new database();
-        return($db->db_read("SELECT user_id FROM USERS WHERE login = '$login';"));
+        return($db->db_read("SELECT user_id FROM USERS WHERE login = '$login'"));
     }
-    function check_history_view($alfa_user_id, $omega_user_id)
-    {
-        $db = new database();
-        $history_id = $db->db_read("SELECT history_id FROM HISTORY where alfa_user_id = '$alfa_user_id'
-                                    AND omega_user_id = '$omega_user_id' AND action = 1 order by update_date DESC;");
-        return ($history_id);
-    }
-    function check_date_history_view($history_id){
-        $db = new database();
-        $history = $db->db_read("SELECT creation_date FROM HISTORY WHERE history_id = '$history_id'");
-        $today = date("Y-m-d ");
-        $explode = explode(" ", $history);
-        $history_day = $explode[0];
-        $d1 = strtotime($history_day);
-        $d2 = strtotime($today);
-        $diff = $d2-$d1;
-        $diff = $diff/(60*60*24);
-        $check = floor($diff);
-        return $check;
-    }
-
     function insert_history_view($alfa_user_id, $omega_user_id){
         $db = new database();
-        $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action, action_icon) VALUES ('$alfa_user_id', '$omega_user_id', 1, '<i class=\"far fa-eye\"></i>');");
-    }
-    function update_history_view($history_id){
-        $db = new database();
-        $db->db_change("UPDATE HISTORY SET update_date = CURRENT_TIMESTAMP WHERE history_id = '$history_id';");
+        $db->db_change("INSERT INTO USER_HISTORY (alfa_user_id, omega_user_id, action_id) 
+                                VALUES ('$alfa_user_id', '$omega_user_id', 1)");
     }
     function put_like($omega_user_login)
     {
@@ -104,27 +71,25 @@ class Model_Profile extends Model{
         $alfa_user_id = $this->get_user_id($alfa_user_login);
         $like_id = $this->check_like_exist($alfa_user_id, $omega_user_id);
         if ($like_id)
-        {
             $this->delete_like($like_id);
-        }
         else
             $this->insert_like($alfa_user_id, $omega_user_id);
     }
     function check_like_exist($alfa_user_id, $omega_user_id)
     {
         $db = new database();
-        $like_id = $db->db_read("SELECT history_id FROM HISTORY where alfa_user_id = '$alfa_user_id'
-                                    AND omega_user_id = '$omega_user_id' AND action = 2 order by update_date DESC;");
+        $like_id = $db->db_read("SELECT history_id FROM USER_HISTORY WHERE alfa_user_id='$alfa_user_id'
+                                      AND omega_user_id='$omega_user_id' AND action_id=2");
         return ($like_id);
     }
     function insert_like($alfa_user_id, $omega_user_id){
         $db = new database();
-        $db->db_change("INSERT INTO HISTORY (alfa_user_id, omega_user_id, action, action_icon) VALUES ('$alfa_user_id', '$omega_user_id', 2, '<i class=\"far fa-heart\"></i>');");
+        $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) 
+                                VALUES ('$alfa_user_id', '$omega_user_id', 2)");
     }
-
     function delete_like($like_id){
         $db = new database();
-        $db->db_change("UPDATE HISTORY SET action=3, action_icon='<i class=\"fas fa-heart-broken\"></i>' WHERE history_id = '$like_id';");
+        $db->db_change("UPDATE USER_HISTORY SET action_id=3 WHERE history_id = '$like_id';");
     }
     function  check_ready_to_chat($omega_user_login){
         $omega_user_id = $this->get_user_id($omega_user_login);

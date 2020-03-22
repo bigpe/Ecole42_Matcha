@@ -12,7 +12,7 @@
         <div class="people" style="background: url(' . $photo_data . ') no-repeat center; 
                 background-size: cover;"><span class="name"><i class="fas fa-circle" style="color: #5fe15f"></i> '
             . $user_data['login'] . '</span></div></a>');
-        print("<label class='tags_labels' >".$user_data['action_icon']."</label>");
+        print("<label class='tags_labels' >". $user_data['action_icon']."</label>");
     } ?>
 </div>
 
