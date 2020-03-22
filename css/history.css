@@ -1,8 +1,12 @@
 #people_block{
 
 }
+#people_block{
+    padding: 20px;
+}
 #people_block a{
     color: black;
+    text-decoration: none;
 }
 .people{
     border-radius: 360px;
@@ -12,11 +16,16 @@
 }
 .name{
     position: absolute;
-    margin-top: 75px;
+    margin-top: 35px;
     background: rgba(255, 255, 255, .9);
-    margin-left: -66px;
-    width: 132px;
-    height: 25px;
+    margin-left: -45px;
+    width: 90px;
+    height: 30px;
+}
+.tags_labels{
+    margin-left: -65px;
+    position: absolute;
+    margin-top: 110px;
 }
 .name i{
     font-size: .5em;
