@@ -65,7 +65,7 @@ function fil_users(data) {
         people.setAttribute("style", "background: url(" + data[i]['photo_src'] + ") no-repeat center; background-size: cover;");
         let name = document.createElement("span");
         name.setAttribute("class", "name");
-        name.innerHTML = '<i class="fas fa-circle" style="color: #5fe15f" aria-hidden="true"></i>' + data[i]['login'];
+        name.innerHTML = '<i class="fas fa-circle" style="color:'+ data[i]['online_status']['status']+'" title="'+data[i]['online_status']['last_online']+'"> </i> ' + data[i]['login'];
         people.append(name);
         url.append(people);
         people_block.append(url);

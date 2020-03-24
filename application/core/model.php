@@ -94,13 +94,32 @@ class Model
         $d1 = strtotime($last);
         $d2 = strtotime($today);
         $diff = $d2-$d1;
-        $diff = $diff/(60);
+        $diff = ceil($diff/(60));
         if ($diff > 10)
         {
-            return (array("status"=>"Red",
-                "last online" => $last['update_date']));
+            if ($diff < 60)
+                return (array("status"=>"Red",
+                "last_online" => "Was online ".$diff." minutes ago "));
+            elseif ($diff < 1440 and $diff >= 60)
+                return (array("status"=>"Red",
+                    "last_online" => "Was online ". ceil($diff/60) ." hour ago "));
+            else
+                return (array("status"=>"Red",
+                    "last_online" => "Last online ". $last));
         }
         else
-            return (array("status"=>"green"));
+            return (array("status"=>"green",
+                "last_online" => "Online"));
+    }
+    function  check_ready_to_chat($omega_user_login){
+        $omega_user_id = $this->get_user_id($omega_user_login);
+        $alfa_user_login = $_SESSION['login'];
+        $alfa_user_id = $this->get_user_id($alfa_user_login);
+        $like = $this->check_like_exist($alfa_user_id, $omega_user_id);
+        $like_back = $this->check_like_exist($omega_user_id, $alfa_user_id);
+        if ($like && $like_back)
+            return (1);
+        else
+            return (0);
     }
 }

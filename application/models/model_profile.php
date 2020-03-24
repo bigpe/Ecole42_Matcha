@@ -10,7 +10,8 @@ class Model_Profile extends Model{
             "user_sex_preference" => $this->get_user_sex_preference($login),
             "user_fame_rating" => $this->get_user_fame_rating($login),
             "online_status" => $this->check_online($login),
-            "user_login" => $login));
+            "user_login" => $login,
+            "ready_to_chat" => $this->check_ready_to_chat($login)));
     }
     function get_user_main_photo($login){
         $db = new database();
@@ -113,16 +114,5 @@ class Model_Profile extends Model{
     function delete_like($like_id){
         $db = new database();
         $db->db_change("UPDATE USER_HISTORY SET action_id=3 WHERE history_id = '$like_id';");
-    }
-    function  check_ready_to_chat($omega_user_login){
-        $omega_user_id = $this->get_user_id($omega_user_login);
-        $alfa_user_login = $_SESSION['login'];
-        $alfa_user_id = $this->get_user_id($alfa_user_login);
-        $like = $this->check_like_exist($alfa_user_id, $omega_user_id);
-        $like_back = $this->check_like_exist($omega_user_id, $alfa_user_id);
-        if ($like && $like_back)
-            return true;
-        else
-            return false;
     }
 }
