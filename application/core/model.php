@@ -111,4 +111,15 @@ class Model
             return (array("status"=>"green",
                 "last_online" => "Online"));
     }
+    function  check_ready_to_chat($omega_user_login){
+        $omega_user_id = $this->get_user_id($omega_user_login);
+        $alfa_user_login = $_SESSION['login'];
+        $alfa_user_id = $this->get_user_id($alfa_user_login);
+        $like = $this->check_like_exist($alfa_user_id, $omega_user_id);
+        $like_back = $this->check_like_exist($omega_user_id, $alfa_user_id);
+        if ($like && $like_back)
+            return (1);
+        else
+            return (0);
+    }
 }

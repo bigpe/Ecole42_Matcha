@@ -10,7 +10,8 @@ class Model_Profile extends Model{
             "user_sex_preference" => $this->get_user_sex_preference($login),
             "user_fame_rating" => $this->get_user_fame_rating($login),
             "online_status" => $this->check_online($login),
-            "user_login" => $login));
+            "user_login" => $login,
+            "ready_to_chat" => $this->check_ready_to_chat($login)));
     }
     function get_user_main_photo($login){
         $db = new database();
@@ -58,8 +59,9 @@ class Model_Profile extends Model{
                                                 JOIN USERS O on omega_user_id=O.user_id
                                                 JOIN USER_ACTIONS UA on USER_HISTORY.action_id = UA.action_id
             WHERE (O.login='$login' AND USER_HISTORY.action_id=1 OR
-                USER_HISTORY.action_id=2 AND O.login='$login')
-            ORDER BY USER_HISTORY.creation_date DESC");
+                USER_HISTORY.action_id=2 AND O.login='$login') AND day(USER_HISTORY.creation_date) 
+                    BETWEEN DAY(CURRENT_TIMESTAMP) AND (DAY(CURRENT_TIMESTAMP) + 3) 
+                    ORDER BY USER_HISTORY.creation_date DESC");
         if($user_fame_rating_count >= 999)
             $user_fame_rating = $db->db_read_multiple("SELECT fame_rating_name, fame_rating_icon FROM FAME_RATING 
                 WHERE fame_rating_end=999")[0];
@@ -112,16 +114,5 @@ class Model_Profile extends Model{
     function delete_like($like_id){
         $db = new database();
         $db->db_change("UPDATE USER_HISTORY SET action_id=3 WHERE history_id = '$like_id';");
-    }
-    function  check_ready_to_chat($omega_user_login){
-        $omega_user_id = $this->get_user_id($omega_user_login);
-        $alfa_user_login = $_SESSION['login'];
-        $alfa_user_id = $this->get_user_id($alfa_user_login);
-        $like = $this->check_like_exist($alfa_user_id, $omega_user_id);
-        $like_back = $this->check_like_exist($omega_user_id, $alfa_user_id);
-        if ($like && $like_back)
-            return true;
-        else
-            return false;
     }
 }

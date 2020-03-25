@@ -27,7 +27,7 @@
         <div id="right_arrow"><i class="fas fa-arrow-right"></i></div>
     </div>
     <div id="main_block">
-        <div id="connect_status"><i class="fas fa-power-off" style="color:<?php print($data['user_data']['online_status']['status'] . '" title="'. $data['user_data']['online_status']['last_online']); ?>"> </i> <span></span></div>
+        <div id="connect_status"><i class="fas fa-circle" style="color:<?php print($data['user_data']['online_status']['status'] . '" title="'. $data['user_data']['online_status']['last_online']); ?>"> </i> <span></span></div>
         <div id="name"><?php print($data['user_data']['user_login']); ?></div>
         <div id="sex_preference">
             <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
@@ -37,10 +37,13 @@
             <?php print($data['user_data']['user_fame_rating']['fame_rating_icon']); ?><span class="tooltiptext"><?php
                 print($data['user_data']['user_fame_rating']['fame_rating_name']); ?></span></div>
     </div>
-    <div id="action_block">
-        <div id="like_block" onclick="like()"><i class="fas fa-heart"></i></div>
-        <div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div>
-    </div>
+    <?php if($data['user_data']['user_login'] != $_SESSION['login'])
+        print('<div id="action_block">');
+    else
+        print('<div id="like_block" onclick="like()"><i class="fas fa-heart"></i></div>');
+        if($data['user_data']['ready_to_chat'])
+            print('<div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div></div>');
+        ?>
     <div id="info_block">
         <h3><i class="fas fa-info-circle"></i> About Me</h3>
         <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>

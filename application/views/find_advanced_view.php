@@ -29,7 +29,7 @@
         $photo_data = "'data: ". mime_content_type($main_photo) .";base64,$main_photo_data'";
         print('<a href="/profile/view/?login=' . $user_data['login'] . '">
         <div class="people" style="background: url(' . $photo_data . ') no-repeat center; 
-                background-size: cover;"><span class="name"><i class="fas fa-power-off" style="color:'.$user_data['online_status']['status'].'" title="'.$user_data['online_status']['last_online'].'"> </i> '
+                background-size: cover;"><span class="name"><i class="fas fa-circle" style="color:'.$user_data['online_status']['status'].'" title="'.$user_data['online_status']['last_online'].'"> </i> '
             . $user_data['login'] . '</span></div></a>');
     } ?>
 </div>
