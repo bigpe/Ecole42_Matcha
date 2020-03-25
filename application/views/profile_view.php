@@ -66,7 +66,7 @@
     }?>
     <div id="info_block">
         <h3><i class="fas fa-info-circle"></i> About Me</h3>
-        <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>
+        <div id="info"><?php print($data['user_data']['user_info']); ?></div>
     </div>
     <div id="geo_block">
         <div id="geo"><i class="fas fa-location-arrow"></i> <?php print($data['user_data']['user_geo']);?></div>
