@@ -17,7 +17,7 @@
         print($date_time);
         print('<a href="/profile/view/?login=' . $user_data['login'] . '">
         <div class="people" style="background: url(' . $photo_data . ') no-repeat center; 
-                background-size: cover;"><span class="name"><i class="fas fa-circle" style="color: #5fe15f"></i> '
+                background-size: cover;"><span class="name"><i class="fas fa-circle" style="color: '.$user_data['online_status']['status'] .'" title ="'.$user_data['online_status']['last_online'].'"></i> '
             . $user_data['login'] . '</span></div></a>');
         print("<label class='tags_labels' >$action_icon $action_count</label>");
         if($date_one != $date_two && $date_two != 1)

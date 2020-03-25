@@ -15,6 +15,8 @@ class Model_History extends Model{
     WHERE (O.login='$login') AND alfa_user_id!=omega_user_id
     GROUP BY action_id, day(USER_HISTORY.update_date)
     ORDER BY USER_HISTORY.update_date DESC");
+        for ($i = 0; $i < count($user_history); $i++)
+            $user_history[$i]['online_status'] = $this->check_online($user_history[$i]['login']);
         $this->input_history($user_id, $user_id, 16);
         return ($user_history);
     }

@@ -41,7 +41,7 @@
         </div>
     </div>
     <div id="main_block">
-        <div id="connect_status"><i class="fas fa-circle" style="color:<?php print($data['user_data']['online_status']['status']); ?>"> </i> <span></span></div>
+        <div id="connect_status"><i class="fas fa-circle" style="color:<?php print($data['user_data']['online_status']['status'] . '" title="'. $data['user_data']['online_status']['last_online']); ?>"> </i> <span></span></div>
         <div id="name"><?php print($data['user_data']['user_login']); ?></div>
         <div id="sex_preference">
             <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
