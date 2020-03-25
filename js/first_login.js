@@ -201,3 +201,14 @@ function fill_tags() {
                 }
             }})
 }
+function get_location(token) {
+    let serviceUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip=";
+    $.ajax({
+        url: serviceUrl,
+        method: "GET",
+        contentType: "application/json",
+        headers: {"Authorization": "Token " + token},
+        success: function (data) {
+            geo.value = data['location']['data']['city'];
+        }})
+}
