@@ -122,4 +122,13 @@ class Model
         else
             return (0);
     }
+    function check_like_status($omega_login, $alpha_login){
+        $db = new database();
+        if($db->db_read("SELECT action_id FROM USER_HISTORY
+    JOIN USERS O on USER_HISTORY.omega_user_id = O.user_id
+    JOIN USERS A on USER_HISTORY.alfa_user_id = A.user_id
+    WHERE (O.login='$omega_login' AND A.login='$alpha_login') and action_id=2"))
+            return(1);
+        return(0);
+    }
 }

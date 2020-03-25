@@ -12,7 +12,7 @@ class Model_History extends Model{
     JOIN USER_MAIN_PHOTO UMP on A.user_id = UMP.user_id
     JOIN USER_PHOTO UP on UMP.photo_id = UP.photo_id
     JOIN USER_ACTIONS UA on USER_HISTORY.action_id = UA.action_id
-    WHERE (alfa_user_id=13 AND omega_user_id=24) AND alfa_user_id!=omega_user_id
+    WHERE (O.login='$login') AND alfa_user_id!=omega_user_id
     GROUP BY action_id, day(USER_HISTORY.update_date)
     ORDER BY USER_HISTORY.update_date DESC");
         for ($i = 0; $i < count($user_history); $i++)

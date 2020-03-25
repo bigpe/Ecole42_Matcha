@@ -1,9 +1,8 @@
 <?php
 class Model_Profile extends Model{
     function get_user_data($login){
-        $this->put_history_view($login);
-        return (array(
-            "main_photo_src" => $this->get_user_main_photo($login),
+        $user_data = array(
+            "main_photo" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
             "user_geo" =>$this->get_user_location($login),
             "user_tags" => $this->get_user_tags($login),
@@ -11,14 +10,18 @@ class Model_Profile extends Model{
             "user_fame_rating" => $this->get_user_fame_rating($login),
             "online_status" => $this->check_online($login),
             "user_login" => $login,
-            "ready_to_chat" => $this->check_ready_to_chat($login)));
+            "user_photos" => $this->get_user_photos($login),
+            "ready_to_chat" => (isset($_SESSION['login']) ? $this->check_ready_to_chat($login) : "0"),
+            "check_like" => (isset($_SESSION['login']) ? $this->check_like_status($login, $_SESSION['login']) : "0"));
+        return($user_data);
     }
     function get_user_main_photo($login){
         $db = new database();
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
         $user_main_photo_id = $db->db_read("SELECT photo_id FROM USER_MAIN_PHOTO WHERE user_id='$user_id'");
         $user_main_photo_src = $db->db_read("SELECT photo_src FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
-        return($user_main_photo_src);
+        $user_main_photo_token = $db->db_read("SELECT photo_token FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
+        return(array("photo_src" => $user_main_photo_src, "photo_token" => $user_main_photo_token));
     }
     function get_user_info($login){
         $db = new database();
@@ -72,12 +75,12 @@ class Model_Profile extends Model{
         return($user_fame_rating);
     }
     function put_history_view($omega_user_login){
-        $omega_user_id = $this->get_user_id($omega_user_login);
-        $alfa_user_login = $_SESSION['login'];
-        $alfa_user_id = $this->get_user_id($alfa_user_login);
-        if ($alfa_user_id == $omega_user_id)
-            return;
-        $this->insert_history_view($alfa_user_id, $omega_user_id);
+            $omega_user_id = $this->get_user_id($omega_user_login);
+            $alfa_user_login = $_SESSION['login'];
+            $alfa_user_id = $this->get_user_id($alfa_user_login);
+            if ($alfa_user_id == $omega_user_id)
+                return;
+            $this->insert_history_view($alfa_user_id, $omega_user_id);
     }
     function get_user_id($login){
         $db = new database();
@@ -114,5 +117,10 @@ class Model_Profile extends Model{
     function delete_like($like_id){
         $db = new database();
         $db->db_change("UPDATE USER_HISTORY SET action_id=3 WHERE history_id = '$like_id';");
+    }
+    function get_user_photos($login){
+        $db = new database();
+        return($db->db_read_multiple("SELECT photo_token, photo_src FROM USER_PHOTO 
+                                    JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login'"));
     }
 }

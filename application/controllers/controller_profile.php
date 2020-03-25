@@ -22,6 +22,10 @@ class Controller_Profile extends Controller
     }
     function action_view(){
         if($this->check_get_arguments_exists(array("login"))){ #Success
+            if(isset($_SESSION['login'])) {
+                if ($_GET['login'] == $_SESSION['login'])
+                    header("Location: /profile");
+            }
             $user_data = $this->model->get_user_data($_GET['login']);
             $this->view->generate("profile_view.php", "template_view.php",
                 array("error" => $this->model->error_handler($this->model->error_id),
