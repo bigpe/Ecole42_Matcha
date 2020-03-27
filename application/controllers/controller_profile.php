@@ -51,5 +51,11 @@ class Controller_Profile extends Controller
                 echo "The user is not ready to meet";
         }
     }
+    function action_save_settings(){
+        if($this->check_post_arguments_exists(array("settings"))) {
+            if($this->model->check_session())
+                $this->model->save_settings($_POST['settings'], $_SESSION['login']);
+        }
+    }
 }
 ?>
