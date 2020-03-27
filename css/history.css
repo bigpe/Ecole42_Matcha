@@ -1,8 +1,16 @@
-#people_block{
 
-}
 #people_block{
     padding: 20px;
+}
+.date_block{
+    width: 100%;
+    background: antiquewhite;
+    border-radius: 10px;
+}
+.time_block{
+    position: absolute;
+    margin-left: 35px;
+    margin-top: -20px;
 }
 #people_block a{
     color: black;
@@ -11,8 +19,10 @@
 .people{
     border-radius: 360px;
     padding: 50px;
-    margin: 10px;
     display: inline-block;
+}
+.name span{
+    display: none;
 }
 .name{
     position: absolute;
@@ -23,9 +33,13 @@
     height: 30px;
 }
 .tags_labels{
-    margin-left: -65px;
+    margin-left: -75px;
     position: absolute;
     margin-top: 110px;
+    background: thistle;
+    width: 50px;
+    padding: 10px 5px 5px 5px;
+    border-radius: 10px;
 }
 .name i{
     font-size: .5em;

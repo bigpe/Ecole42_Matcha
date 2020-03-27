@@ -31,3 +31,15 @@
     width: 50%;
     margin: auto;
 }
+#address{
+    border: none;
+}
+.name span{
+    display: none;
+}
+#geo_block i{
+    position: absolute;
+    margin-left: -35px;
+    margin-top: 15px;
+    font-size: 1.5em;
+}

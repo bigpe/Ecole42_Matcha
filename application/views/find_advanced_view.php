@@ -13,6 +13,7 @@
         <div id="fame_block"></div>
         <div id="geo_block">
             <h4>Find by Geo</h4>
+            <i class="fas fa-location-arrow" aria-hidden="true" style="position: absolute;"></i>
             <input id="address" name="address" type="text" value="<?php print($data['user_filters']['geo']);?>"/>
         </div>
         <div id="tags_block"></div>

@@ -70,14 +70,20 @@
 #info_block{
     width: 100%;
 }
-#info_block h3{
-    height: 5px;
-}
 #info{
     outline: 0 solid transparent;
-    width: 90%;
-    padding: 10px;
-    margin: auto;
+    padding: 5px;
+    margin-bottom: 15px;
+}
+#info_block h3{
+    margin-bottom: 15px;
+}
+#connect_status span{
+    display: none;
+}
+.fa-user-ninja {
+    font-size: 1.2em;
+    color: crimson;
 }
 #photo_button{
     position: relative;
@@ -205,13 +211,23 @@
     padding: 10px;
     background: rgba(0, 0, 0, .05);
 }
-#info_change, #info_change_accept, #geo_change, #geo_change_accept, #tags_change_accept{
+#info_change, #info_change_accept, #geo_change, #geo_change_accept, #tags_change_accept, #real_name_change_accept{
     padding: 10px;
 }
-#info_change, #geo_change{
+#info_change, #geo_change, #real_name_change{
     color: darkorange;
+    padding: 5px;
 }
-#info_change_accept, #geo_change_accept, #tags_change_accept{
+#real_name input[type='text']{
+    text-align: center;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+#real_name{
+
+}
+#info_change_accept, #geo_change_accept, #tags_change_accept, #real_name_change_accept{
     color: #5fe15f;
 }
 #info textarea{

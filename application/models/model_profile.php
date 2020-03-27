@@ -6,6 +6,7 @@ class Model_Profile extends Model{
         $user_data = array(
             "main_photo" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
+            "user_real_name" => $this->get_user_real_name($login),
             "user_geo" =>$this->get_user_location($login),
             "user_tags" => $this->get_user_tags($login),
             "user_sex_preference" => $this->get_user_sex_preference($login),
@@ -34,6 +35,11 @@ class Model_Profile extends Model{
         $user_info = $db->db_read("SELECT info FROM USERS WHERE login='$login'");
         return ($user_info);
     }
+    function get_user_real_name($login){
+        $db = new database();
+        $user_real_name = $db->db_read("SELECT full_name FROM USERS WHERE login='$login'");
+        return ($user_real_name);
+    }
     function get_user_location($login){
         $db = new database();
         $user_location = $db->db_read("SELECT geo FROM USERS WHERE login='$login'");
@@ -46,6 +52,19 @@ class Model_Profile extends Model{
                 FROM USER_TAGS JOIN TAGS T on USER_TAGS.tag_id = T.tag_id 
                 WHERE user_id='$user_id' ORDER BY tag_rate DESC");
         return($user_tags);
+    }
+    function get_user_not_selected_tags($login){
+        $db = new database();
+        $user_tags = $db->db_read_multiple("SELECT tag_id
+            FROM USER_TAGS JOIN USERS U on USER_TAGS.user_id = U.user_id
+            WHERE login='$login'");
+        $query = "SELECT DISTINCT tag_name, tag_icon, tag_color
+                    FROM TAGS JOIN USER_TAGS UT on TAGS.tag_id = UT.tag_id ";
+        foreach ($user_tags as $user_tag){
+            $tag_id = $user_tag['tag_id'];
+            $query = "$query AND UT.tag_id!='$tag_id'";
+        }
+        return($db->db_read_multiple($query));
     }
     function get_user_sex_preference($login){
         $db = new database();
@@ -145,9 +164,12 @@ class Model_Profile extends Model{
             $query = "INSERT INTO USER_PHOTO(photo_token, photo_src, user_id) 
                         SELECT '$photo_token', '$photo_path', user_id FROM USERS WHERE login='$login'";
         }
-        if($settings['setting_type'] == 4)
+        if($settings['setting_type'] == 4) {
+            $photo_src = $db->db_read("SELECT photo_src FROM USER_PHOTO WHERE photo_token='$settings_value'");
+            exec("rm $photo_src");
             $query = "DELETE USER_PHOTO FROM USER_PHOTO 
             JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE photo_token='$settings_value' AND login='$login'";
+        }
         if($settings['setting_type'] == 5) {
             $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
             $photo_id = $db->db_read("SELECT photo_id FROM USER_PHOTO WHERE photo_token='$settings_value'");
@@ -171,7 +193,24 @@ class Model_Profile extends Model{
             else
                 $query = "INSERT INTO USER_MAIN_PHOTO(photo_id, user_id) VALUES ('$photo_id', '$user_id')";
         }
-        if(isset($query))
+        if($settings['setting_type'] == 7){
+            $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+            $query = [];
+            foreach ($settings_value as $tag)
+                $query[] = "INSERT IGNORE INTO USER_TAGS (user_id, tag_id) 
+                SELECT '$user_id', tag_id FROM TAGS WHERE tag_name='$tag'";
+        }
+        if($settings['setting_type'] == 8)
+            $query = "DELETE USER_TAGS FROM USER_TAGS 
+            JOIN USERS U on USER_TAGS.user_id = U.user_id JOIN TAGS T on USER_TAGS.tag_id = T.tag_id
+            WHERE login='$login' AND tag_name='$settings_value'";
+        if($settings['setting_type'] == 9)
+            $query = "UPDATE USERS SET full_name='$settings_value' WHERE login='$login'";
+        if(isset($query) && !is_array($query))
             $db->db_change($query);
+        if(isset($query) && is_array($query)){
+            foreach ($query as $q)
+                $db->db_change($q);
+        }
     }
 }

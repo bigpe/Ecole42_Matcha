@@ -45,7 +45,7 @@ class Controller_Profile extends Controller
     {
         if($_POST['login']) { #Success
             $login = $_POST['login'];
-            if($this->model->check_ready_to_chat($login) === true)
+            if($this->model->check_ready_to_chat($login))
                 header("Location: /chat/?login=$login");
             else
                 echo "The user is not ready to meet";
@@ -56,6 +56,11 @@ class Controller_Profile extends Controller
             if($this->model->check_session())
                 $this->model->save_settings($_POST['settings'], $_SESSION['login']);
         }
+    }
+    function action_load_tags(){
+        header("Content-Type: application/json");
+        if($this->model->check_session())
+            print(json_encode($this->model->get_user_not_selected_tags($_SESSION['login'])));
     }
 }
 ?>

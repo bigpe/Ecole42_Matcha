@@ -6,6 +6,8 @@ let user_photos = [];
 let photo;
 let info;
 let geo;
+let real_name;
+let city_selected = false;
 let main_photo_change_click = false;
 let like_block = document.getElementById("like_block");
 let main_photo_icon = document.getElementById("main_photo_icon");
@@ -14,6 +16,7 @@ let left_arrow = document.getElementById("left_arrow");
 let tags = document.getElementById("tags_block");
 let current_token;
 let main_photo_index = 0;
+let tag_delete = false;
 
 
 
@@ -213,47 +216,104 @@ function chat () {
         }
     });
 }
+
+function change_real_name() {
+    real_name = document.getElementById("real_name");
+    let real_name_change_accept = document.createElement("span");
+    real_name_change_accept.setAttribute("id", "real_name_change_accept");
+    real_name_change_accept.innerHTML = "<i class=\"fas fa-check\"></i>";
+    let real_name_input = document.createElement("input");
+    real_name_input.setAttribute("type", "text");
+    if(real_name.innerText.match("Anon"))
+        real_name_input.value = "";
+    else
+        real_name_input.value = real_name.innerText;
+    real_name.innerText = "";
+    real_name.onclick = null;
+    real_name.append(real_name_input);
+    real_name.append(real_name_change_accept);
+    real_name_input.focus();
+    real_name_input.addEventListener("keydown", function (e) {
+        if(e.keyCode == 13)
+            real_name_change_accept.click();
+    });
+    real_name_change_accept.onclick = function(){
+        profile_save_settings(9, real_name_input.value.trim()); //Type 9 - Save new Real Name
+        let real_name_change = document.createElement("span");
+        real_name_change.setAttribute("id", "real_name_change");
+        real_name_change.setAttribute("onclick", "change_real_name()");
+        real_name_change.innerHTML = "<i class=\"fas fa-pencil-alt\"></i>";
+        if(real_name_input.value.trim().length == 0)
+            real_name.innerHTML = "<i class=\"fas fa-user-ninja\"></i> I'm Anon";
+        else
+            real_name.innerText = real_name_input.value.trim();
+        real_name.append(real_name_change);
+        real_name_input.remove();
+        real_name_change_accept.remove();
+    };
+}
+
 function change_info() {
     info = document.getElementById("info");
     let info_change_accept = document.createElement("span");
     info_change_accept.setAttribute("id", "info_change_accept");
     info_change_accept.innerHTML = "<i class=\"fas fa-check\"></i>";
     let info_input = document.createElement("textarea");
-    info_input.value = info.innerText;
+    if(info.innerText.match("I'm Very Shy"))
+        info_input.value = "";
+    else
+        info_input.value = info.innerText;
     info.innerText = "";
     info.onclick = null;
     info.append(info_input);
     info.append(info_change_accept);
     info_input.focus();
+    info_input.addEventListener("keydown", function (e) {
+        if(e.keyCode == 13)
+            info_change_accept.click();
+    });
     info_change_accept.onclick = function(){
-        profile_save_settings("1", info_input.value); //Type 1 - Save new Info
+        profile_save_settings("1", info_input.value.trim()); //Type 1 - Save new Info
         let info_change = document.createElement("span");
         info_change.setAttribute("id", "info_change");
         info_change.setAttribute("onclick", "change_info()");
         info_change.innerHTML = "<i class=\"fas fa-pencil-alt\"></i>";
-        info.innerText = info_input.value;
+        if(info_input.value.trim().length == 0)
+            info.innerHTML = "<i class=\"fas fa-user-ninja\"></i> I'm Very Shy";
+        else
+            info.innerText = info_input.value.trim();
         info.append(info_change);
         info_input.remove();
         info_change_accept.remove();
     };
 }
 function change_geo() {
+    city_selected = false;
     geo = document.getElementById("geo");
+    let last_city = geo.innerText;
     geo.innerHTML = '<i class="fas fa-location-arrow" aria-hidden="true"></i>' +
         '<input id="address" name="address" type="text">';
     load_city_input(current_token);
     let geo_change_accept = document.createElement("span");
     let geo_change_input = document.getElementById("address");
+    geo_change_input.focus();
     geo_change_accept.setAttribute("id", "info_change_accept");
     geo_change_accept.innerHTML = "<i class=\"fas fa-check\"></i>";
     geo.append(geo_change_accept);
+    geo_change_input.addEventListener("keydown", function (e) {
+        if(e.keyCode == 13)
+            geo_change_accept.click();
+    });
     geo_change_accept.onclick = function () {
         profile_save_settings("2", geo_change_input.value); //Type 2 - Save new Geo
         let geo_change = document.createElement("span");
         geo_change.setAttribute("id", "geo_change");
         geo_change.setAttribute("onclick", "change_geo()");
         geo_change.innerHTML = "<i class=\"fas fa-pencil-alt\"></i>";
-        geo.innerHTML = "<i class=\"fas fa-location-arrow\"></i> " + geo_change_input.value;
+        if(city_selected)
+            geo.innerHTML = "<i class=\"fas fa-location-arrow\"></i> " + geo_change_input.value;
+        else
+            geo.innerHTML = "<i class=\"fas fa-location-arrow\"></i> " + last_city;
         geo.append(geo_change);
         geo_change_accept.remove();
     };
@@ -269,6 +329,7 @@ function load_city_input(token) {
         },
         onSelect: function(suggestion) {
            document.getElementById("address").value = suggestion['data']['city'];
+           city_selected = true;
         }
     });
 }
@@ -286,9 +347,22 @@ function load_tags_button(){
     fill_tags();
     document.getElementById("add_new_tag").remove();
 }
+
+function remove_tag() {
+   let tags = document.getElementsByClassName("tags");
+   for(let i = 0; i < tags.length; i++){
+       if(!tags[i]['checked']) {
+           tags[i]['labels'][0]['attributes']['for']['ownerElement'].remove();
+           profile_save_settings(8, tags[i].id); //Type 8 - Delete Tag
+           document.getElementById(tags[i].id).remove();
+       }
+   }
+}
+
 function fill_tags() {
+    tag_delete = false;
     $.ajax(
-        {url: "/first_login/load_tags",
+        {url: "/profile/load_tags",
             method: "POST",
             success: function (data) {
                 for(let i = 0; i < data.length; i++){
@@ -313,12 +387,16 @@ function fill_tags() {
                 tags_change_accept.onclick = function () {
                     let tags_list = tags.getElementsByClassName("tags");
                     let tags_to_delete = new Array();
+                    let tags_to_save = new Array();
                     for(let i = 0; i < tags_list.length; i++){
                         if(!tags_list[i]['checked']) {
                             tags_to_delete.push(tags_list[i].id);
                             tags_list[i]['labels'][0]['attributes']['for']['ownerElement'].remove();
                         }
+                        else
+                            tags_to_save.push(tags_list[i].id);
                     }
+                    profile_save_settings(7, tags_to_save); //Type 7 - Save Tag
                     for(let i = 0; i < tags_to_delete.length; i++)
                         document.getElementById(tags_to_delete[i]).remove();
                     this.remove();
@@ -327,6 +405,11 @@ function fill_tags() {
                     add_new_tag.setAttribute("onclick", "load_tags_button()");
                     add_new_tag.innerHTML = "<i class=\"fas fa-plus-circle\"></i>";
                     tags.append(add_new_tag);
+                    tag_delete = true;
+                    tags.onclick = function () {
+                        if(tag_delete)
+                            remove_tag();
+                    };
                 }
             }})
 }
