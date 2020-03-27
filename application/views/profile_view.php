@@ -1,5 +1,9 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
+<link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
 <h3><?php
+    $ini = include('./config/config.php');
+    $token = $ini['city_parser']['token'];
     $self_profile = 1;
     if(isset($_GET['login'])){
         $self_profile = 0;
@@ -25,17 +29,32 @@
     </div>
     <div id="photo_button">
         <?php count($data['user_data']['user_photos']) > 1 ?
-            print('<div id="left_arrow" onclick="photo_backward()"><i class="fas fa-arrow-left"></i></div>') : "";?>
+            print('<div id="left_arrow" onclick="photo_backward()"><i class="fas fa-arrow-left"></i></div>') :
+            print('<div id="left_arrow" onclick="photo_backward()" style="visibility: hidden"><i class="fas fa-arrow-left"></i></div>');?>
         <?php count($data['user_data']['user_photos']) > 1 ?
-            print('<div id="right_arrow" onclick="photo_forward()"><i class="fas fa-arrow-right"></i></div>') : "";?>
+            print('<div id="right_arrow" onclick="photo_forward()"><i class="fas fa-arrow-right"></i></div>') :
+            print('<div id="right_arrow" onclick="photo_forward()" style="visibility: hidden"><i class="fas fa-arrow-right"></i></div>');?>
+        <?php if($self_profile)
+            count($data['user_data']['user_photos']) > 0 ?
+            print('<div id="main_photo_icon" onclick="main_photo_change()"><i class="fas fa-star"></i></div>') :
+            print('<div id="main_photo_icon" onclick="main_photo_change()" style="visibility: hidden"><i class="fas fa-star"></i></div>');
+        else print('<div id="main_photo_icon" onclick="main_photo_change()" style="visibility: hidden"><i class="fas fa-star"></i></div>')?>
         <div id="options" <?php
         if(!isset($_SESSION['login'])) print('style="display:none"'); ?>>
             <input type="checkbox" id="options_input">
             <label for="options_input" id="options_label">
                 <i class="fas fa-ellipsis-h"></i>
                 <span id="options_menu">
-                    <?php if(!$self_profile) print('<p><i class="fas fa-user-lock"></i></p>'); ?>
-                    <?php if($self_profile) print('<p><i class="fas fa-trash-alt"></i></p>'); ?>
+                    <?php if(!$self_profile) print('<p id="block_user"><i class="fas fa-user-lock"></i></p>'); ?>
+                    <?php if($self_profile)
+                        if (count($data['user_data']['user_photos']) > 0)
+                            print('<p id="remove_photo" onclick="remove_photo()"><i class="fas fa-trash-alt"></i></p>');
+                        else
+                            print('<p id="remove_photo" onclick="remove_photo()" style="display: none"><i class="fas fa-trash-alt"></i></p>')?>
+                    <?php if($self_profile && count($data['user_data']['user_photos']) < 5)
+                        print('<p id="add_photo" onclick="add_photo()"><i class="fas fa-camera"></i></p>');
+                    else
+                        print('<p id="add_photo" onclick="add_photo()" style="display: none"><i class="fas fa-camera"></i></p>')?>
                 </span>
             </label>
         </div>
@@ -66,10 +85,15 @@
     }?>
     <div id="info_block">
         <h3><i class="fas fa-info-circle"></i> About Me</h3>
-        <div id="info" contentEditable="true"><?php print($data['user_data']['user_info']); ?></div>
+        <div id="info"><?php print($data['user_data']['user_info']); ?>
+            <?php $self_profile ? print('<span id="info_change" onclick="change_info()"><i class="fas fa-pencil-alt"></i></span>') : "";?>
+        </div>
     </div>
     <div id="geo_block">
-        <div id="geo"><i class="fas fa-location-arrow"></i> <?php print($data['user_data']['user_geo']);?></div>
+        <div id="geo">
+            <i class="fas fa-location-arrow"></i> <?php print($data['user_data']['user_geo']);?>
+            <?php $self_profile ? print('<span id="geo_change" onclick="change_geo()"><i class="fas fa-pencil-alt"></i></span>') : "" ?>
+        </div>
     </div>
     <div id="tags_block">
         <?php
@@ -79,13 +103,17 @@
                 $tag_name = $tag['tag_name'];
                 $tag_icon = $tag['tag_icon'];
                 $tag_color = $tag['tag_color'];
-                print("<input class='tags' id='$tag_name' value='$i'>");
-                print("<label class='tags_labels_another' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
+                $self_profile ? print("<input type='checkbox' checked class='tags' id='$tag_name' value='$tag_name' name='tags[]'>") :
+                    print("<input class='tags' id='$tag_name' value='$i'>");
+                $self_profile ?
+                print("<label class='tags_labels' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>") :
+                    print("<label class='tags_labels_another' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
                 $i++;
             }
+            $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : "";
         }
         else
-            print("Tags Error!");
+            $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : print("Tags not Found");
         ?>
     </div>
 </div>
@@ -93,4 +121,5 @@
 <script type="text/javascript">
     like_status(<?php print($data['user_data']['check_like']); ?>);
     load_user_photos(JSON.parse('<?php print(json_encode($data['user_data']['user_photos']))?>'));
+    load_token("<?php print($token);?>");
 </script>

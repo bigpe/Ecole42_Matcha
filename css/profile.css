@@ -130,7 +130,7 @@
     color: white;
     margin-top: -39px;
     margin-right: -10px;
-    padding-top: 25px;
+    padding-top: 30px;
     border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
     width: 65px;
@@ -139,7 +139,7 @@
     min-height: 50px;
     padding: 15px;
 }
-.tags_labels, .sex_label, .sex_preference_label, .tags_labels_another{
+.tags_labels, .sex_label, .sex_preference_label, .tags_labels_another, #add_new_tag{
     display: inline-table;
     vertical-align: middle;
     text-align: center;
@@ -148,6 +148,9 @@
     margin: 5px;
     border-radius: 5px;
     font-size: 2em;
+}
+#add_new_tag{
+    border: 1px dashed black;
 }
 .tags_labels, .tags_labels_another{
     width: 50px;
@@ -201,4 +204,33 @@
     align-items: center;
     padding: 10px;
     background: rgba(0, 0, 0, .05);
+}
+#info_change, #info_change_accept, #geo_change, #geo_change_accept, #tags_change_accept{
+    padding: 10px;
+}
+#info_change, #geo_change{
+    color: darkorange;
+}
+#info_change_accept, #geo_change_accept, #tags_change_accept{
+    color: #5fe15f;
+}
+#info textarea{
+    border: none;
+    text-align: center;
+    width: 100%;
+    resize: none;
+}
+#geo #address{
+    width: 50%;
+    margin: 10px;
+    font-size: 1em;
+    border: none;
+    height: 20px;
+}
+#main_photo_icon{
+    position: absolute;
+    margin-top: -135px;
+    font-size: 0.5em;
+    margin-left: 15px;
+    color: gold;
 }

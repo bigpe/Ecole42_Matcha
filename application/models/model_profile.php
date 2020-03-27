@@ -1,6 +1,8 @@
 <?php
 class Model_Profile extends Model{
     function get_user_data($login){
+        if(isset($_SESSION['login']))
+            $this->input_history($_SESSION['login'], $login, 1);
         $user_data = array(
             "main_photo" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
@@ -21,6 +23,10 @@ class Model_Profile extends Model{
         $user_main_photo_id = $db->db_read("SELECT photo_id FROM USER_MAIN_PHOTO WHERE user_id='$user_id'");
         $user_main_photo_src = $db->db_read("SELECT photo_src FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
         $user_main_photo_token = $db->db_read("SELECT photo_token FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
+        if(!$user_main_photo_token)
+            $user_main_photo_token = 1;
+        if(!$user_main_photo_src)
+            $user_main_photo_src = "./images/placeholder.png";
         return(array("photo_src" => $user_main_photo_src, "photo_token" => $user_main_photo_token));
     }
     function get_user_info($login){
@@ -122,5 +128,50 @@ class Model_Profile extends Model{
         $db = new database();
         return($db->db_read_multiple("SELECT photo_token, photo_src FROM USER_PHOTO 
                                     JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login'"));
+    }
+    function save_settings($settings, $login){
+        $db = new database();
+        $settings_value = $settings['setting_value'];
+        if($settings['setting_type'] == 1)
+            $query = "UPDATE USERS SET info='$settings_value' WHERE login='$login'";
+        if($settings['setting_type'] == 2)
+            $query = "UPDATE USERS SET geo='$settings_value' WHERE login='$login'";
+        if($settings['setting_type'] == 3){
+            $photo_token = $settings['setting_value']['photo_token'];
+            $photo_base64 = $settings['setting_value']['photo_base64'];
+            $photo_name = md5($photo_token);
+            $photo_path = "./images/user_photo/$photo_name.jpg";
+            file_put_contents($photo_path, file_get_contents($photo_base64));
+            $query = "INSERT INTO USER_PHOTO(photo_token, photo_src, user_id) 
+                        SELECT '$photo_token', '$photo_path', user_id FROM USERS WHERE login='$login'";
+        }
+        if($settings['setting_type'] == 4)
+            $query = "DELETE USER_PHOTO FROM USER_PHOTO 
+            JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE photo_token='$settings_value' AND login='$login'";
+        if($settings['setting_type'] == 5) {
+            $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+            $photo_id = $db->db_read("SELECT photo_id FROM USER_PHOTO WHERE photo_token='$settings_value'");
+            if($db->db_check("SELECT user_id FROM USER_MAIN_PHOTO WHERE user_id='$user_id'"))
+                $query = "UPDATE USER_MAIN_PHOTO SET photo_id='$photo_id' WHERE user_id='$user_id'";
+            else
+                $query = "INSERT INTO USER_MAIN_PHOTO(photo_id, user_id) VALUES ('$photo_id', '$user_id')";
+        }
+        if($settings['setting_type'] == 6){
+            $photo_token = $settings['setting_value']['photo_token'];
+            $photo_base64 = $settings['setting_value']['photo_base64'];
+            $photo_name = md5($photo_token);
+            $photo_path = "./images/user_photo/$photo_name.jpg";
+            file_put_contents($photo_path, file_get_contents($photo_base64));
+            $db->db_change("INSERT INTO USER_PHOTO(photo_token, photo_src, user_id) 
+                        SELECT '$photo_token', '$photo_path', user_id FROM USERS WHERE login='$login'");
+            $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+            $photo_id = $db->db_read("SELECT photo_id FROM USER_PHOTO WHERE photo_token='$photo_token'");
+            if($db->db_check("SELECT user_id FROM USER_MAIN_PHOTO WHERE user_id='$user_id'"))
+                $query = "UPDATE USER_MAIN_PHOTO SET photo_id='$photo_id' WHERE user_id='$user_id'";
+            else
+                $query = "INSERT INTO USER_MAIN_PHOTO(photo_id, user_id) VALUES ('$photo_id', '$user_id')";
+        }
+        if(isset($query))
+            $db->db_change($query);
     }
 }
