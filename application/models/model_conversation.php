@@ -70,4 +70,13 @@ class Model_Conversation extends Model{
         $user_main_photo_token = $db->db_read("SELECT photo_token FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
         return (array("photo_src" => $user_main_photo_src, "photo_token" => $user_main_photo_token));
     }
+
+    function save_message($login_from, $login_to, $message){
+        $db = new database();
+        $user_id_from = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_from'");
+        $user_id_to = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_to'");
+        $db->db_change("INSERT INTO USER_MESSAGE (user_id_from, user_id_to, text_message, chat_id) SELECT $user_id_from, $user_id_to, '$message', chat_id
+FROM CHATS WHERE user_id_one = $user_id_from AND user_id_two = $user_id_to
+OR user_id_one = $user_id_to AND user_id_two = $user_id_from");
+    }
 }

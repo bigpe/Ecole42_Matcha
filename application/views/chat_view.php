@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="../../css/chat.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
     <?php
@@ -25,15 +26,19 @@
             }
         else{
             $class = "other_message";
-            $mini_photo =  '<div class="mini_people" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;"></div>';
+            $mini_photo =  '<div class="mini_people" id="mini_photo" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;"></div>';
         }
             print('
             <div class="'.$class.'">'.$mini_photo.'<span>'.$message['text_message'].'</span></div>');
     } ?>
 </div>
+<div id="message_block"></div>
 <div class="input_message">
     <div id="textarea"><textarea id="text"></textarea></div>
-    <div id="send_message"><i class="fas fa-arrow-circle-up"></i></div>
+    <div id="send_message" onclick="send_message()"><i class="fas fa-arrow-circle-up"></i></div>
+    <input type="hidden" name="login" id="my_login" value="<?php echo $_SESSION['login']?>"></input>
+    <input type="hidden" name="login" id="login_to" value="<?php echo $users_data['login'] ?>"></input>
 </div>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
+<script src="../../js/chat.js"></script>
