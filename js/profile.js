@@ -35,12 +35,12 @@ let params = window
     );
 function like () {
     if(current_like_status) {
-        like_block.innerHTML = "<i class=\"far fa-heart\"></i>";
         current_like_status = 0;
+        like_block.removeAttribute("class");
     }
     else {
-        like_block.innerHTML = "<i class=\"fas fa-heart\"></i>";
         current_like_status = 1;
+        like_block.setAttribute("class", "like_filled");
     }
     $.ajax({
         url: '/profile/like',

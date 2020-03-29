@@ -62,9 +62,11 @@
     <div id="main_block">
         <div id="connect_status"><i class="fas fa-circle" style="color:<?php print($data['user_data']['online_status']['status'] . '" title="'. $data['user_data']['online_status']['last_online']); ?>"> </i> <span></span></div>
         <div id="name"><?php print($data['user_data']['user_login']); ?></div>
-        <div id="sex_preference">
+        <div id="sex_preference" style="color:
+        <?php print($data['user_data']['user_sex_preference']['sex_preference_color'])?>">
             <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
-            <span class="tooltiptext"><?php print($data['user_data']['user_sex_preference']['sex_preference_name']);?></span>
+            <span class="tooltiptext">
+                <?php print($data['user_data']['user_sex_preference']['sex_preference_name']);?></span>
         </div>
         <div id="fame_rating" style="color: <?php print($data['user_data']['user_fame_rating']['fame_rating_color']);?>">
             <?php print($data['user_data']['user_fame_rating']['fame_rating_icon']); ?><span class="tooltiptext"><?php
@@ -73,11 +75,10 @@
     <?php
     if(!$self_profile && isset($_SESSION['login'])) {
         print('<div id="action_block">');
-        if($data['user_data']['check_like'])
-            $heart = "<i class=\"fas fa-heart\"></i>";
-        else
-            $heart = "<i class=\"far fa-heart\"></i>";
-        print("<div id='like_block' onclick='like()'>$heart</div>");
+        $heart = "<i class=\"fas fa-heart\"></i>";
+        $check_like = $data['user_data']['check_like'];
+        $check_like ? print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>") :
+            print("<div id='like_block' onclick='like()'>$heart</div>");
         if($data['user_data']['ready_to_chat'])
             print('<div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div>');
         if(!$self_profile)

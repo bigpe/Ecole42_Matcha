@@ -40,13 +40,12 @@
 #sex_preference{
     padding: 10px;
     font-size: 2em;
-    color: darkmagenta;
-    text-shadow: 0 0 15px white;
+    text-shadow: 1px 1px 1px black;
 }
 #fame_rating{
     font-size: 2em;
     color: crimson;
-    text-shadow: 0 0 15px white;
+    text-shadow: 1px 1px 1px black;
 }
 #fame_rating:hover .tooltiptext, #sex_preference:hover .tooltiptext{
     display: unset;
@@ -196,13 +195,32 @@
     font-weight: bold;
 }
 #like_block{
+    color: rgba(255, 15, 0, 0.31);
+    font-size: 2em;
+    border-radius: 100%;
+    background: white;
+    padding: 15px;
+    border: 1px solid lightgray;
+}
+.like_filled i{
     color: crimson;
-    font-size: 2.5em;
+    animation-name: like_animation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+@keyframes like_animation {
+    0%{transform: scale(1)}
+    90%{transform: scale(1.2)}
+    100%{transform: scale(1)}
 }
 #chat_block{
     color: #c640a4;
-    font-size: 2.5em;
+    font-size: 2em;
     margin-left: 100px;
+    border-radius: 100%;
+    background: white;
+    padding: 15px;
+    border: 1px solid lightgray;
 }
 #action_block{
     display: flex;

@@ -71,10 +71,10 @@ class Model_Profile extends Model{
         $user_sex = $db->db_read("SELECT sex FROM USERS WHERE login='$login'");
         $user_sex_preference = $db->db_read("SELECT sex_preference from USERS WHERE login='$login'");
         if(!(int)$user_sex_preference)
-            return($db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon 
+            return($db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon, sex_preference_color
                 FROM SEX_PREFERENCE WHERE sex_preference_id='0'")[0]);
         $math = (int)$user_sex + (int)$user_sex_preference;
-        $sex_preference = $db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon 
+        $sex_preference = $db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon, sex_preference_color 
                 FROM SEX_PREFERENCE WHERE sex_preference_id='$math'")[0];
         return($sex_preference);
     }
