@@ -62,9 +62,11 @@
     <div id="main_block">
         <div id="connect_status"><i class="fas fa-circle" style="color:<?php print($data['user_data']['online_status']['status'] . '" title="'. $data['user_data']['online_status']['last_online']); ?>"> </i> <span></span></div>
         <div id="name"><?php print($data['user_data']['user_login']); ?></div>
-        <div id="sex_preference">
+        <div id="sex_preference" style="color:
+        <?php print($data['user_data']['user_sex_preference']['sex_preference_color'])?>">
             <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
-            <span class="tooltiptext"><?php print($data['user_data']['user_sex_preference']['sex_preference_name']);?></span>
+            <span class="tooltiptext">
+                <?php print($data['user_data']['user_sex_preference']['sex_preference_name']);?></span>
         </div>
         <div id="fame_rating" style="color: <?php print($data['user_data']['user_fame_rating']['fame_rating_color']);?>">
             <?php print($data['user_data']['user_fame_rating']['fame_rating_icon']); ?><span class="tooltiptext"><?php
@@ -73,19 +75,27 @@
     <?php
     if(!$self_profile && isset($_SESSION['login'])) {
         print('<div id="action_block">');
-        if($data['user_data']['check_like'])
-            $heart = "<i class=\"fas fa-heart\"></i>";
-        else
-            $heart = "<i class=\"far fa-heart\"></i>";
-        print("<div id='like_block' onclick='like()'>$heart</div>");
+        $heart = "<i class=\"fas fa-heart\"></i>";
+        $check_like = $data['user_data']['check_like'];
+        $check_like ? print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>") :
+            print("<div id='like_block' onclick='like()'>$heart</div>");
         if($data['user_data']['ready_to_chat'])
             print('<div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div>');
         if(!$self_profile)
             print('</div>');
     }?>
+    <div id="real_name_block">
+        <h3><i class="fas fa-user-tie"></i> Can Call Me</h3>
+        <?php !$data['user_data']['user_real_name'] ? print('<div id="real_name"><i class="fas fa-user-ninja"></i> I\'m Anon') :
+                print('<div id="real_name">' . $data['user_data']['user_real_name']);
+        $self_profile ? print('<span id="real_name_change" onclick="change_real_name()"><i class="fas fa-pencil-alt"></i></span>') : "" ?>
+        </div>
+    </div>
     <div id="info_block">
         <h3><i class="fas fa-info-circle"></i> About Me</h3>
-        <div id="info"><?php print($data['user_data']['user_info']); ?>
+        <?php !$data['user_data']['user_info'] ?
+            print('<div id="info"><i class="fas fa-user-ninja"></i> I\'m Very Shy') :
+            print('<div id="info">' . $data['user_data']['user_info']); ?>
             <?php $self_profile ? print('<span id="info_change" onclick="change_info()"><i class="fas fa-pencil-alt"></i></span>') : "";?>
         </div>
     </div>
@@ -103,7 +113,7 @@
                 $tag_name = $tag['tag_name'];
                 $tag_icon = $tag['tag_icon'];
                 $tag_color = $tag['tag_color'];
-                $self_profile ? print("<input type='checkbox' checked class='tags' id='$tag_name' value='$tag_name' name='tags[]'>") :
+                $self_profile ? print("<input type='checkbox' checked class='tags' onclick='remove_tag()' id='$tag_name' value='$tag_name' name='tags[]'>") :
                     print("<input class='tags' id='$tag_name' value='$i'>");
                 $self_profile ?
                 print("<label class='tags_labels' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>") :
@@ -111,9 +121,10 @@
                 $i++;
             }
             $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : "";
+            !$data['user_data']['user_tags'] && !$self_profile ? print("<i class=\"fas fa-user-ninja\"></i> My interesting is empty <br> I'm not Interesting") : "";
         }
         else
-            $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : print("Tags not Found");
+            $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : "";
         ?>
     </div>
 </div>

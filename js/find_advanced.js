@@ -43,6 +43,7 @@ function load_city_input(token) {
             locations: { city_type: "город" }
         },
         onSelect: function(suggestion) {
+            geo.value = suggestion['data']['city'];
             $.ajax({
                 url: "/find_advanced/save_filters",
                 method: "POST",

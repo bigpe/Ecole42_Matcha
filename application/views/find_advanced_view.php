@@ -5,14 +5,25 @@
 
 <h3>Find Advanced</h3>
 <details>
+    <summary><i class="fas fa-filter"></i> Filters</summary>
     <div id="filter_block">
         <div id="age_block">
-            <h4>Find by Age Range</h4>
             <input type="text" class="js-range-slider">
         </div>
-        <div id="fame_block"></div>
+        <div id="fame_block">
+            <input class="fame_rating" type="radio" name="fame_rating" id="any_fame_rating" checked>
+            <label class="fame_rating_label" for="any_fame_rating"><i class="fas fa-infinity"></i></label>
+            <input class="fame_rating" type="radio" name="fame_rating" id="low_fame_rating">
+            <label class="fame_rating_label" for="low_fame_rating"><i class="fas fa-battery-quarter"></i></label>
+            <input class="fame_rating" type="radio" name="fame_rating" id="medium_fame_rating">
+            <label class="fame_rating_label" for="medium_fame_rating"><i class="fas fa-battery-half"></i></label>
+            <input class="fame_rating" type="radio" name="fame_rating" id="high_fame_rating">
+            <label class="fame_rating_label" for="high_fame_rating"><i class="fas fa-battery-three-quarters"></i></label>
+            <input class="fame_rating" type="radio" name="fame_rating" id="famous_fame_rating">
+            <label class="fame_rating_label" for="famous_fame_rating"><i class="fas fa-battery-full"></i></label>
+        </div>
         <div id="geo_block">
-            <h4>Find by Geo</h4>
+            <i class="fas fa-search-location"></i>
             <input id="address" name="address" type="text" value="<?php print($data['user_filters']['geo']);?>"/>
         </div>
         <div id="tags_block"></div>
