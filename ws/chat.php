@@ -1,4 +1,5 @@
 <?php
+require_once ('../config/database.php');
 class Chat {
     public function sendHeaders($headersText, $newSocket, $host, $port){
         $headers = array();
@@ -64,9 +65,15 @@ class Chat {
         return true;
     }
 
-    function createChatBoxMessage($user_from ,$user_to, $message, $type) {
-        $messageArray = array('user_from'=>$user_from,'user_to'=>$user_to, 'message'=> $message, 'type' => $type);
+    function createChatBoxMessage($user_session ,$chat_id, $message, $type) {
+        $db = new database();
+        $user_to = $db->db_read("SELECT session_name FROM USERS_SESSIONS
+                                JOIN CHATS C on user_id_one = USERS_SESSIONS.user_id
+                                OR C.user_id_two=USERS_SESSIONS.user_id
+                                WHERE  C.chat_id = $chat_id AND USERS_SESSIONS.session_name !='$user_session'");
+        
+        $messageArray = array('user_from'=>$chat_id,'user_to'=>$user_to, 'message'=> $message, 'type' => $type);
         $chatMessage = $this->seal(json_encode($messageArray));
         return $chatMessage;
-    }
+}
 }

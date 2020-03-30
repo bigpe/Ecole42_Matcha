@@ -13,7 +13,7 @@
     print('<div id="people_block">
         <div class="people" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;">
         <a href="/profile/view/?login=' . $users_data['login'] . '">
-        <span class="name"><i class="fas fa-circle" style="color:'.$users_data['online_status']['status'].'" 
+        <span class="name" id="login_from"><i class="fas fa-circle" style="color:'.$users_data['online_status']['status'].'" 
         title="'.$users_data['online_status']['last_online'].'"></i> '
             . $users_data['login'] . '</span></a>
         </div>
@@ -36,8 +36,6 @@
 <div class="input_message">
     <div id="textarea"><textarea id="text"></textarea></div>
     <div id="send_message" onclick="send_message()"><i class="fas fa-arrow-circle-up"></i></div>
-    <input type="hidden" name="login" id="my_login" value="<?php echo $_SESSION['login']?>"></input>
-    <input type="hidden" name="login" id="login_to" value="<?php echo $users_data['login'] ?>"></input>
 </div>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>

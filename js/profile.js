@@ -206,17 +206,6 @@ function load_user_photos(photo_array) {
     count_photo = photo_array.length;
 }
 
-function chat () {
-    $.ajax({
-        url: '/profile/chat',
-        method: 'POST',
-        data: {"login": params['login']},
-        success: function (data) {
-            // alert(data)
-        }
-    });
-}
-
 function change_real_name() {
     real_name = document.getElementById("real_name");
     let real_name_change_accept = document.createElement("span");
