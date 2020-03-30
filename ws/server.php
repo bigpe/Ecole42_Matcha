@@ -2,6 +2,8 @@
 require_once('chat.php');
 $chat = new Chat();
 $null = null;
+$session1 = 0;
+$session2 = 0;
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 if (!is_resource($socket))
     echo 'Не могу создать сокет: '. socket_strerror(socket_last_error()) . PHP_EOL;
@@ -20,7 +22,7 @@ while (true){
         $newSocket = socket_accept($socket);
         $clientSocketArray[] = $newSocket;
         $header = socket_read($newSocket, 1024);
-        $chat->sendHeaders($header, $newSocket, '192.168.0.191/ws', 8888);
+        $chat->sendHeaders($header, $newSocket, '192.168.0.2/ws', 8888);
         $newSocketIndex = array_search($socket, $newSocketArray);
         unset($newSocketArray[$newSocketIndex]);
     }

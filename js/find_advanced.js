@@ -1,9 +1,26 @@
 let time = null;
 let people_block = document.getElementById("people_block");
 let geo = document.getElementById("address");
+let fame_rating = document.getElementsByClassName("fame_rating");
 
 onload = function () {
 };
+
+function change_fame() {
+    for (let i = 0; i < fame_rating.length; i++){
+        if(fame_rating[i]['checked'])
+            $.ajax({
+                url: "/find_advanced/save_filters",
+                method: "POST",
+                data: {"fame_filter": {"fame_rating": fame_rating[i].value}},
+                success: function (data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    fil_users(data);
+                }
+            })
+    }
+}
 
 function load_slider(age_from, age_to) {
     $(".js-range-slider").ionRangeSlider({

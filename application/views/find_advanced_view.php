@@ -11,15 +11,20 @@
             <input type="text" class="js-range-slider">
         </div>
         <div id="fame_block">
-            <input class="fame_rating" type="radio" name="fame_rating" id="any_fame_rating" checked>
+            <input class="fame_rating" type="radio" name="fame_rating" id="any_fame_rating" value="0"
+                <?php !$data['user_filters']['fame_rating'] ? print("checked") : ""; ?> onclick="change_fame()">
             <label class="fame_rating_label" for="any_fame_rating"><i class="fas fa-infinity"></i></label>
-            <input class="fame_rating" type="radio" name="fame_rating" id="low_fame_rating">
+            <input class="fame_rating" type="radio" name="fame_rating" id="low_fame_rating" value="2" onclick="change_fame()"
+                <?php $data['user_filters']['fame_rating'] == 2 ? print("checked") : ""; ?>>
             <label class="fame_rating_label" for="low_fame_rating"><i class="fas fa-battery-quarter"></i></label>
-            <input class="fame_rating" type="radio" name="fame_rating" id="medium_fame_rating">
+            <input class="fame_rating" type="radio" name="fame_rating" id="medium_fame_rating" value="3" onclick="change_fame()"
+                <?php $data['user_filters']['fame_rating'] == 3 ? print("checked") : ""; ?>>
             <label class="fame_rating_label" for="medium_fame_rating"><i class="fas fa-battery-half"></i></label>
-            <input class="fame_rating" type="radio" name="fame_rating" id="high_fame_rating">
+            <input class="fame_rating" type="radio" name="fame_rating" id="high_fame_rating" value="4" onclick="change_fame()"
+                <?php $data['user_filters']['fame_rating'] == 4 ? print("checked") : ""; ?>>
             <label class="fame_rating_label" for="high_fame_rating"><i class="fas fa-battery-three-quarters"></i></label>
-            <input class="fame_rating" type="radio" name="fame_rating" id="famous_fame_rating">
+            <input class="fame_rating" type="radio" name="fame_rating" id="famous_fame_rating" value="5" onclick="change_fame()"
+                <?php $data['user_filters']['fame_rating'] == 5 ? print("checked") : ""; ?>>
             <label class="fame_rating_label" for="famous_fame_rating"><i class="fas fa-battery-full"></i></label>
         </div>
         <div id="geo_block">
@@ -40,7 +45,8 @@
         $photo_data = "'data: ". mime_content_type($main_photo) .";base64,$main_photo_data'";
         print('<a href="/profile/view/?login=' . $user_data['login'] . '">
         <div class="people" style="background: url(' . $photo_data . ') no-repeat center; 
-                background-size: cover;"><span class="name"><i class="fas fa-circle" style="color:'.$user_data['online_status']['status'].'" title="'.$user_data['online_status']['last_online'].'"> </i> '
+                background-size: cover;">
+                <span class="name"><i class="fas fa-circle" style="color:'.$user_data['online_status']['status'].'" title="'.$user_data['online_status']['last_online'].'"> </i> '
             . $user_data['login'] . '</span></div></a>');
     } ?>
 </div>
