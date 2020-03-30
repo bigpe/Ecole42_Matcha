@@ -80,14 +80,10 @@
         $check_like = $data['user_data']['check_like'];
         $check_like ? print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>") :
             print("<div id='like_block' onclick='like()'>$heart</div>");
-<<<<<<< HEAD
-        if($data['user_data']['ready_to_chat'])
-            print('<div id="chat_block"><a href="/conversation/chat_view/?id='.$chat_id.'" <i class="fas fa-comment-dots"></i></a></div>');
-=======
+
         $data['user_data']['ready_to_chat'] ?
-            print('<div id="chat_block" onclick="chat()" class="chat_available"><i class="fas fa-comment-dots"></i></div>') :
-            print('<div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div>');
->>>>>>> origin/master
+            print("<a href='/conversation/chat_view/?id=$chat_id'><div id='chat_block' class='chat_available'><i class='fas fa-comment-dots'></i></a></div>") :
+            print('<div id="chat_block"><i class="fas fa-comment-dots"></i></div>');
         if(!$self_profile)
             print('</div>');
 

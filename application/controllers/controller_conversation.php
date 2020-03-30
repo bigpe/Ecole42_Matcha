@@ -44,8 +44,9 @@ class Controller_Conversation extends Controller
 
     function action_save_message(){
         if ($this->check_post_arguments_exists(array("user_to", "message", "type"))){
-            if ($_POST['type'] == 1)
-                $this->model->save_message($_POST['user_to'], $_POST['message']);
+            if ($_POST['type'] == 1){
+                $this->model->save_message($_POST['user_to'], $_POST['message']) ? print (true) : print (false);
+            }
         }
     }
 }

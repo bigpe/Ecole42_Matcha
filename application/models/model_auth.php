@@ -29,7 +29,12 @@ class Model_Auth extends Model{
     function save_session($login){
         $db = new database();
         $session_id = session_id();
-        $db->db_change("INSERT INTO USERS_SESSIONS (session_name, user_id)
+        $user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        if($db->db_check("SELECT session_name FROM USERS_SESSIONS WHERE session_name ='$session_id'"))
+            $db->db_change("UPDATE USERS_SESSIONS  SET USERS_SESSIONS.user_id='$user_id'
+WHERE session_name='$session_id'");
+        else
+            $db->db_change("INSERT INTO USERS_SESSIONS (session_name, user_id)
                                 SELECT '$session_id', user_id
                                 FROM USERS WHERE user_id=user_id AND USERS.login='$login';");
     }

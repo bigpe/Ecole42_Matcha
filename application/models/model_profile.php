@@ -150,7 +150,10 @@ class Model_Profile extends Model{
     }
     function save_settings($settings, $login){
         $db = new database();
+
         $settings_value = $settings['setting_value'];
+        if ($settings['setting_type'] == 1 || $settings['setting_type'] == 9)
+            $settings_value = quotemeta(htmlspecialchars($settings_value, ENT_QUOTES));
         if($settings['setting_type'] == 1)
             $query = "UPDATE USERS SET info='$settings_value' WHERE login='$login'";
         if($settings['setting_type'] == 2)

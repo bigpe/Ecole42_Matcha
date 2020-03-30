@@ -18,12 +18,16 @@ let user_from = document.cookie.split('=', 2)[1];
 function append_message(data){
     let messageDiv = document.createElement("div");
     messageDiv.setAttribute('class', 'other_message');
-    let miniPhoto = document.getElementById("mini_photo").cloneNode(true);
-    messageDiv.append(miniPhoto);
+    let photo = document.getElementById("mini_photo");
+    if (photo !== null ){
+       let miniPhoto = photo.cloneNode(true);
+        messageDiv.append(miniPhoto);
+    }
     let span = document.createElement("span");
     span.innerText = data.message;
     messageDiv.append(span);
     $('.messages').append(messageDiv);
+    messageDiv.val(0);
 }
 function append_my_message(data){
     let messageDiv = document.createElement("div");
@@ -32,12 +36,12 @@ function append_my_message(data){
     span.innerText = data.message;
     messageDiv.append(span);
     $('.messages').append(messageDiv);
+    messageDiv.value = '';
 }
-let socket = new WebSocket("ws://192.168.0.2:8888/ws/server.php");
+let socket = new WebSocket("ws://192.168.0.191:8888/ws/server.php");
 
 socket.onopen = function () {
     console.log("join in Chat");
-    socket.send(JSON.stringify({session: document.cookie['PHPSESSID']}));
 };
 
 socket.onclose = function () {
@@ -53,26 +57,15 @@ if (data.user_from === user_chat_to && data.user_to === user_from && data.type =
 };
 
 function send_message() {
-    let user_from = $('#my_login').val();
-    let user_to = $('#login_to').val();
     let message = document.getElementById("text").value;
-    let messageJSON = {
-        user_from: user_from,
-        user_to: user_to,
-        message: message,
-        type: 1,
-    };
-    socket.send(JSON.stringify(messageJSON));
-    append_message(messageJSON);
-     $.ajax({
-        url: "/conversation/save_message",
-        method: "POST",
-        data: {"user_to": user_chat_to,
-        "message": message,
-        "type": 1   }, //type 1  - личное сообщение
-        success: function (userStatus) {
-            if(userStatus === "online")
-            {
+        if (message.trim() !== ''){
+         $.ajax({
+            url: "/conversation/save_message",
+            method: "POST",
+            data: {"user_to": user_chat_to,
+            "message": message,
+            "type": 1   }, //type 1  - личное сообщение
+            success: function (userStatus) {
                 let cookie = document.cookie.split('=', 2)[1];
                 let messageJSON = {
                     user_from: cookie,
@@ -80,18 +73,25 @@ function send_message() {
                     message: message,
                     type: 1
                 };
-                socket.send(JSON.stringify(messageJSON));
+
+                if(Number(userStatus) != 0){
+                    console.log(userStatus);
+                    socket.send(JSON.stringify(messageJSON));
+                }
                 append_my_message(messageJSON);
-            }
-            document.getElementById("text").value = '';
-        }});
+            }});
+         document.getElementById("text").value = '';
+
+    }
 }
 
 document.getElementById('text').addEventListener('keydown', function (k){
     if (k.keyCode === 13){
         send_message();
-        document.getElementById("text").value = '';
+        document.getElementById("text").value = null;
+        event.preventDefault()
     }
+
 });
 
 

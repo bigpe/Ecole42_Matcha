@@ -34,7 +34,7 @@
 </div>
 <div id="message_block"></div>
 <div class="input_message">
-    <div id="textarea"><textarea id="text"></textarea></div>
+    <div id="textarea"><textarea id="text" required></textarea></div>
     <div id="send_message" onclick="send_message()"><i class="fas fa-arrow-circle-up"></i></div>
 </div>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
