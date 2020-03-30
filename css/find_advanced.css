@@ -8,15 +8,16 @@
 .people{
     border-radius: 360px;
     padding: 100px;
-    margin: 10px;
+    margin: 20px;
     display: inline-block;
+    /*box-shadow: 1px 1px 5px gray;*/
 }
 .name{
     position: absolute;
-    margin-top: 75px;
+    margin-top: 90px;
     background: rgba(255, 255, 255, .9);
-    margin-left: -66px;
-    width: 132px;
+    margin-left: -75px;
+    width: 145px;
     height: 25px;
 }
 .name i{

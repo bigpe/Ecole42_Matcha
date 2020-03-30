@@ -14,10 +14,11 @@ function append_message(data){
     messageDiv.append(span);
     $('.messages').append(messageDiv);
 }
-let socket = new WebSocket("ws://192.168.0.191:8888/ws/server.php");
+let socket = new WebSocket("ws://192.168.0.2:8888/ws/server.php");
 
 socket.onopen = function () {
     console.log("join in Chat");
+    socket.send(JSON.stringify({session: document.cookie['PHPSESSID']}));
 };
 
 socket.onclose = function () {
@@ -44,7 +45,7 @@ function send_message() {
         user_from: user_from,
         user_to: user_to,
         message: message,
-        type: 1
+        type: 1,
     };
     socket.send(JSON.stringify(messageJSON));
     append_message(messageJSON);

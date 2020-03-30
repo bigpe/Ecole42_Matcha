@@ -79,7 +79,8 @@
         $check_like = $data['user_data']['check_like'];
         $check_like ? print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>") :
             print("<div id='like_block' onclick='like()'>$heart</div>");
-        if($data['user_data']['ready_to_chat'])
+        $data['user_data']['ready_to_chat'] ?
+            print('<div id="chat_block" onclick="chat()" class="chat_available"><i class="fas fa-comment-dots"></i></div>') :
             print('<div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div>');
         if(!$self_profile)
             print('</div>');

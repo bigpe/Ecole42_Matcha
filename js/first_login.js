@@ -112,6 +112,7 @@ load_tags_button.onclick = function(){
     load_tags_button.remove();
 };
 
+
 user_photo_input.onchange = function () {
     if(user_photo_input.files.length >= 5)
         user_photo_button.setAttribute("disabled", "disabled");
@@ -176,9 +177,6 @@ user_photo_input.onchange = function () {
     user_photo_tips.setAttribute("class", "highlight");
 };
 
-user_photo_button.onclick = function () {
-    user_photo_input.click();
-};
 function fill_tags() {
     $.ajax(
         {url: "/first_login/load_tags",
