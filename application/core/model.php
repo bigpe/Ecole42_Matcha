@@ -75,15 +75,19 @@ class Model
 
     function input_history($alfa_user_id, $omega_user_id, $action)
     {
+        if (isset($alfa_user_id) && isset($omega_user_id) && isset($action)){
         $db = new database();
         $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
+        }
     }
     function input_history_by_login($alfa_user_login, $omega_user_login, $action)
     {
-        $db = new database();
-        $alfa_user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$alfa_user_login'");
-        $omega_user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$omega_user_login'");
-        $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
+        if (isset($alfa_user_login) && isset($omega_user_login) && isset($action)) {
+            $db = new database();
+            $alfa_user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$alfa_user_login'");
+            $omega_user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$omega_user_login'");
+            $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
+        }
     }
     function check_online($login)
     {
@@ -111,17 +115,73 @@ class Model
             return (array("status"=>"green",
                 "last_online" => "Online"));
     }
-    function  check_ready_to_chat($omega_user_login){
-        $omega_user_id = $this->get_user_id($omega_user_login);
-        $alfa_user_login = $_SESSION['login'];
-        $alfa_user_id = $this->get_user_id($alfa_user_login);
-        $like = $this->check_like_exist($alfa_user_id, $omega_user_id);
-        $like_back = $this->check_like_exist($omega_user_id, $alfa_user_id);
-        if ($like && $like_back)
-            return (1);
-        else
-            return (0);
+    function check_ready_to_chat_id($chat_id){
+        $omega_user_login = $this->get_chat_users($chat_id);
+        return ($this->check_ready_to_chat($omega_user_login));
     }
+    function get_chat_users($chat_id){
+        $db = new database();
+        $login = $_SESSION['login'];
+        return  $db->db_read("SELECT DISTINCT login FROM USERS
+JOIN CHATS C on C.user_id_one = USERS.user_id OR C.user_id_two = USERS.user_id 
+WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
+
+    }
+    function get_user_id($login){
+        $db = new database();
+        return($db->db_read("SELECT user_id FROM USERS WHERE login = '$login'"));
+    }
+
+    function check_like_exist($alfa_user_id, $omega_user_id)
+    {
+        $db = new database();
+        $like_id = $db->db_read("SELECT history_id FROM USER_HISTORY WHERE alfa_user_id='$alfa_user_id'
+                                      AND omega_user_id='$omega_user_id' AND action_id=2");
+        return ($like_id);
+    }
+
+    function  check_ready_to_chat($omega_user_login){
+        if (isset($omega_user_login)){
+            $omega_user_id = $this->get_user_id($omega_user_login);
+            $alfa_user_login = $_SESSION['login'];
+            $alfa_user_id = $this->get_user_id($alfa_user_login);
+            $like = $this->check_like_exist($alfa_user_id, $omega_user_id);
+            $like_back = $this->check_like_exist($omega_user_id, $alfa_user_id);
+            if ($like && $like_back){
+                $chat_id = $this->search_chat($alfa_user_id, $omega_user_id);
+                if (!$chat_id){
+                    $this->create_chat($alfa_user_id, $omega_user_id);
+                    $chat_id = $this->search_chat($alfa_user_id, $omega_user_id);
+                }
+                return ($chat_id);
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+
+    function search_chat($user_id_one, $user_id_two){
+        $db = new database();
+        $chat_id = $db->db_read("SELECT chat_id FROM CHATS WHERE user_id_one=$user_id_one 
+                                                        AND user_id_two=$user_id_two OR
+                                                        user_id_one=$user_id_two AND 
+                                                        user_id_two=$user_id_one ");
+        return $chat_id;
+    }
+    function create_chat($user_id_one, $user_id_two){
+        $db = new database();
+        $id_chat = $db->db_read("SELECT chat_id FROM CHATS WHERE user_id_one=$user_id_one 
+                                                        AND user_id_two=$user_id_two OR
+                                                        user_id_one=$user_id_two AND 
+                                                        user_id_two=$user_id_one ");
+        if (isset($id_chat))
+            $db->db_change("INSERT INTO CHATS (user_id_one, user_id_two) VALUES ($user_id_one, $user_id_two)");
+        else
+            return $id_chat;
+    }
+
     function check_like_status($omega_login, $alpha_login){
         $db = new database();
         if($db->db_read("SELECT action_id FROM USER_HISTORY

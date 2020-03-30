@@ -34,8 +34,8 @@ class Model_Conversation extends Model{
     function get_login_chat($chat_id){
         $login = $_SESSION['login'];
         $db = new database();
-        $users = $db->db_read_multiple("SELECT DISTINCT login FROM USERS
-                                                JOIN USER_MESSAGE UM on USERS.user_id = UM.user_id_to WHERE chat_id = '$chat_id'");
+        $users = $db->db_read_multiple("SELECT login FROM CHATS
+                    JOIN USERS U on U.user_id=CHATS.user_id_one OR U.user_id=CHATS.user_id_two WHERE chat_id='$chat_id'");
         if ($users[0]['login'] === $login)
             $login_chat = $users[1]['login'];
         else
@@ -71,12 +71,15 @@ class Model_Conversation extends Model{
         return (array("photo_src" => $user_main_photo_src, "photo_token" => $user_main_photo_token));
     }
 
-    function save_message($login_from, $login_to, $message){
+    function save_message($chat_id, $message){
         $db = new database();
-        $user_id_from = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_from'");
-        $user_id_to = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_to'");
-        $db->db_change("INSERT INTO USER_MESSAGE (user_id_from, user_id_to, text_message, chat_id) SELECT $user_id_from, $user_id_to, '$message', chat_id
-FROM CHATS WHERE user_id_one = $user_id_from AND user_id_two = $user_id_to
-OR user_id_one = $user_id_to AND user_id_two = $user_id_from");
+        $login = $_SESSION['login'];
+        $user_id_from = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $user_id_to = $db->db_read("SELECT user_id FROM USERS
+                        JOIN CHATS on user_id_one=USERS.user_id OR user_id_two=USERS.user_id
+                        WHERE login!='$login' AND chat_id=$chat_id");
+        $db->db_change("INSERT INTO USER_MESSAGE (chat_id, user_id_from, user_id_to, text_message) 
+                                VALUES ($chat_id, $user_id_from, $user_id_to, '$message')");
+        $this->input_history($user_id_from, $user_id_from, 11);
     }
 }

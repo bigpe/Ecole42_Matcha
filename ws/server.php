@@ -12,6 +12,7 @@ if (!socket_bind($socket, 0, 8888))
 if(!socket_listen($socket))
     echo "error listen";
 $clientSocketArray = array($socket);
+
 while (true){
     $newSocketArray = $clientSocketArray;
     socket_select($newSocketArray, $null, $null, 0, 10);
@@ -27,9 +28,11 @@ while (true){
         while (socket_recv($newSocketArrayResource, $socketData, 1024, 0 ) >= 1){
             $socketMessage = $chat->unseal($socketData);
             $messageObj = json_decode($socketMessage);
-            $chat_box_message = $chat->createChatBoxMessage($messageObj->user_from, $messageObj->user_to, $messageObj->message,
+            if (isset($messageObj)){
+                $chat_box_message = $chat->createChatBoxMessage($messageObj->user_from, $messageObj->user_to, $messageObj->message,
                                                             $messageObj->type);
             $chat->send($chat_box_message);
+                }
             break 2;
         }
         $socketData = @socket_read($newSocketArrayResource, 1024, PHP_NORMAL_READ);

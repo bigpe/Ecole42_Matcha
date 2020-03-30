@@ -41,16 +41,7 @@ class Controller_Profile extends Controller
             $this->model->put_like($_POST['login']);
         }
     }
-    function action_chat()
-    {
-        if($_POST['login']) { #Success
-            $login = $_POST['login'];
-            if($this->model->check_ready_to_chat($login))
-                header("Location: /chat/?login=$login");
-            else
-                echo "The user is not ready to meet";
-        }
-    }
+
     function action_save_settings(){
         if($this->check_post_arguments_exists(array("settings"))) {
             if($this->model->check_session())

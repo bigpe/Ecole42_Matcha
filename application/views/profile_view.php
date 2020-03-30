@@ -75,14 +75,16 @@
     <?php
     if(!$self_profile && isset($_SESSION['login'])) {
         print('<div id="action_block">');
+        $chat_id = $data['user_data']['ready_to_chat'];
         $heart = "<i class=\"fas fa-heart\"></i>";
         $check_like = $data['user_data']['check_like'];
         $check_like ? print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>") :
             print("<div id='like_block' onclick='like()'>$heart</div>");
         if($data['user_data']['ready_to_chat'])
-            print('<div id="chat_block" onclick="chat()"><i class="fas fa-comment-dots"></i></div>');
+            print('<div id="chat_block"><a href="/conversation/chat_view/?id='.$chat_id.'" <i class="fas fa-comment-dots"></i></a></div>');
         if(!$self_profile)
             print('</div>');
+
     }?>
     <div id="real_name_block">
         <h3><i class="fas fa-user-tie"></i> Can Call Me</h3>

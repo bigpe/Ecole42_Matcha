@@ -5,6 +5,7 @@ class Model_Auth extends Model{
             return($this->error_id = 10); #Error_code 10 - Login or password incorrect
         if(!$this->error_id){ #Success
             $_SESSION['login'] = $login;
+            $this->save_session($login);
             $this->input_history_by_login($login, $login, 12);
         }
         return($this->error_id);
@@ -16,11 +17,26 @@ class Model_Auth extends Model{
         return($this->error_id);
     }
     function clear_session(){
+        $this->delete_session_in_db();
         session_unset();
         session_destroy();
     }
     function check_login_password($login, $password){
         $db = new database();
         return($db->db_check("SELECT user_id FROM USERS WHERE login='$login' AND password='$password'"));
+    }
+
+    function save_session($login){
+        $db = new database();
+        $session_id = session_id();
+        $db->db_change("INSERT INTO USERS_SESSIONS (session_name, user_id)
+                                SELECT '$session_id', user_id
+                                FROM USERS WHERE user_id=user_id AND USERS.login='$login';");
+    }
+
+    function delete_session_in_db(){
+        $db = new database();
+        $session_id = session_id();
+        $db->db_change("DELETE FROM USERS_SESSIONS WHERE session_name='$session_id'");
     }
 }
