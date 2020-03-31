@@ -43,10 +43,13 @@ class Controller_Conversation extends Controller
 
 
     function action_save_message(){
-        if ($this->check_post_arguments_exists(array("user_to", "message", "type"))){
-            if ($_POST['type'] == 1){
+        if ($this->check_post_arguments_exists(array("user_to", "message", "type")))
                 $this->model->save_message($_POST['user_to'], $_POST['message']) ? print (true) : print (false);
-            }
-        }
     }
+
+    function action_handler_message(){
+        if ($this->check_post_arguments_exists(array("chat_id", "start_message")))
+            print (json_encode($this->model->handler_message($_POST['chat_id'], $_POST['start_message'])));
+    }
+
 }

@@ -49,8 +49,12 @@
     height: 30px;
     min-width: 80px;
     align-self: center;
-    padding: 5;
+    padding: 5px;
 }
+.my_message i{
+    font-size: 10px                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ;
+}
+
 .other_message{
     border-radius: 50px 50px 50px 0px;
     background-color: rgba(45, 129, 181, 0.8);
@@ -58,7 +62,11 @@
     height: 30px;
     min-width: 80px;
     align-self: center;
-    padding: 5;
+    padding: 5px;
+}
+
+.other_message i{
+    font-size: 10px;
 }
 .mini_people{
     border-radius: 360px;

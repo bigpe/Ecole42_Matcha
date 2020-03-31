@@ -18,18 +18,23 @@
             . $users_data['login'] . '</span></a>
         </div>
         </div>
+        <div class="more_message" >
+            <button id="load_more_message">More message</button>
+        </div>
         <div class="messages">');
     foreach($messages as $message){
         $mini_photo = null;
-        if ($message['author'] == "You"){
+        $status = '<i class="fas fa-check-double" style="position: absolute; margin:15px 15px 15px"></i>';
+        if ($message['status_message'] == 0)
+            $status = '<i class="fas fa-check" style="position: absolute; margin:15px 15px 15px"></i>';
+        if ($message['author'] == "You")
             $class = "my_message";
-            }
         else{
             $class = "other_message";
             $mini_photo =  '<div class="mini_people" id="mini_photo" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;"></div>';
         }
             print('
-            <div class="'.$class.'">'.$mini_photo.'<span>'.$message['text_message'].'</span></div>');
+            <div class="'.$class.'" title="'.$message['creation_date'].'">'.$mini_photo.'<span>'.$message['text_message'].'</span>'.$status.'</div>');
     } ?>
 </div>
 <div id="message_block"></div>
