@@ -15,7 +15,8 @@ class Model_Profile extends Model{
             "user_login" => $login,
             "user_photos" => $this->get_user_photos($login),
             "ready_to_chat" => (isset($_SESSION['login']) ? $this->check_ready_to_chat($login) : "0"),
-            "check_like" => (isset($_SESSION['login']) ? $this->check_like_status($login, $_SESSION['login']) : "0"));
+            "check_like" => (isset($_SESSION['login']) ? $this->check_like_status($login, $_SESSION['login']) : "0"),
+            "profile_filled" => $this->get_profile_filled($login));
         return($user_data);
     }
     function get_user_main_photo($login){
@@ -59,7 +60,9 @@ class Model_Profile extends Model{
             FROM USER_TAGS JOIN USERS U on USER_TAGS.user_id = U.user_id
             WHERE login='$login'");
         $query = "SELECT DISTINCT tag_name, tag_icon, tag_color
-                    FROM TAGS WHERE";
+                    FROM TAGS";
+        if($user_tags)
+            $query = $query . " WHERE ";
         foreach ($user_tags as $user_tag){
             $tag_id = $user_tag['tag_id'];
             $query = "$query tag_id!='$tag_id'";
@@ -217,5 +220,34 @@ class Model_Profile extends Model{
             foreach ($query as $q)
                 $db->db_change($q);
         }
+    }
+    function get_profile_filled($login){
+        $db = new database();
+        $user_profile_filled = array("value" => 0, "add_to_profile" => []);
+        $user_base_info = $db->db_read_multiple("SELECT full_name, info FROM USERS WHERE login='$login'")[0];
+        if($user_base_info['full_name'])
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Full Name",
+                "icon" => "<i class=\"fas fa-user-tie\"></i>");
+        if($user_base_info['info'])
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Info",
+                "icon" => "<i class=\"fas fa-info-circle\"></i>");
+        $user_photos = $db->db_read("SELECT COUNT(photo_id) FROM USER_PHOTO 
+                            JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login' ");
+        $user_profile_filled['value'] += $user_photos * 8;
+        if($user_photos < 5)
+            $user_profile_filled['add_to_profile'][] = array("value" => "Photos",
+                "icon" => "<i class=\"fas fa-camera\"></i>");
+        $user_tags = $db->db_read("SELECT COUNT(user_tag_id) FROM USER_TAGS 
+                        JOIN USERS U on USER_TAGS.user_id = U.user_id WHERE login='$login'");
+        if($user_tags >= 1)
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Tags",
+                "icon" => "<i class=\"fas fa-hashtag\"></i>");
+        return ($user_profile_filled);
     }
 }

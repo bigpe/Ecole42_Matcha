@@ -8,6 +8,19 @@
     ?>
 </h3>
 <div id="profile_block">
+    <div id="add_to_profile_block">
+        <?php
+        if($self_profile) {
+            $add_to_profile = $data['user_data']['profile_filled']['add_to_profile'];
+            foreach ($add_to_profile as $add) {
+                $icon = $add['icon'];
+                $title = "Add " . $add['value'] . " to Fulfil your profile";
+                $id = "add_" . strtolower($add['value']);
+                print("<span id='$id' class='add_to_profile' title='$title'>$icon</span>");
+            }
+        }
+        ?>
+    </div>
     <div id="photo_block">
         <div class="photo" style="background:
             url('<?php $image = $data['user_data']['main_photo']['photo_src'];
@@ -17,6 +30,9 @@
             background-size: cover;" id="<?php print($data['user_data']['main_photo']['photo_token']);?>"></div>
     </div>
     <div id="photo_button">
+        <div id="profile_filled">
+            <progress id='profile_filled_progress_bar' value="<?php print($data['user_data']['profile_filled']['value']);?>" max="100"></progress>
+        </div>
         <?php count($data['user_data']['user_photos']) > 1 ?
             print('<div id="left_arrow" onclick="photo_backward()"><i class="fas fa-arrow-left"></i></div>') :
             print('<div id="left_arrow" onclick="photo_backward()" style="visibility: hidden"><i class="fas fa-arrow-left"></i></div>');?>
