@@ -20,7 +20,6 @@ let current_token;
 let main_photo_index = 0;
 let tag_delete = false;
 
-
 let params = window
     .location
     .search
@@ -48,8 +47,18 @@ function like () {
         url: '/profile/like',
         method: 'POST',
         data: {"login": params['login']},
-        success: function () {
-            // alert("ok");
+        success: function (data) {
+            if(data > 0){
+                let href = '/conversation/chat_view/?id='+data;
+                let chat_block = document.getElementById("chat_block");
+                chat_block.setAttribute("class", "chat_available");
+                chat_block.innerHTML= "<a href ='/conversation/chat_view/?id='+data'>" + chat_block.innerHTML + "</a>";
+            }
+            else{
+                let chat_block = document.getElementById("chat_block");
+                chat_block.removeAttribute("class");
+                chat_block.innerHTML = "<i class=\"fas fa-comment-dots\" aria-hidden=\"true\"></i>";
+            }
         }
     });
 }
