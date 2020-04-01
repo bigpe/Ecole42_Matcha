@@ -69,6 +69,7 @@
         $check_like = $data['user_data']['check_like'];
         $check_like ? print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>") :
             print("<div id='like_block' onclick='like()'>$heart</div>");
+
         $data['user_data']['ready_to_chat'] ?
             print("<a href='/conversation/chat_view/?id=$chat_id'><div id='chat_block' class='chat_available'><i class='fas fa-comment-dots'></i></a></div>") :
             print('<div id="chat_block"><i class="fas fa-comment-dots"></i></div>');

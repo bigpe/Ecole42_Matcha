@@ -18,11 +18,11 @@ class Model_Conversation extends Model{
     function get_messages($chat_id, $count_message){
         $login = $_SESSION['login'];
         $db = new database();
-        $messages = $db->db_read_multiple("SELECT text_message, user_id_from FROM USER_MESSAGE WHERE chat_id = '$chat_id'
-                                                  order by creation_date desc LIMIT $count_message");
+        $messages = $db->db_read_multiple("SELECT text_message, user_id_from, status_message, creation_date FROM USER_MESSAGE WHERE chat_id = '$chat_id'
+                                                  order by id_message desc LIMIT $count_message");
         for($i = 0; $i < count($messages); $i++){
         $author_id =  $messages[$i]['user_id_from'];
-        $author_message = $db->db_read("SELECT login FROM USERS WHERE user_id='$author_id'");
+    $author_message = $db->db_read("SELECT login FROM USERS WHERE user_id='$author_id'");
         if ($author_message == $login)
             $messages[$i]['author'] = "You";
         else
@@ -57,8 +57,17 @@ class Model_Conversation extends Model{
             "main_photo" => $this->get_user_main_photo($login_companion),
             "online_status" => $this->check_online($login_companion),
             "login" => $login_companion);
+        $this->edit_message_status($chat_id);
         return($user_data);
     }
+
+    function edit_message_status($chat_id){
+        $login = $_SESSION['login'];
+        $db = new database();
+        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login = '$login'");
+        $db->db_change("UPDATE USER_MESSAGE SET status_message=1 WHERE chat_id=$chat_id AND user_id_from!='$user_id'");
+    }
+
 
     function get_user_main_photo($login)
     {
@@ -72,13 +81,35 @@ class Model_Conversation extends Model{
 
     function save_message($chat_id, $message){
         $db = new database();
+        $message = quotemeta(htmlspecialchars($message, ENT_QUOTES));
         $login = $_SESSION['login'];
         $user_id_from = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
         $user_id_to = $db->db_read("SELECT user_id FROM USERS
                         JOIN CHATS on user_id_one=USERS.user_id OR user_id_two=USERS.user_id
                         WHERE login!='$login' AND chat_id='$chat_id'");
         $db->db_change("INSERT INTO USER_MESSAGE (chat_id, user_id_from, user_id_to, text_message) 
-                                VALUES ('$chat_id', '$user_id_from', '$user_id_to', '$message')");
-        $this->input_history($user_id_from, $user_id_from, 11);
+                                VALUES ('$chat_id', '$user_id_from', '$user_id_to', '$message');");
+        $this->input_history($user_id_from, $user_id_to, 11);
+        return($this->check_cookie($user_id_to));
+    }
+    function check_cookie($user_id)
+    {
+        $db = new database();
+        return $db->db_check("SELECT creation_date, session_name FROM USERS_SESSIONS
+                                            WHERE user_id='$user_id' ORDER BY creation_date DESC");
+    }
+    function handler_message($chat_id, $start_message_from){
+        $db = new database();
+        $login = $_SESSION['login'];
+        $my_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $messages = $db->db_read_multiple("SELECT user_id_from, text_message, status_message, creation_date 
+                                    FROM USER_MESSAGE WHERE chat_id='$chat_id' ORDER BY id_message DESC LIMIT $start_message_from, 10");
+        for ($i = 0; $i < count($messages); $i++){
+            if ($messages[$i]['user_id_from'] === $my_id)
+                $messages[$i]['message_from'] = "my";
+            else
+                $messages[$i]['message_from'] = "other";
+        }
+        return $messages;
     }
 }

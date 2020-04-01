@@ -164,11 +164,10 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
 
     function search_chat($user_id_one, $user_id_two){
         $db = new database();
-        $chat_id = $db->db_read("SELECT chat_id FROM CHATS WHERE user_id_one=$user_id_one 
+        return $db->db_read("SELECT chat_id FROM CHATS WHERE user_id_one=$user_id_one 
                                                         AND user_id_two=$user_id_two OR
                                                         user_id_one=$user_id_two AND 
                                                         user_id_two=$user_id_one ");
-        return $chat_id;
     }
     function create_chat($user_id_one, $user_id_two){
         $db = new database();
@@ -176,8 +175,8 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
                                                         AND user_id_two=$user_id_two OR
                                                         user_id_one=$user_id_two AND 
                                                         user_id_two=$user_id_one ");
-        if (isset($id_chat))
-            $db->db_change("INSERT INTO CHATS (user_id_one, user_id_two) VALUES ($user_id_one, $user_id_two)");
+        if (!$id_chat)
+            return $db->db_change("INSERT INTO CHATS (user_id_one, user_id_two) VALUES ($user_id_one, $user_id_two)");
         else
             return $id_chat;
     }
