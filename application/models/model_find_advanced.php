@@ -12,9 +12,23 @@ class model_find_advanced extends Model{
             $geo = $user_filters['geo'];
             $query_append = $query_append . " AND geo='$geo'";
         }
-        $users_data = $db->db_read_multiple("SELECT login, photo_src FROM USER_MAIN_PHOTO
+        if(isset($user_filters['tags'])) {
+            $tags = unserialize($user_filters['tags']);
+            if($tags) {
+                $query_append = $query_append . " AND (";
+                foreach ($tags as $tag) {
+                    $query_append = $query_append . "tag_name='$tag'";
+                    if (next($tags))
+                        $query_append = $query_append . "OR ";
+                }
+                $query_append = $query_append . ")";
+            }
+        }
+        $users_data = $db->db_read_multiple("SELECT DISTINCT login, photo_src FROM USER_MAIN_PHOTO
                     JOIN USER_PHOTO UP on USER_MAIN_PHOTO.photo_id = UP.photo_id 
-                    JOIN USERS U on UP.user_id = U.user_id WHERE login!='$login'" . $query_append);
+                    JOIN USERS U on UP.user_id = U.user_id 
+                    JOIN USER_TAGS UT on U.user_id = UT.user_id
+                    JOIN TAGS T on UT.tag_id = T.tag_id WHERE login!='$login'" . $query_append);
         for ($i = 0; $i < count($users_data); $i++) {
             $users_data[$i]['online_status'] = $this->check_online($users_data[$i]['login']);
             $users_data[$i]['fame_rating'] = $this->get_user_fame_rating($users_data[$i]['login']);
@@ -36,7 +50,7 @@ class model_find_advanced extends Model{
     }
     function get_user_filters($login){
         $db = new database();
-        $user_filters = $db->db_read_multiple("SELECT age_from, age_to, USER_FILTERS.geo, fame_rating FROM USER_FILTERS 
+        $user_filters = $db->db_read_multiple("SELECT age_from, age_to, USER_FILTERS.geo, fame_rating, tags FROM USER_FILTERS 
                 JOIN USERS U on USER_FILTERS.user_id = U.user_id WHERE U.login='$login'")[0];
         return($user_filters);
     }
@@ -61,6 +75,11 @@ class model_find_advanced extends Model{
             $db->db_change("UPDATE USER_FILTERS 
                                     JOIN USERS U on USER_FILTERS.user_id = U.user_id 
                                     SET fame_rating='$fame' WHERE login='$login'");
+        }
+        if(isset($user_filters['tags_filter'])) {
+            $tags = serialize($user_filters['tags_filter']['tags']);
+            $db->db_change("UPDATE USER_FILTERS JOIN USERS U on USER_FILTERS.user_id = U.user_id 
+                                    SET tags='$tags' WHERE login='$login'");
         }
         $users_data = $this->get_users_data($login, $this->get_user_filters($login));
         return($users_data);
@@ -90,6 +109,31 @@ class model_find_advanced extends Model{
                 FROM FAME_RATING WHERE '$user_fame_rating_count' >= fame_rating_start AND 
                                         '$user_fame_rating_count' <= fame_rating_end")[0];
         return($user_fame_rating_id);
+    }
+    function get_tags($login){
+        $db = new database();
+        $user_tags = [];
+        $tags = unserialize($db->db_read("SELECT tags FROM USER_FILTERS 
+                        JOIN USERS U on USER_FILTERS.user_id = U.user_id WHERE login='$login'"));
+        if($tags) {
+            foreach ($tags as $tag)
+                $user_tags[] = $db->db_read_multiple("SELECT tag_name, tag_icon, tag_color 
+                                                            FROM TAGS WHERE tag_name='$tag'")[0];
+        }
+        return($user_tags);
+    }
+    function find_tags($keyword){
+        $db = new database();
+        $tags = $db->db_read_multiple("SELECT tag_name, tag_icon, tag_color 
+                                            FROM TAGS WHERE tag_name LIKE '#$keyword%'");
+        return($tags);
+    }
+    function delete_filter($login, $filter){
+        $db = new database();
+        $db->db_change("UPDATE USER_FILTERS 
+                JOIN USERS U on USER_FILTERS.user_id = U.user_id SET tags=null WHERE login='$login'");
+        $users_data = $this->get_users_data($login, $this->get_user_filters($login));
+        return($users_data);
     }
 }
 ?>

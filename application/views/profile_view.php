@@ -4,25 +4,14 @@
 <h3><?php
     $ini = include('./config/config.php');
     $token = $ini['city_parser']['token'];
-    $self_profile = 1;
-    if(isset($_GET['login'])){
-        $self_profile = 0;
-        if(isset($_SESSION['profile'])) {
-            if ($_SESSION['login'] != $_GET['login'])
-                print(strtoupper($_GET['login']) . "'s Profile");
-        }
-        else {
-            print(strtoupper($_GET['login']) . "'s Profile");
-        }
-    }
-    else
-        print("It's your profile, another people be look's same");
+    isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1;
     ?>
 </h3>
 <div id="profile_block">
     <div id="photo_block">
         <div class="photo" style="background:
             url('<?php $image = $data['user_data']['main_photo']['photo_src'];
+            !file_exists($image) ? $image = "./images/placeholder.png" : "";
         $image_data = base64_encode(file_get_contents($image));
         print("data: ".mime_content_type($image).";base64,$image_data"); ?>') no-repeat center;
             background-size: cover;" id="<?php print($data['user_data']['main_photo']['photo_token']);?>"></div>

@@ -1,7 +1,7 @@
 #profile_block{
     width: 98%;
     max-width: 500px;
-    min-width: 350px;
+    min-width: 300px;
     border-radius: 15px;
     box-shadow: 1px 1px 20px gray;
     margin: 50px auto 50px auto;
@@ -119,7 +119,7 @@
     right: 0;
     font-size: .5em;
     margin-right: 2%;
-    margin-top: -140px;
+    margin-top: -141px;
     width: 55px;
 }
 #options_input{

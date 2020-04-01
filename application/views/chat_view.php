@@ -6,6 +6,8 @@
     <?php
     $users_data = $data['users_data'];
     $main_photo = $users_data['main_photo']['photo_src'];
+    if(!file_exists($main_photo))
+        $main_photo = "./images/placeholder.png";
     $main_photo_data = base64_encode(file_get_contents($main_photo));
     $messages = $users_data['messages'];
     $class = null;

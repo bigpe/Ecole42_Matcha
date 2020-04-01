@@ -3,9 +3,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
 
-<h3>Find Advanced</h3>
-<details>
-    <summary><i class="fas fa-filter"></i> Filters</summary>
+<details id="filter">
+    <summary><i class="fas fa-sliders-h"></i></summary>
     <div id="filter_block">
         <div id="age_block">
             <input type="text" class="js-range-slider">
@@ -31,7 +30,22 @@
             <i class="fas fa-search-location"></i>
             <input id="address" name="address" type="text" value="<?php print($data['user_filters']['geo']);?>"/>
         </div>
-        <div id="tags_block"></div>
+        <div id="tags_block">
+            <i class="fas fa-hashtag"></i>
+            <?php
+            if(isset($data['user_tags'])) {
+            foreach ($data['user_tags'] as $tag) {
+                $tag_name = $tag['tag_name'];
+                $tag_icon = $tag['tag_icon'];
+                $tag_color = $tag['tag_color'];
+                print("<label class='tags_labels' onclick='remove_tag.apply(this)' id='$tag_name' style='color: $tag_color'>$tag_icon</label>");
+            } }?>
+            <div id="tags_add">
+                <input disabled class="input_anim" id="tags_input">
+                <span id="tags_input_button"><i class="fas fa-plus-circle"></i></span>
+                <span id="tags_suggestion_block"></span>
+            </div>
+        </div>
     </div>
 </details>
 <div id="people_block">
@@ -41,6 +55,7 @@
     $users_data = $data['users_data'];
     foreach($users_data as $user_data){
         $main_photo = $user_data['photo_src'];
+        !file_exists($main_photo) ? $main_photo = "./images/placeholder.png" : "";
         $main_photo_data = base64_encode(file_get_contents($main_photo));
         $photo_data = "'data: ". mime_content_type($main_photo) .";base64,$main_photo_data'";
         print('<a href="/profile/view/?login=' . $user_data['login'] . '">
@@ -56,5 +71,4 @@
 <script type="text/javascript">
     load_slider(<?php print($data['user_filters']['age_from']);?>, <?php print($data['user_filters']['age_to']);?>);
     load_city_input("<?php print($token);?>");
-    //get_location("<?php //print($token);?>//");
 </script>

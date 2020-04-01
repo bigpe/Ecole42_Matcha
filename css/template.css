@@ -1,20 +1,66 @@
 header{
-    border: 1px solid black;
+    margin-top: -8px;
+    margin-left: -8px;
+    margin-right: -8px;
     text-align: center;
+    min-width: 300px;
+}
+header a{
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    padding: 20px;
+}
+#header_buttons{
+    display: table;
+    width: 100%;
+    background: indianred;
+}
+.header_buttons{
+    display: table-cell;
+}
+#notification_count{
+    font-size: .6em;
+    padding: 3px;
+}
+.header_buttons:hover{
+    background: rgba(255, 255, 255, 0.1);
+}
+#logo{
+    display: table-cell;
+    background: #777aff;
 }
 body{
     text-align: center;
 }
-footer{
-    border: 1px solid black;
-    text-align: center;
-}
 #debug_block{
+
 }
 #address{
+    background: transparent;
     text-align: center;
     border: none;
     border-bottom: 3px dashed black;
     height: 50px;
     font-size: 1.5em;
+    min-width: 300px;
+    width: 300px;
+}
+#filter summary{
+    font-size: 1.5em;
+    outline: none;
+}
+#filter{
+    background: honeydew;
+    padding: 10px;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+footer{
+    height: 100px;
+    margin-left: -8px;
+    margin-right: -8px;
+    margin-bottom: -8px;
+    background: indianred;
+    text-align: center;
 }

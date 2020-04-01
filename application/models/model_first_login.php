@@ -29,6 +29,11 @@ class model_first_login extends Model{
         return($db->db_read_multiple("SELECT tag_name, tag_icon, tag_color FROM TAGS ORDER BY tag_rate DESC 
                 LIMIT $this->tag_limit OFFSET $this->tag_offset"));
     }
+    function get_all_tags(){
+        $db = new database();
+        return($db->db_read_multiple("SELECT tag_name, tag_icon, tag_color 
+                                FROM TAGS ORDER BY tag_rate DESC LIMIT 100 OFFSET 5"));
+    }
     function save_photos($photos, $login){
         $db = new database();
         $photos = json_decode($photos, true);
