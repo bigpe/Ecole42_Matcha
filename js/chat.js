@@ -126,16 +126,27 @@ function send_message() {
                     message: message,
                     type: 1
                 };
-
-                if(Number(userStatus) != 0){
+                if(Number(userStatus) !== 0){
                     console.log(userStatus);
-                    //socket.send(JSON.stringify(messageJSON));
-                }
-                append_my_message(messageJSON);
-            }});
-         document.getElementById("text").value = '';
+                    socket.send(JSON.stringify(messageJSON));
+                    $.ajax({
+                        url: "/conversation/change_message_status",
+                        method: "POST",
+                        data: {"chat_to": user_chat_to,
+                            "user_from": user_from,
+                            "type": 2   },
+                        success: function changeMessageStatus() {
 
-    }
+                        },
+                    });
+                }
+                append_my_message(messageJSON)
+            }
+            }
+            )
+         }
+            document.getElementById("text").value = '';
+
 }
 
 document.getElementById('text').addEventListener('keydown', function (k){
