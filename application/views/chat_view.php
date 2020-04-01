@@ -26,11 +26,14 @@
         <div class="messages">');
     foreach($messages as $message){
         $mini_photo = null;
-        $status = '<i class="fas fa-check-double" style="position: absolute; margin:15px 15px 15px"></i>';
-        if ($message['status_message'] == 0)
-            $status = '<i class="fas fa-check" style="position: absolute; margin:15px 15px 15px"></i>';
-        if ($message['author'] == "You")
+        $status = null;
+        if ($message['author'] == "You"){
             $class = "my_message";
+            $status = '<i class="fas fa-check" style="color:#2C81B7"></i>';
+            if ($message['status_message'] == 0){
+                $status = '<i class="fas fa-check" style="color:white" ></i>';
+            }
+        }
         else{
             $class = "other_message";
             $mini_photo =  '<div class="mini_people" id="mini_photo" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;"></div>';

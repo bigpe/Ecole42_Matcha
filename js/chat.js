@@ -7,17 +7,13 @@ let params = window
         function (p, e) {
             let a = e.split('=');
             p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
-            return p;
-        },
-        {}
-    );
+            return p;}, {});
 let user_chat_to = params['id'];
 let user_from = document.cookie.split('=', 2)[1];
 
 
 function append_message(data) {
     let messages = $.parseJSON(data);
-    console.log(messages);
     for(let i in messages){
         if (messages[i]['message_from'].localeCompare("my") === 0)
             append_my_old_message(messages[i]);
@@ -53,12 +49,6 @@ function  append_other_old_message(data) {
     }
     let span = document.createElement("span");
     span.innerText = data['text_message'];
-    let i = document.createElement("i");
-    if (data['status_message'] === '0')
-        i.setAttribute('class', 'fas fa-check');
-    else
-        i.setAttribute('class', 'fas fa-check-double');
-    messageDiv.append(i);
     messageDiv.append(span);
     $('.messages').prepend(messageDiv);
 }
@@ -80,22 +70,30 @@ function append_my_message(data){
     let messageDiv = document.createElement("div");
     messageDiv.setAttribute("class", 'my_message');
     let span = document.createElement("span");
+    let i = document.createElement("i");
+    i.setAttribute('class', 'fas fa-check');
+    i.style.color ='white';
     span.innerText = data.message;
     messageDiv.append(span);
+    messageDiv.append(i);
     $('.messages').append(messageDiv);
-    messageDiv.value = '';
 }
 let socket = new WebSocket("ws://192.168.0.191:8888/ws/server.php");
 
 socket.onopen = function () {
-    console.log("join in Chat");
+    let cookie = document.cookie.split('=', 2)[1];
+    let messageJSON = {
+        user_from: cookie,
+        user_to: user_chat_to,
+        type: 3
+    };
+    socket.send(JSON.stringify(messageJSON));
+
 };
 
 socket.onclose = function () {
     setTimeout(function() {
-
         socket = new WebSocket("ws://192.168.0.191:8888/ws/server.php");
-
     }, 1000);
 };
 
@@ -104,10 +102,44 @@ socket.onerror = function (error) {
 
 socket.onmessage = function (event) {
 let data = JSON.parse(event.data);
-if (data.user_from === user_chat_to && data.user_to === user_from && data.type === 1){
-    append_other_message(data);
-}
+if (data.user_from === user_chat_to &&  data.type === 1){
+    for(let user in data.user_to){
+        if (data.user_to[user]['session_name'] === user_from ){
+            append_other_message(data);
+            $.ajax({
+                url: "/conversation/change_message_status",
+                method: "POST",
+                data: {"chat_to": user_chat_to,
+                    "user_from": user_from,
+                    "type": 2   },
+            });
+            let cookie = document.cookie.split('=', 2)[1];
+            let messageJSON = {
+                user_from: cookie,
+                user_to: user_chat_to,
+                type: 2
+            };
+            socket.send(JSON.stringify(messageJSON));
+}}}
+if (data.user_from === user_chat_to && data.type === 2)
+    for(let user in data.user_to)
+        if (data.user_to[user]['session_name'] === user_from ){
+            change_message_status();
+            }
+    if (data.user_from === user_chat_to && data.type === 3)
+        for(let user in data.user_to)
+            if (data.user_to[user]['session_name'] === user_from ){
+                change_message_status();
+            }
 };
+
+function change_message_status(){
+    console.log('change');
+    let elements = document.getElementsByClassName("fas fa-check");
+    for (i = 0, len = elements.length; i < len; i++) {
+        elements[i].style.color = '#2C81B7';
+    }
+}
 
 function send_message() {
     let message = document.getElementById("text").value;
@@ -126,26 +158,25 @@ function send_message() {
                     message: message,
                     type: 1
                 };
+                if(Number(userStatus) !== 0)
+                    socket.send(JSON.stringify(messageJSON));
+                append_my_message(messageJSON)
+            }})
+         }
+            document.getElementById("text").value = '';
 
-                if(Number(userStatus) != 0){
-                    console.log(userStatus);
-                    //socket.send(JSON.stringify(messageJSON));
-                }
-                append_my_message(messageJSON);
-            }});
-         document.getElementById("text").value = '';
-
-    }
 }
 
 document.getElementById('text').addEventListener('keydown', function (k){
     if (k.keyCode === 13){
         send_message();
-        document.getElementById("text").value = null;
         event.preventDefault()
     }
 
 });
+
+
+
 let lastMessage = 10;
 document.getElementById('load_more_message').addEventListener('click', function () {
     $.ajax({

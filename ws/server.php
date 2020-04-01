@@ -31,11 +31,15 @@ while (true){
             $socketMessage = $chat->unseal($socketData);
             $messageObj = json_decode($socketMessage);
             if (isset($messageObj)){
-                print_r($messageObj);
-                $chat_box_message = $chat->createChatBoxMessage($messageObj->user_from, $messageObj->user_to, $messageObj->message,
+                if ($messageObj->type == 1)
+                    $chat_box_message = $chat->createChatBoxMessage($messageObj->user_from, $messageObj->user_to, $messageObj->message,
                                                             $messageObj->type);
-                print_r($chat_box_message);
-            $chat->send($chat_box_message);
+                if ($messageObj->type == 2)
+                    $chat_box_message = $chat->createChatBoxStatus($messageObj->user_from, $messageObj->user_to, $messageObj->type);
+                if ($messageObj->type == 3)
+                    $chat_box_message = $chat->createChatBoxStatus($messageObj->user_from, $messageObj->user_to, $messageObj->type);
+
+                $chat->send($chat_box_message);
                 }
             break 2;
         }

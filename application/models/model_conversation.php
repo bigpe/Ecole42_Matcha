@@ -90,14 +90,10 @@ class Model_Conversation extends Model{
         $db->db_change("INSERT INTO USER_MESSAGE (chat_id, user_id_from, user_id_to, text_message) 
                                 VALUES ('$chat_id', '$user_id_from', '$user_id_to', '$message');");
         $this->input_history($user_id_from, $user_id_to, 11);
-        return($this->check_cookie($user_id_to));
+        $login_to = $db->db_read("SELECT login FROM USERS WHERE user_id='$user_id_to'");
+        return($this->check_online($login_to));
     }
-    function check_cookie($user_id)
-    {
-        $db = new database();
-        return $db->db_check("SELECT creation_date, session_name FROM USERS_SESSIONS
-                                            WHERE user_id='$user_id' ORDER BY creation_date DESC");
-    }
+
     function handler_message($chat_id, $start_message_from){
         $db = new database();
         $login = $_SESSION['login'];
