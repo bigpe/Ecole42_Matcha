@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="../../css/history.css">
-<h3>History</h3>
+<details id="filter">
+    <summary><i class="fas fa-sliders-h"></i></summary>
+</details>
 <div id="people_block">
     <?php
     $users_data = $data['users_data'];
@@ -10,6 +12,7 @@
         print("<h2 class='date_block'>$calendar $date_one</h2>");
         foreach($users_data as $user_data) {
             $main_photo = $user_data['photo_src'];
+            !file_exists($main_photo) ? $main_photo = "./images/placeholder.png" : "";
             $date_time = date("G:i", strtotime($user_data['update_date']));
             $date_one = date("j", strtotime($user_data['update_date']));
             $date_two = date("j", strtotime(next($users_data)['update_date']));

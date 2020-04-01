@@ -59,10 +59,12 @@ class Model_Profile extends Model{
             FROM USER_TAGS JOIN USERS U on USER_TAGS.user_id = U.user_id
             WHERE login='$login'");
         $query = "SELECT DISTINCT tag_name, tag_icon, tag_color
-                    FROM TAGS JOIN USER_TAGS UT on TAGS.tag_id = UT.tag_id ";
+                    FROM TAGS WHERE";
         foreach ($user_tags as $user_tag){
             $tag_id = $user_tag['tag_id'];
-            $query = "$query AND UT.tag_id!='$tag_id'";
+            $query = "$query tag_id!='$tag_id'";
+            if(next($user_tags))
+                $query = "$query AND";
         }
         return($db->db_read_multiple($query));
     }
