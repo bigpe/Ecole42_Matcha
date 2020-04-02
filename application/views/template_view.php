@@ -4,6 +4,7 @@
     <script src="https://kit.fontawesome.com/4c208c6ea5.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/template.css">
     <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <script src="/js/notification.js"><</script>
 </head>
     <body>
     <header>

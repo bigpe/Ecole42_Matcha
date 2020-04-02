@@ -49,10 +49,9 @@ function like () {
         data: {"login": params['login']},
         success: function (data) {
             if(data > 0){
-                let href = '/conversation/chat_view/?id='+data;
                 let chat_block = document.getElementById("chat_block");
                 chat_block.setAttribute("class", "chat_available");
-                chat_block.innerHTML= "<a href ='/conversation/chat_view/?id='+data'>" + chat_block.innerHTML + "</a>";
+                chat_block.innerHTML= "<a href ='/conversation/chat_view/?id="+data+"'>" + chat_block.innerHTML + "</a>";
             }
             else{
                 let chat_block = document.getElementById("chat_block");

@@ -1,8 +1,7 @@
 <?php
 class Model_Profile extends Model{
     function get_user_data($login){
-        if(isset($_SESSION['login']))
-            $this->input_history($_SESSION['login'], $login, 1);
+        $this->input_history_by_login($_SESSION['login'], $login, 1);
         $user_data = array(
             "main_photo" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
@@ -104,14 +103,7 @@ class Model_Profile extends Model{
                                         '$user_fame_rating_count' <= fame_rating_end")[0];
         return($user_fame_rating);
     }
-    function put_history_view($omega_user_login){
-            $omega_user_id = $this->get_user_id($omega_user_login);
-            $alfa_user_login = $_SESSION['login'];
-            $alfa_user_id = $this->get_user_id($alfa_user_login);
-            if ($alfa_user_id == $omega_user_id)
-                return;
-            $this->insert_history_view($alfa_user_id, $omega_user_id);
-    }
+
     function get_user_id($login){
         $db = new database();
         return($db->db_read("SELECT user_id FROM USERS WHERE login = '$login'"));
@@ -127,10 +119,14 @@ class Model_Profile extends Model{
         $alfa_user_login = $_SESSION['login'];
         $alfa_user_id = $this->get_user_id($alfa_user_login);
         $like_id = $this->check_like_exist($alfa_user_id, $omega_user_id);
-        if ($like_id)
+        if ($like_id){
             $this->delete_like($like_id);
-        else
+            $this->input_history($omega_user_id, $alfa_user_id, 3);
+        }
+        else{
             $this->insert_like($alfa_user_id, $omega_user_id);
+            $this->input_history($omega_user_id, $alfa_user_id, 2);
+        }
     }
     function check_like_exist($alfa_user_id, $omega_user_id)
     {
