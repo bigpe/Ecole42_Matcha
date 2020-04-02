@@ -19,7 +19,9 @@ let profile_filled_progress_bar = document.getElementById("profile_filled_progre
 let current_token;
 let main_photo_index = 0;
 let tag_delete = false;
-
+let new_main_photo = 0;
+let progress_bar_css = find_pointer_for_style("progress::-moz-progress-bar");
+progress_bar_value(0);
 
 let params = window
     .location
@@ -97,23 +99,14 @@ function main_photo_change() {
         main_photo_index = current_photo;
         user_photos[current_photo]['main_photo'] = 1;
         profile_save_settings(5, user_photos[current_photo]['photo_token']);
-        console.log(user_photos);
     }
 }
 
 function remove_photo() {
     main_photo = 0;
     if(count_photo > 1) {
-        if(!document.getElementById("add_photos")) {
-            add_to_profile_block.innerHTML = add_to_profile_block.innerHTML.trim();
-            let add_photos = document.createElement("span");
-            add_photos.setAttribute("id", "add_photos");
-            add_photos.setAttribute("title", "Add Photos to Fulfil your profile");
-            add_photos.setAttribute("class", "add_to_profile");
-            add_photos.innerHTML = "<i class=\"fas fa-camera\"></i>";
-            add_to_profile_block.append(add_photos);
-        }
-        profile_filled_progress_bar.value -= 8;
+        add_to_profile("add_photos", "Photos", "<i class='fas fa-camera'></i>", 0);
+        progress_bar_value(-8);
         profile_save_settings(4, user_photos[current_photo]['photo_token']); //Type 4 - Delete Photo
         if(user_photos[current_photo]['main_photo'])
             main_photo = 1;
@@ -130,16 +123,8 @@ function remove_photo() {
         check_main_photo();
     }
     else{
-        if(!document.getElementById("add_photos")) {
-            add_to_profile_block.innerHTML = add_to_profile_block.innerHTML.trim();
-            let add_photos = document.createElement("span");
-            add_photos.setAttribute("id", "add_photos");
-            add_photos.setAttribute("title", "Add Photos to Fulfil your profile");
-            add_photos.setAttribute("class", "add_to_profile");
-            add_photos.innerHTML = "<i class=\"fas fa-camera\"></i>";
-            add_to_profile_block.append(add_photos);
-        }
-        profile_filled_progress_bar.value -= 8;
+        add_to_profile("add_photos", "Photos", "<i class='fas fa-camera'></i>", 0);
+        progress_bar_value(-8);
         count_photo -= 1;
         profile_save_settings(4, user_photos[0]['photo_token']);
         user_photos.splice(0, 1);
@@ -166,6 +151,10 @@ function fill_photos_buttons() {
     right_arrow.style.visibility = "visible";
 }
 
+function block_user() {
+    profile_save_settings(10, params['login']); //Type - 10 Block User
+}
+
 function add_photo() {
     main_photo = 0;
     let file_input = document.createElement("input");
@@ -177,11 +166,15 @@ function add_photo() {
         for (let i = 0; i < file.length; i++){
             if(count_photo >= 1)
                 fill_photos_buttons();
+            if(count_photo == 0)
+                new_main_photo = 1;
             count_photo += 1;
-            profile_filled_progress_bar.value += 8;
+            if(count_photo <= 5)
+                progress_bar_value(8);
             if(count_photo >= 5) {
                 document.getElementById("add_photo").style.display = "none";
-                document.getElementById("add_photos").remove();
+                if(document.getElementById("add_photos"))
+                    document.getElementById("add_photos").remove();
             }
             if(count_photo > 5){
                 count_photo = 5;
@@ -199,10 +192,19 @@ function add_photo() {
                     document.getElementById("remove_photo").style.display = "grid";
                     main_photo = 1;
                 }
+                if(new_main_photo == 1){
+                    document.getElementsByClassName("photo")[0].style.backgroundImage =
+                        "url('" + image_data + "')";
+                    main_photo_icon.style.visibility = "visible";
+                    document.getElementById("remove_photo").style.display = "grid";
+                    main_photo = 1;
+                    new_main_photo = 0;
+                }
                 user_photos.push({"photo_token": photo_token, "photo_src": image_data, "main_photo": main_photo});
                 if(main_photo) {
-                    profile_save_settings(6, {"photo_token": photo_token, "photo_base64": image_data}); //Type 6 - Add new Photo
-                    // and Set Main Photo
+                    profile_save_settings(6, {"photo_token": photo_token, "photo_base64": image_data});
+                    //Type 6 - Add new Photo and Set Main Photo
+                    main_photo = 0;
                 }
                 else
                     profile_save_settings(3,
@@ -259,19 +261,12 @@ function change_real_name() {
         real_name_change.innerHTML = "<i class=\"fas fa-pencil-alt\"></i>";
         if(real_name_input.value.trim().length == 0) {
             real_name.innerHTML = "<i class=\"fas fa-user-ninja\"></i> I'm Anon";
-            add_to_profile_block.innerHTML = add_to_profile_block.innerHTML.trim();
-            let add_full_name = document.createElement("span");
-            add_full_name.setAttribute("id", "add_full_name");
-            add_full_name.setAttribute("title", "Add Full Name to Fulfil your profile");
-            add_full_name.setAttribute("class", "add_to_profile");
-            add_full_name.innerHTML = "<i class='fas fa-user-tie'></i>";
-            add_to_profile_block.append(add_full_name);
-            profile_filled_progress_bar.value -= 20;
+            add_to_profile("add_full_name", "Full Name", "<i class='fas fa-user-tie'></i>", 20);
         }
         else {
             real_name.innerText = real_name_input.value.trim();
             if(document.getElementById("add_full_name")) {
-                profile_filled_progress_bar.value += 20;
+                progress_bar_value(20);
                 document.getElementById("add_full_name").remove();
             }
         }
@@ -279,6 +274,30 @@ function change_real_name() {
         real_name_input.remove();
         real_name_change_accept.remove();
     };
+}
+
+function add_to_profile(id, name, icon, step) {
+    if(!document.getElementById(id)) {
+        add_to_profile_block.innerHTML = add_to_profile_block.innerHTML.trim();
+        let add_to_profile = document.createElement("span");
+        add_to_profile.setAttribute("id", id);
+        add_to_profile.setAttribute("title", "Add " + name + " to Fulfil your profile");
+        add_to_profile.setAttribute("class", "add_to_profile");
+        add_to_profile.innerHTML = icon;
+        add_to_profile_block.append(add_to_profile);
+        progress_bar_value(-step);
+    }
+}
+function progress_bar_value(step) {
+    profile_filled_progress_bar.value += step;
+    if(profile_filled_progress_bar.value <= 30)
+        progress_bar_css.backgroundColor = "crimson";
+    if(profile_filled_progress_bar.value > 30 && profile_filled_progress_bar.value < 70)
+        progress_bar_css.backgroundColor = "rgb(255, 131, 21)";
+    if(profile_filled_progress_bar.value > 70 && profile_filled_progress_bar.value < 100)
+        progress_bar_css.backgroundColor = "rgb(7, 255, 46)";
+    if(profile_filled_progress_bar.value == 100)
+        progress_bar_css.backgroundColor = "rgb(255, 7, 251)";
 }
 
 function change_info() {
@@ -308,19 +327,12 @@ function change_info() {
         info_change.innerHTML = "<i class=\"fas fa-pencil-alt\"></i>";
         if(info_input.value.trim().length == 0) {
             info.innerHTML = "<i class=\"fas fa-user-ninja\"></i> I'm Very Shy";
-            add_to_profile_block.innerHTML = add_to_profile_block.innerHTML.trim();
-            let add_info = document.createElement("span");
-            add_info.setAttribute("id", "add_info");
-            add_info.setAttribute("title", "Add Info to Fulfil your profile");
-            add_info.setAttribute("class", "add_to_profile");
-            add_info.innerHTML = "<i class=\"fas fa-info-circle\"></i>";
-            add_to_profile_block.append(add_info);
-            profile_filled_progress_bar.value -= 20;
+            add_to_profile("add_info", "Info", "<i class='fas fa-info-circle'></i>", 20);
         }
         else {
             info.innerText = info_input.value.trim();
             if(document.getElementById("add_info")) {
-                profile_filled_progress_bar.value += 20;
+                progress_bar_value(20);
                 document.getElementById("add_info").remove();
             }
         }
@@ -380,7 +392,7 @@ function load_token(token) {
 }
 function profile_save_settings(setting_type, setting_value) {
     $.ajax({
-        url: "profile/save_settings",
+        url: "/profile/save_settings",
         method: "POST",
         data: {"settings": {setting_type, setting_value}}
     })
@@ -399,16 +411,8 @@ function remove_tag() {
            document.getElementById(tags[i].id).remove();
        }
    }
-   if(!tags.length && !document.getElementById("add_tags")) {
-       profile_filled_progress_bar.value -= 20;
-       add_to_profile_block.innerHTML = add_to_profile_block.innerHTML.trim();
-       let add_tags = document.createElement("span");
-       add_tags.setAttribute("id", "add_tags");
-       add_tags.setAttribute("title", "Add Tags to Fulfil your profile");
-       add_tags.setAttribute("class", "add_to_profile");
-       add_tags.innerHTML = "<i class=\"fas fa-hashtag\"></i>";
-       add_to_profile_block.append(add_tags);
-   }
+   if(!tags.length && !document.getElementById("add_tags"))
+       add_to_profile("add_tags", "Tags", "<i class='fas fa-hashtag'></i>", 20);
 }
 
 function fill_tags() {
@@ -452,7 +456,7 @@ function fill_tags() {
                     if(tags_to_save) {
                         if(document.getElementById("add_tags")) {
                             document.getElementById("add_tags").remove();
-                            profile_filled_progress_bar.value += 20;
+                            progress_bar_value(20);
                         }
                     }
                     for(let i = 0; i < tags_to_delete.length; i++)

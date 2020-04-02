@@ -2,7 +2,8 @@
 <head>
     <script src="/js/jQuery.js"></script>
     <script src="https://kit.fontawesome.com/4c208c6ea5.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/template.css">
+    <link rel="stylesheet" href="../../css/template.css">
+    <script src="../../js/template.js"></script>
     <meta name="viewport" content="width=device-width initial-scale=1.0">
 </head>
     <body>
@@ -12,6 +13,7 @@
             <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/settings'><i class=\"fas fa-cogs\"></i></a>"); ?>
             <?php isset($_SESSION['login']) ? print('<a class="header_buttons" href="/"><i class="fas fa-dice"></i></a>') : ""?>
             <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/find_advanced'><i class=\"fas fa-search\"></i></a>"); ?>
+            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/conversation'><i class=\"fas fa-envelope\"></i></a>"); ?>
             <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' id='notification' href='/history'>
                                 <i class=\"fas fa-bell\"></i><span id='notification_count'>1</span></a>"); ?>
             <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/auth/sign_out'><i class=\"fas fa-sign-out-alt\"></i></a>"); ?>
@@ -33,7 +35,6 @@
 
     </footer>
     </body>
-<script src="../../js/template.js"></script>
 <script type="text/javascript">
     let error_name = "<?php
         if(isset($data['error'])) print($data['error']); else print(""); ?>";

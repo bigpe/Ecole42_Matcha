@@ -1,4 +1,21 @@
 <link rel="stylesheet" type="text/css" href="/css/first_login.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $( function() {
+        $(function () {
+            $("#datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '-100:+0',
+                maxDate: new Date(2002, 1 - 1, 1),
+                dateFormat: "yy.mm.dd"
+            });
+        });
+    } );
+</script>
 <h2>Hello <?php print($data['login']) ?>, Welcome to Matcha!</h2>
 <p>This site help you to find your crush!</p>
 <p>At first let we know a little more about yourself</p>
@@ -23,7 +40,7 @@
     </div>
     <h3>What's about your age?</h3>
     <div id="age_block">
-        <input type="date" name="user_age" min="1920-00-00" max="2002-03-01" required>
+        <input type="text" id="datepicker" name="user_age" required>
     </div>
     <h3>Few words about you</h3>
     <div id="info_block">
@@ -76,21 +93,10 @@
 </form>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
-<script type="text/javascript" src="/js/first_login.js"></script>
+<script type="text/javascript" src="../../js/first_login.js"></script>
 <script type="text/javascript">
     get_location("<?php print($token); ?>")
 </script>
 <script>
-    $("#address").suggestions({
-        token: "<?php print($token);?>",
-        type: "ADDRESS",
-        bounds: "city",
-        constraints: {
-            label: "",
-            locations: { city_type_full: "город" }
-        },
-        onSelect: function(suggestion) {
-            console.log(suggestion);
-        }
-    });
+    load_city_input("<?php print($token);?>");
 </script>

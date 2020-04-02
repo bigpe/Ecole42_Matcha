@@ -13,38 +13,9 @@ let user_photo_count = 0;
 let tag_offset = 5;
 let timeout;
 let lastTap = 0;
-let animation_duration;
-let animation_node_name = ".highlight";
+let animation_duration = parseFloat(find_pointer_for_style(".highlight").animationDuration) * 1000;
 let ajax_complete = false;
 
-onload = function () {
-    get_animation_duration(animation_node_name);
-};
-
-function get_animation_duration(animation_node_name) {
-    let styleSheetList = document.styleSheets;
-    //Find Current Controller Name, Anchor Remove
-    history.pushState(null, null, window.location.href.split('#')[0]);
-    let controller_name = document.documentURI.split("/")[3];
-    let css_name;
-    let css_rules;
-    for (let i = 0; i < styleSheetList.length; i++){
-        //Find All StyleSheets for this Document
-        css_name = styleSheetList[i].href.split("/").splice(-1)[0];
-        //Controller Name Must be same name a .css file
-        if(css_name.match(controller_name + ".css")) {
-            css_rules = styleSheetList[i].cssRules;
-            for (let j = 0; j < css_rules.length; j++){
-                if(css_rules[j].selectorText.match(animation_node_name)){
-                    //Get Animation Duration for Auto Remove when this action be completed
-                    animation_duration = parseFloat(css_rules[j].style.animationDuration) * 1000;
-                    break;
-                }
-            }
-            break;
-        }
-    }
-}
 
 function set_highlight(node) {
     node.setAttribute("class", "highlight");
@@ -177,6 +148,21 @@ user_photo_input.onchange = function () {
     user_photo_tips.setAttribute("class", "highlight");
 };
 
+function load_city_input(token) {
+    $("#address").suggestions({
+        token: token,
+        type: "ADDRESS",
+        bounds: "city",
+        constraints: {
+            label: "",
+            locations: { city_type: "город" }
+        },
+        onSelect: function(suggestion) {
+            geo.value = suggestion['data']['city'];
+        }
+    });
+}
+
 function fill_tags() {
     $.ajax(
         {url: "/first_login/load_tags",
@@ -210,3 +196,6 @@ function get_location(token) {
             geo.value = data['location']['data']['city'];
         }})
 }
+user_photo_button.onclick = function () {
+    user_photo_input.click();
+};
