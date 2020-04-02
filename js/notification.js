@@ -1,4 +1,5 @@
-let params = window
+
+let get = window
     .location
     .search
     .replace('?', '')
@@ -6,67 +7,80 @@ let params = window
     .reduce(
         function (p, e) {
             let a = e.split('=');
-            p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
-            return p;}, {});
+            //p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+            return a;}, {});
 
-let user_from = document.cookie.split('=', 2)[1];
 let address = window.location.pathname;
 
-let socket = new WebSocket("ws://192.168.0.191:6969/notification_ws/notification.php");
+let socketNotif = new WebSocket("ws://192.168.0.191:6969/notification_ws/notification.php");
 
-socket.onopen = function () {
-    console.log(address);
+socketNotif.onopen = function () {
     let cookie = document.cookie.split('=', 2)[1];
-    let messageJSON = {
-        user_from: cookie,
-
-        type: 3
-    };
-       // socket.send(JSON.stringify(messageJSON));
-
+    let messageJSON = {};
+    if (get[0] === "login" && address === "/profile/view/") {
+        messageJSON = {
+            user_from: cookie,
+            user_to: get[1],
+            type: 1
+        };
+        socketNotif.send(JSON.stringify(messageJSON));
+        }
 };
 
-socket.onclose = function () {
+socketNotif.onclose = function () {
     setTimeout(function() {
         socket = new WebSocket("ws://192.168.0.191:6969/ws/server.php");
     }, 1000);
 };
 
-socket.onerror = function (error) {
+socketNotif.onerror = function (error) {
 };
 
-socket.onmessage = function (event) {
+socketNotif.onmessage = function (event) {
     let data = JSON.parse(event.data);
-    if (data.user_from === user_chat_to &&  data.type === 1){
+    let cookie = document.cookie.split('=', 2)[1];
+    if (data.type === 11 && get[1] != data.chat_id){
         for(let user in data.user_to){
-            if (data.user_to[user]['session_name'] === user_from ){
-                append_other_message(data);
-                $.ajax({
-                    url: "/conversation/change_message_status",
-                    method: "POST",
-                    data: {"chat_to": user_chat_to,
-                        "user_from": user_from,
-                        "type": 2   },
-                });
-                let cookie = document.cookie.split('=', 2)[1];
-                let messageJSON = {
-                    user_from: cookie,
-                    user_to: user_chat_to,
-                    type: 2
-                };
-                //socket.send(JSON.stringify(messageJSON));
-            }}}
-    if (data.user_from === user_chat_to && data.type === 2)
+            if (data.user_to[user]['session_name'] === cookie ){
+                    appendNotifications("new message " + data.user_from + "\nmassage: " + data.message);
+                }
+            }}
+    if (data.type === 1)
         for(let user in data.user_to)
-            if (data.user_to[user]['session_name'] === user_from ){
-                change_message_status();
+            if (data.user_to[user]['session_name'] === cookie ){
+                appendNotifications("new visit " + data.user_from);
             }
-    if (data.user_from === user_chat_to && data.type === 3)
+    if (data.type === 2)
         for(let user in data.user_to)
-            if (data.user_to[user]['session_name'] === user_from ){
-                change_message_status();
+            if (data.user_to[user]['session_name'] === cookie ){
+                appendNotifications("new like " + data.user_from);
             }
+    if (data.type === 3)
+        for(let user in data.user_to)
+            if (data.user_to[user]['session_name'] === cookie ){
+                appendNotifications("new dislike " + data.user_from);
+            }
+
+
 };
+
+
+function appendNotifications(data) {
+    let notificationBlock = document.getElementById("notification_block");
+    div = document.createElement("div");
+    div.setAttribute("id", "notif_content");
+    div.innerText = data;
+    notificationBlock.append(div);
+    notificationBlock.style.visibility = "visible";
+}
+
+function closeNotifications() {
+    $("#notif_content").remove();
+    let notificationBlock = document.getElementById("notification_block");
+    notificationBlock.style.visibility = "hidden";
+
+
+}
 
 
 

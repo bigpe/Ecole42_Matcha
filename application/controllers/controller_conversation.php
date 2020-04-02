@@ -53,9 +53,17 @@ class Controller_Conversation extends Controller
             print (json_encode($this->model->handler_message($_POST['chat_id'], $_POST['start_message'])));
     }
 
-    function change_message_status(){
+    function action_change_message_status(){
         if ($this->check_post_arguments_exists(array("chat_id")))
             $this->model->edit_message_status($_POST['chat_id']);
     }
 
+    function action_input_notification(){
+        if ($this->check_post_arguments_exists(array("chat_id")))
+            $this->model->input_message_notification($_POST['chat_id']);
+    }
+    function action_delete_notification(){
+        if ($this->check_post_arguments_exists(array("chat_id")))
+            $this->model->input_message_notification($_POST['chat_id']);
+    }
 }

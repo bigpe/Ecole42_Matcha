@@ -14,6 +14,8 @@ class Controller_History extends Controller
                     array("error" => $this->model->error_handler($this->model->error_id),
                         "users_data" => $data));
             }
+            else
+                header("Location: /");
         }
         else
             header("Location: /");

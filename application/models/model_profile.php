@@ -1,7 +1,10 @@
 <?php
 class Model_Profile extends Model{
     function get_user_data($login){
-        $this->input_history_by_login($_SESSION['login'], $login, 1);
+        if(!$this->check_user_exist($login))
+            return (0);
+        if(isset($_SESSION['login']))
+            $this->input_history_by_login($_SESSION['login'], $login, 1);
         $user_data = array(
             "main_photo" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
@@ -17,6 +20,10 @@ class Model_Profile extends Model{
             "check_like" => (isset($_SESSION['login']) ? $this->check_like_status($login, $_SESSION['login']) : "0"),
             "profile_filled" => $this->get_profile_filled($login));
         return($user_data);
+    }
+    function check_user_exist($login){
+        $db = new database();
+        return($db->db_check("SELECT login FROM USERS WHERE login='$login'"));
     }
     function get_user_main_photo($login){
         $db = new database();
@@ -121,11 +128,11 @@ class Model_Profile extends Model{
         $like_id = $this->check_like_exist($alfa_user_id, $omega_user_id);
         if ($like_id){
             $this->delete_like($like_id);
-            $this->input_history($omega_user_id, $alfa_user_id, 3);
+            $this->input_history($alfa_user_id, $omega_user_id, 3);
         }
         else{
             $this->insert_like($alfa_user_id, $omega_user_id);
-            $this->input_history($omega_user_id, $alfa_user_id, 2);
+            $this->input_history($alfa_user_id, $omega_user_id, 2);
         }
     }
     function check_like_exist($alfa_user_id, $omega_user_id)
@@ -210,6 +217,17 @@ class Model_Profile extends Model{
             WHERE login='$login' AND tag_name='$settings_value'";
         if($settings['setting_type'] == 9)
             $query = "UPDATE USERS SET full_name='$settings_value' WHERE login='$login'";
+        if($settings['setting_type'] == 10) {
+            $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+            $query = "INSERT IGNORE INTO USER_BLACK_LIST (user_id, user_id_blocked) SELECT '$user_id', user_id 
+                            FROM USERS WHERE login='$settings_value'";
+        }
+        if($settings['setting_type'] == 11) {
+            $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+            $user_id_blocker = $db->db_read("SELECT user_id FROM USERS WHERE login='$settings_value'");
+            $query = "DELETE USER_BLACK_LIST FROM USER_BLACK_LIST 
+                    WHERE user_id='$user_id' AND user_id_blocked='$user_id_blocker'";
+        }
         if(isset($query) && !is_array($query))
             $db->db_change($query);
         if(isset($query) && is_array($query)){

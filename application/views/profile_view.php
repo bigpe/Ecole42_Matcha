@@ -15,7 +15,7 @@
             foreach ($add_to_profile as $add) {
                 $icon = $add['icon'];
                 $title = "Add " . $add['value'] . " to Fulfil your profile";
-                $id = "add_" . strtolower($add['value']);
+                $id = "add_" . str_replace(" ", "_", strtolower($add['value']));
                 print("<span id='$id' class='add_to_profile' title='$title'>$icon</span>");
             }
         }
@@ -50,7 +50,7 @@
             <label for="options_input" id="options_label">
                 <i class="fas fa-ellipsis-h"></i>
                 <span id="options_menu">
-                    <?php if(!$self_profile) print('<p id="block_user"><i class="fas fa-user-lock"></i></p>'); ?>
+                    <?php if(!$self_profile) print('<p id="block_user" onclick="block_user()"><i class="fas fa-user-lock"></i></p>'); ?>
                     <?php if($self_profile)
                         if (count($data['user_data']['user_photos']) > 0)
                             print('<p id="remove_photo" onclick="remove_photo()"><i class="fas fa-trash-alt"></i></p>');

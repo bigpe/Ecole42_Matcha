@@ -12,6 +12,7 @@
         $user_data['last_message'][0]['status_message'] == 0 ? $user_data['last_message'][0]['status_message'] = $not_checked :
             $user_data['last_message'][0]['status_message'] = $checked;
         $main_photo = $user_data['main_photo']['photo_src'];
+        !file_exists($main_photo) ? $main_photo = "./images/placeholder.png" : "";
         $main_photo_data = base64_encode(file_get_contents($main_photo));
         $photo_data = "'data: ". mime_content_type($main_photo) .";base64,$main_photo_data'";
         print('<div class="people" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;"><a href="/profile/view/?login=' . $user_data['login'] . '">

@@ -147,6 +147,9 @@
     border-bottom-left-radius: 10px;
     width: 65px;
 }
+#options_menu i{
+    padding-bottom: 5px;
+}
 #tags_block{
     min-height: 50px;
     padding: 15px;

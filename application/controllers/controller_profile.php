@@ -27,9 +27,12 @@ class Controller_Profile extends Controller
                     header("Location: /profile");
             }
             $user_data = $this->model->get_user_data($_GET['login']);
+            if(!$user_data) #User Not Found
+                header("Location: /profile");
             $this->view->generate("profile_view.php", "template_view.php",
                 array("error" => $this->model->error_handler($this->model->error_id),
                     "user_data" => $user_data));
+
         }
     else
         header("Location: /");

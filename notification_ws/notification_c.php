@@ -1,6 +1,6 @@
 <?php
 require_once ('../config/database.php');
-class Chat
+class Notification
 {
     public function sendHeaders($headersText, $newSocket, $host, $port)
     {
@@ -67,28 +67,31 @@ class Chat
         return true;
     }
 
-    function createChatBoxMessage($user_session, $chat_id, $message, $type)
+    function createChatBoxMessage($user_from_session, $chat_id, $message, $type)
     {
         $db = new database();
+        $user_from = $db->db_read("SELECT login FROM USERS
+JOIN USERS_SESSIONS US on USERS.user_id = US.user_id
+WHERE US.session_name = '$user_from_session'");
         $user_to = $db->db_read_multiple("SELECT session_name FROM USERS_SESSIONS
                                 JOIN CHATS C on user_id_one = USERS_SESSIONS.user_id
                                 OR C.user_id_two=USERS_SESSIONS.user_id
-                                WHERE  C.chat_id = $chat_id AND USERS_SESSIONS.session_name !='$user_session'
+                                WHERE  C.chat_id = $chat_id AND USERS_SESSIONS.session_name !='$user_from_session'
                                 ");
-        $messageArray = array('user_from' => $chat_id, 'user_to' => $user_to, 'message' => $message, 'type' => $type);
+        $messageArray = array('user_from' => $user_from, 'user_to' => $user_to,'chat_id' => $chat_id, 'message' => $message, 'type' => $type);
         return $this->seal(json_encode($messageArray));
     }
 
-    function createChatBoxStatus($user_session, $chat_id, $type)
+    function createChatBoxStatus($user_from_session, $user_login_to, $type)
     {
         $db = new database();
         $user_to = $db->db_read_multiple("SELECT session_name FROM USERS_SESSIONS
-                                JOIN CHATS C on user_id_one = USERS_SESSIONS.user_id
-                                OR C.user_id_two=USERS_SESSIONS.user_id
-                                WHERE  C.chat_id = $chat_id AND USERS_SESSIONS.session_name !='$user_session' 
-                                ");
-
-        $messageArray = array('user_from' => $chat_id, 'user_to' => $user_to, 'type' => $type);
+                                                JOIN USERS U on USERS_SESSIONS.user_id = U.user_id
+                                                WHERE U.login = '$user_login_to'");
+        $user_from = $db->db_read("SELECT login FROM USERS
+JOIN USERS_SESSIONS US on USERS.user_id = US.user_id
+WHERE US.session_name = '$user_from_session'");
+        $messageArray = array('user_from' => $user_from, 'user_to' => $user_to, 'type' => $type);
         return $this->seal(json_encode($messageArray));
     }
 }

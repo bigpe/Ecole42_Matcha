@@ -2,7 +2,6 @@
 #people_block{
     width: 50%;
     align-content: center;
-    display: grid;
     justify-content: start;
     grid-template-columns: 20% 80%;
     margin-left: auto;

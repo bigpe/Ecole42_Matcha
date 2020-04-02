@@ -29,14 +29,13 @@ while (true){
             $socketMessage = $chat->unseal($socketData);
             $messageObj = json_decode($socketMessage);
             if (isset($messageObj)){
-                if ($messageObj->type == 1)
+                if ($messageObj->type == 11)
                     $chat_box_message = $chat->createChatBoxMessage($messageObj->user_from, $messageObj->user_to, $messageObj->message,
                                                             $messageObj->type);
-                if ($messageObj->type == 2)
+                if ($messageObj->type == 18)
                     $chat_box_message = $chat->createChatBoxStatus($messageObj->user_from, $messageObj->user_to, $messageObj->type);
-                if ($messageObj->type == 3)
+                if ($messageObj->type == 19)
                     $chat_box_message = $chat->createChatBoxStatus($messageObj->user_from, $messageObj->user_to, $messageObj->type);
-
                 $chat->send($chat_box_message);
                 }
             break 2;
