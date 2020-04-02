@@ -10,17 +10,23 @@ let real_name;
 let city_selected = false;
 let main_photo_change_click = false;
 let like_block = document.getElementById("like_block");
+let chat_block = document.getElementById("chat_block");
 let main_photo_icon = document.getElementById("main_photo_icon");
 let right_arrow = document.getElementById("right_arrow");
 let left_arrow = document.getElementById("left_arrow");
 let tags = document.getElementById("tags_block");
 let add_to_profile_block = document.getElementById("add_to_profile_block");
 let profile_filled_progress_bar = document.getElementById("profile_filled_progress_bar");
+let block_user_option = document.getElementById("block_user");
 let current_token;
 let main_photo_index = 0;
 let tag_delete = false;
 let new_main_photo = 0;
-let progress_bar_css = find_pointer_for_style("progress::-moz-progress-bar");
+let progress_bar_css;
+if(navigator.userAgent.match("Firefox"))
+    progress_bar_css = find_pointer_for_style("progress::-moz-progress-bar");
+else
+    progress_bar_css = find_pointer_for_style("progress::-webkit-progress-value");
 progress_bar_value(0);
 
 let params = window
@@ -50,8 +56,16 @@ function like () {
         url: '/profile/like',
         method: 'POST',
         data: {"login": params['login']},
-        success: function () {
-            // alert("ok");
+        success: function (data) {
+            if(data.trim()){
+                let href = '/conversation/chat_view/?id=' + data;
+                chat_block.setAttribute("class", "chat_available");
+                chat_block.innerHTML= "<a href ='"+ href +"'>" + chat_block.innerHTML + "</a>";
+            }
+            else{
+                chat_block.removeAttribute("class");
+                chat_block.innerHTML = "<i class=\"fas fa-comment-dots\" aria-hidden=\"true\"></i>";
+            }
         }
     });
 }
@@ -153,6 +167,17 @@ function fill_photos_buttons() {
 
 function block_user() {
     profile_save_settings(10, params['login']); //Type - 10 Block User
+    block_user_option.innerHTML = "<i class=\"fas fa-lock-open\"></i>";
+    if(current_like_status)
+        like();
+    like_block.removeAttribute("onclick");
+    block_user_option.setAttribute("onclick", "unblock_user()");
+}
+function unblock_user() {
+    profile_save_settings(11, params['login']); //Type - 11 Unblock User
+    block_user_option.innerHTML = "<i class=\"fas fa-user-lock\"></i>";
+    like_block.setAttribute("onclick", "like()");
+    block_user_option.setAttribute("onclick", "block_user()");
 }
 
 function add_photo() {

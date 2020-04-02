@@ -42,6 +42,7 @@ class Controller_Profile extends Controller
     {
         if($_POST['login']) { #Success
             $this->model->put_like($_POST['login']);
+            print $this->model->check_ready_to_chat($_POST['login']);
         }
     }
 

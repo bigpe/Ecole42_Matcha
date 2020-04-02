@@ -222,8 +222,14 @@ class Model_Profile extends Model{
             $query = "UPDATE USERS SET full_name='$settings_value' WHERE login='$login'";
         if($settings['setting_type'] == 10) {
             $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
-            $query = "INSERT INTO USER_BLACK_LIST (user_id, user_id_blocked) SELECT '$user_id', user_id 
+            $query = "INSERT IGNORE INTO USER_BLACK_LIST (user_id, user_id_blocked) SELECT '$user_id', user_id 
                             FROM USERS WHERE login='$settings_value'";
+        }
+        if($settings['setting_type'] == 11) {
+            $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+            $user_id_blocker = $db->db_read("SELECT user_id FROM USERS WHERE login='$settings_value'");
+            $query = "DELETE USER_BLACK_LIST FROM USER_BLACK_LIST 
+                    WHERE user_id='$user_id' AND user_id_blocked='$user_id_blocker'";
         }
         if(isset($query) && !is_array($query))
             $db->db_change($query);
