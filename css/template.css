@@ -1,7 +1,16 @@
+*{
+    margin: 0;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
+#wrap{
+    min-height: 100%;
+    margin-bottom: -100px;
+    background: #f9f7f7;
+}
 header{
-    margin-top: -8px;
-    margin-left: -8px;
-    margin-right: -8px;
     text-align: center;
     min-width: 300px;
 }
@@ -53,14 +62,11 @@ body{
 #filter{
     background: honeydew;
     padding: 10px;
-    margin-left: -8px;
-    margin-right: -8px;
+}
+footer, #push{
+    height: 100px;
 }
 footer{
-    height: 100px;
-    margin-left: -8px;
-    margin-right: -8px;
-    margin-bottom: -8px;
     background: indianred;
     text-align: center;
 }

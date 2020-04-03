@@ -24,6 +24,13 @@ class model_find_advanced extends Model{
                 $query_append = $query_append . ")";
             }
         }
+        $user_black_list = $this->get_user_black_list($login);
+        if($user_black_list){
+            foreach ($user_black_list as $ubl) {
+                $user_id_blocked = $ubl['user_id_blocked'];
+                $query_append = $query_append . " AND U.user_id!='$user_id_blocked'";
+            }
+        }
         $users_data = $db->db_read_multiple("SELECT DISTINCT login, photo_src FROM USER_MAIN_PHOTO
                     JOIN USER_PHOTO UP on USER_MAIN_PHOTO.photo_id = UP.photo_id 
                     JOIN USERS U on UP.user_id = U.user_id 
@@ -53,6 +60,11 @@ class model_find_advanced extends Model{
         $user_filters = $db->db_read_multiple("SELECT age_from, age_to, USER_FILTERS.geo, fame_rating, tags FROM USER_FILTERS 
                 JOIN USERS U on USER_FILTERS.user_id = U.user_id WHERE U.login='$login'")[0];
         return($user_filters);
+    }
+    function get_user_black_list($login){
+        $db = new database();
+        return($db->db_read_multiple("SELECT user_id_blocked FROM USER_BLACK_LIST 
+                            JOIN USERS U on USER_BLACK_LIST.user_id = U.user_id WHERE login='$login'"));
     }
     function save_filters($user_filters){
         $db = new database();

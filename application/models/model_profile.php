@@ -1,10 +1,14 @@
 <?php
 class Model_Profile extends Model{
     function get_user_data($login){
+        $self_profile = 0;
         if(!$this->check_user_exist($login))
             return (0);
-        if(isset($_SESSION['login']))
+        if(isset($_SESSION['login'])) {
+            if($_SESSION['login'] == $login)
+                $self_profile = 1;
             $this->input_history($_SESSION['login'], $login, 1);
+        }
         $user_data = array(
             "main_photo" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
@@ -18,12 +22,18 @@ class Model_Profile extends Model{
             "user_photos" => $this->get_user_photos($login),
             "ready_to_chat" => (isset($_SESSION['login']) ? $this->check_ready_to_chat($login) : "0"),
             "check_like" => (isset($_SESSION['login']) ? $this->check_like_status($login, $_SESSION['login']) : "0"),
-            "profile_filled" => $this->get_profile_filled($login));
+            "profile_filled" => $this->get_profile_filled($login),
+            "profile_block_status" => (!$self_profile ? $this->check_block_user($login) : 0));
         return($user_data);
     }
     function check_user_exist($login){
         $db = new database();
         return($db->db_check("SELECT login FROM USERS WHERE login='$login'"));
+    }
+    function check_block_user($login){
+        $db = new database();
+        return($db->db_check("SELECT user_id_blocked FROM USER_BLACK_LIST 
+                JOIN USERS U on USER_BLACK_LIST.user_id_blocked = U.user_id WHERE login='$login'"));
     }
     function get_user_main_photo($login){
         $db = new database();
@@ -129,14 +139,16 @@ class Model_Profile extends Model{
     }
     function put_like($omega_user_login)
     {
-        $omega_user_id = $this->get_user_id($omega_user_login);
-        $alfa_user_login = $_SESSION['login'];
-        $alfa_user_id = $this->get_user_id($alfa_user_login);
-        $like_id = $this->check_like_exist($alfa_user_id, $omega_user_id);
-        if ($like_id)
-            $this->delete_like($like_id);
-        else
-            $this->insert_like($alfa_user_id, $omega_user_id);
+        if(!$this->check_block_user($omega_user_login)) {
+            $omega_user_id = $this->get_user_id($omega_user_login);
+            $alfa_user_login = $_SESSION['login'];
+            $alfa_user_id = $this->get_user_id($alfa_user_login);
+            $like_id = $this->check_like_exist($alfa_user_id, $omega_user_id);
+            if ($like_id)
+                $this->delete_like($like_id);
+            else
+                $this->insert_like($alfa_user_id, $omega_user_id);
+        }
     }
     function check_like_exist($alfa_user_id, $omega_user_id)
     {

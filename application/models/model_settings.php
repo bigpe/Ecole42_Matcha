@@ -59,4 +59,24 @@ class Model_Settings extends Model_Registration
         $db = new database();
         $db->db_change("INSERT INTO USER_TEMP (token_id, email) VALUES ('$token_id', '$email');");
     }
+    function get_blocked_users($login){
+        $db = new database();
+        $blocked_users = $db->db_read_multiple("SELECT UU.login FROM USER_BLACK_LIST 
+                    JOIN USERS U on USER_BLACK_LIST.user_id = U.user_id 
+                    JOIN USERS UU on USER_BLACK_LIST.user_id_blocked = UU.user_id
+                    WHERE U.login='$login'");
+        for ($i = 0; $i < count($blocked_users); $i++) {
+            $blocked_user_login = $blocked_users[$i]['login'];
+            $blocked_users[$i]['photo_src'] = $db->db_read("SELECT photo_src FROM USER_MAIN_PHOTO 
+                                JOIN USER_PHOTO UP on USER_MAIN_PHOTO.photo_id = UP.photo_id 
+                                JOIN USERS U on UP.user_id = U.user_id WHERE login='$blocked_user_login'");
+        }
+        return($blocked_users);
+    }
+    function user_black_list_remove($login, $blocked_user_login){
+        $db = new database();
+        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $user_id_blocked = $db->db_read("SELECT user_id FROM USERS WHERE login='$blocked_user_login'");
+        $db->db_change("DELETE FROM USER_BLACK_LIST WHERE user_id='$user_id' AND user_id_blocked='$user_id_blocked'");
+    }
 }

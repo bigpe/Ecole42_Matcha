@@ -1,0 +1,38 @@
+#people_block{
+    padding: 20px;
+    background: #f9f7f7;
+    min-height: calc(100vh - 69px - 100px - 40px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.people{
+    height: 40px;
+    display: table;
+    margin: auto;
+    padding: 5px;
+}
+.photo{
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+.people_name, .unblock_user{
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 20px;
+}
+.unblock_user{
+    color: crimson;
+}
+#remove_user{
+    animation-name: remove_user_anim;
+    animation-duration: 1s;
+}
+
+@keyframes remove_user_anim {
+    from{opacity: 1}
+    to{opacity: 0}
+}

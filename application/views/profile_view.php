@@ -50,7 +50,14 @@
             <label for="options_input" id="options_label">
                 <i class="fas fa-ellipsis-h"></i>
                 <span id="options_menu">
-                    <?php if(!$self_profile) print('<p id="block_user" onclick="block_user()"><i class="fas fa-user-lock"></i></p>'); ?>
+                    <?php
+                    if(!$self_profile) {
+                        if(!$data['user_data']['profile_block_status']) //User Not Blocked
+                            print('<p id="block_user" onclick="block_user()"><i class="fas fa-user-lock"></i></p>');
+                        else //User Blocked
+                            print('<p id="block_user" onclick="unblock_user()"><i class="fas fa-lock-open"></i></p>');
+                    }
+                    ?>
                     <?php if($self_profile)
                         if (count($data['user_data']['user_photos']) > 0)
                             print('<p id="remove_photo" onclick="remove_photo()"><i class="fas fa-trash-alt"></i></p>');
@@ -83,9 +90,18 @@
         $chat_id = $data['user_data']['ready_to_chat'];
         $heart = "<i class=\"fas fa-heart\"></i>";
         $check_like = $data['user_data']['check_like'];
-        $check_like ? print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>") :
-            print("<div id='like_block' onclick='like()'>$heart</div>");
-
+        if($check_like) {
+            if($data['user_data']['profile_block_status'])
+                print("<div id='like_block'>$heart</div>");
+            else
+                print("<div id='like_block' onclick='like()' class='like_filled'>$heart</div>");
+        }
+        else {
+            if($data['user_data']['profile_block_status'])
+                print("<div id='like_block'>$heart</div>");
+            else
+                print("<div id='like_block' onclick='like()'>$heart</div>");
+        }
         $data['user_data']['ready_to_chat'] ?
             print("<a href='/conversation/chat_view/?id=$chat_id'><div id='chat_block' class='chat_available'><i class='fas fa-comment-dots'></i></a></div>") :
             print('<div id="chat_block"><i class="fas fa-comment-dots"></i></div>');

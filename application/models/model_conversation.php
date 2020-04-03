@@ -6,6 +6,7 @@ class Model_Conversation extends Model{
         return ($data);
     }
     function get_last_message($chats){
+        $data = [];
         for ($i = 0; $i < count($chats); $i++){
             $data[$i]['chat_id'] = $chats[$i]['chat_id'];
             $data[$i]['login'] = $this->get_login_chat($chats[$i]['chat_id']);

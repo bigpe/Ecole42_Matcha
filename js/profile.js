@@ -92,6 +92,14 @@ function photo_backward() {
 function change_current_photo() {
     photo.id = user_photos[current_photo]['photo_token'];
     let photo_path = 'url("' + user_photos[current_photo]['photo_src'] + '")';
+    let image = new Image();
+    image.src = user_photos[current_photo]['photo_src'];
+    image.onerror = function(){
+        photo.style.backgroundImage = "url('/images/placeholder.png')";
+    };
+    image.onload = function () {
+        image.remove();
+    };
     photo.style.backgroundImage = photo_path.replace(".", "");
     check_main_photo();
 }

@@ -250,14 +250,20 @@
     color: darkorange;
     padding: 5px;
 }
+#real_name_block{
+    margin-top: 20px;
+}
 #real_name input[type='text']{
     text-align: center;
     outline: none;
     border: none;
     background: transparent;
 }
+#remove_photo, #add_photo, #block_user{
+    margin: 10px;
+}
 #real_name{
-
+    margin: 15px;
 }
 #info_change_accept, #geo_change_accept, #tags_change_accept, #real_name_change_accept{
     color: #5fe15f;

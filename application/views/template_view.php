@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width initial-scale=1.0">
 </head>
     <body>
+    <div id="wrap">
     <header>
         <div id="header_buttons">
             <a href="/" id="logo"><i class="fas fa-heartbeat"></i> Matcha <i class="fas fa-theater-masks"></i></a>
@@ -31,6 +32,8 @@
             <h3>Post => <?php print_r ($_POST);?></h3>
             <h3>Session => <?php print_r ($_SESSION);?></h3>
         </div>
+        <div id="push"></div>
+    </div>
     <footer>
 
     </footer>

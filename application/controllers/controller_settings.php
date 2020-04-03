@@ -14,7 +14,14 @@ class Controller_Settings extends Controller
             $this->view->generate("settings_view.php", "template_view.php",
                 array("error" => $this->model->error_handler($this->model->error_id)));
     }
-
+    function action_black_list(){
+        if($this->model->check_session()) #Success
+            header("Location: /");
+        else
+            $this->view->generate("black_list_view.php", "template_view.php",
+                array("error" => $this->model->error_handler($this->model->error_id),
+                    "users_data" => $this->model->get_blocked_users($_SESSION['login'])));
+    }
     function action_change_password()
     {
         $new_pass_conf = md5($_POST['new_pass_conf']);
@@ -50,5 +57,12 @@ class Controller_Settings extends Controller
         }
         else
             $this->view->generate("settings_view.php", "template_view.php", array('error' => $this->model->error_handler($res)));
+    }
+    function action_black_list_remove(){
+        if(!$this->model->check_session()){ #Success
+            if($this->check_post_arguments_exists(array("login"))){
+                $this->model->user_black_list_remove($_SESSION['login'], $_POST['login']);
+            }
+        }
     }
 }
