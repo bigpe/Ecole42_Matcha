@@ -43,6 +43,7 @@ body{
     text-align: center;
 }
 #debug_block{
+    display: none;
 
 }
 #address{
@@ -69,4 +70,51 @@ footer, #push{
 footer{
     background: indianred;
     text-align: center;
+}
+.notification{
+    display: block;
+    width: 250px;
+    height: 100px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border-radius: 10px;
+    background-color: #e8e8e8;
+    box-shadow: 1px 1px 20px gray;
+    z-index: 999999;
+    visibility: hidden;
+    align-content: center;
+    animation-name: notification_anim;
+    animation-duration: 3s;
+}
+
+.close {
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+}
+.close:hover {
+    opacity: 1;
+}
+.close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+}
+.close:before {
+    transform: rotate(45deg);
+}
+.close:after {
+    transform: rotate(-45deg);
+}
+
+@keyframes notification_anim {
+    from{bottom: -160px}
+    to{bottom: 0}
 }

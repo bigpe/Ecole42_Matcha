@@ -196,6 +196,6 @@ function get_location(token) {
             geo.value = data['location']['data']['city'];
         }})
 }
-user_photo_button.onclick = function () {
-    user_photo_input.click();
-};
+// user_photo_button.onclick = function () {
+//     user_photo_input.click();
+// };

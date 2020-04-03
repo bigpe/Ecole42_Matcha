@@ -47,10 +47,24 @@ function like () {
     if(current_like_status) {
         current_like_status = 0;
         like_block.removeAttribute("class");
+        let cookie = document.cookie.split('=', 2)[1];
+        messageJSON = {
+            user_from: cookie,
+            user_to: get[1],
+            type: 3
+        };
+        socketNotif.send(JSON.stringify(messageJSON));
     }
     else {
         current_like_status = 1;
         like_block.setAttribute("class", "like_filled");
+        let cookie = document.cookie.split('=', 2)[1];
+        messageJSON = {
+            user_from: cookie,
+            user_to: get[1],
+            type: 2
+        };
+        socketNotif.send(JSON.stringify(messageJSON));
     }
     $.ajax({
         url: '/profile/like',

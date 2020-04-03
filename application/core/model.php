@@ -77,6 +77,8 @@ class Model
     {
         if (isset($alfa_user_id) && isset($omega_user_id) && isset($action)){
         $db = new database();
+        if ($alfa_user_id != $omega_user_id && $action != 11)
+            $this->input_notification($alfa_user_id, $omega_user_id, $action);
         $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
         }
     }
@@ -87,6 +89,8 @@ class Model
             $alfa_user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$alfa_user_login'");
             $omega_user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$omega_user_login'");
             $db->db_change("INSERT INTO USER_HISTORY(alfa_user_id, omega_user_id, action_id) VALUES ('$alfa_user_id', '$omega_user_id', '$action')");
+            if ($alfa_user_id != $omega_user_id && $action != 11)
+                $this->input_notification($alfa_user_id, $omega_user_id, $action);
         }
     }
     function check_online($login)
@@ -189,5 +193,10 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
     WHERE (O.login='$omega_login' AND A.login='$alpha_login') and action_id=2"))
             return(1);
         return(0);
+    }
+
+    function input_notification($user_id_from, $user_id_to, $action){
+        $db = new database();
+        $db->db_change("INSERT INTO NOTIFICATIONS (user_id_to, user_id_from, action) VALUES('$user_id_to', '$user_id_from', '$action')");
     }
 }

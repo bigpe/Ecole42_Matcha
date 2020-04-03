@@ -109,4 +109,25 @@ class Model_Conversation extends Model{
         }
         return $messages;
     }
+
+    function input_message_notification($chat_id_from){
+        $db = new database();
+        $login = $_POST['login'];
+        $user_id_to = $db->db_read("SELECT user_id FROM USERS
+JOIN CHATS C on USERS.user_id = C.user_id_one
+OR USERS.user_id = C.user_id_two
+WHERE login !='$login' AND chat_id='$chat_id_from'");
+        $db->db_change("INSERT INTO MESSAGE_NOTIFICATIONS (user_id_to, chat_id_from) VALUES ('$user_id_to', '$chat_id_from')");
+    }
+
+    function input_delete_notification($chat_id_from){
+        $db = new database();
+        $login = $_POST['login'];
+        $user_id_to = $db->db_read("SELECT user_id FROM USERS
+JOIN CHATS C on USERS.user_id = C.user_id_one
+OR USERS.user_id = C.user_id_two
+WHERE login !='$login' AND chat_id='$chat_id_from'");
+        $db->db_change("DELETE FROM MESSAGE_NOTIFICATIONS WHERE user_id_to = '$user_id_to' AND chat_id_to='$chat_id_from')");
+        $this->edit_message_status($chat_id_from);
+    }
 }

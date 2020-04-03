@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../../css/template.css">
     <script src="../../js/template.js"></script>
     <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <script src="../../js/notification.js"></script>
 </head>
     <body>
     <div id="wrap">
@@ -20,7 +21,12 @@
             <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/auth/sign_out'><i class=\"fas fa-sign-out-alt\"></i></a>"); ?>
         </div>
     </header>
+
     <?php include "application/views/" . $content_view;?>
+    <div class="notification" id ="notification_block">
+        <span class="close" onclick="closeNotifications()"></span>
+        <div id="notification_area"></div>
+    </div>
         <div id="debug_block">
             <h2>Debug</h2>
             <h3>Data => <?php print_r($data)?></h3>

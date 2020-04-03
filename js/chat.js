@@ -78,22 +78,26 @@ function append_my_message(data){
     messageDiv.append(i);
     $('.messages').append(messageDiv);
 }
-let socket = new WebSocket("ws://192.168.0.191:8888/ws/server.php");
+let socket = new WebSocket("ws://" + domain + ":8888");
 
 socket.onopen = function () {
     let cookie = document.cookie.split('=', 2)[1];
     let messageJSON = {
         user_from: cookie,
         user_to: user_chat_to,
-        type: 3
+        type: 18
     };
     socket.send(JSON.stringify(messageJSON));
-
+    $.ajax({
+        url: "/conversation/delete_notification",
+        method: "POST",
+        data: {"chat_id": user_chat_to,
+            "type": 1   }});
 };
 
 socket.onclose = function () {
     setTimeout(function() {
-        socket = new WebSocket("ws://192.168.0.191:8888/ws/server.php");
+        socket = new WebSocket("ws://" + domain + ":8888/ws/server.php");
     }, 1000);
 };
 
@@ -102,7 +106,7 @@ socket.onerror = function (error) {
 
 socket.onmessage = function (event) {
 let data = JSON.parse(event.data);
-if (data.user_from === user_chat_to &&  data.type === 1){
+if (data.user_from === user_chat_to &&  data.type === 11){
     for(let user in data.user_to){
         if (data.user_to[user]['session_name'] === user_from ){
             append_other_message(data);
@@ -117,19 +121,19 @@ if (data.user_from === user_chat_to &&  data.type === 1){
             let messageJSON = {
                 user_from: cookie,
                 user_to: user_chat_to,
-                type: 2
+                type: 19
             };
             socket.send(JSON.stringify(messageJSON));
 }}}
-if (data.user_from === user_chat_to && data.type === 2)
+if (data.user_from === user_chat_to && data.type === 19)
     for(let user in data.user_to)
         if (data.user_to[user]['session_name'] === user_from ){
             change_message_status();
             }
-    if (data.user_from === user_chat_to && data.type === 3)
-        for(let user in data.user_to)
-            if (data.user_to[user]['session_name'] === user_from ){
-                change_message_status();
+if (data.user_from === user_chat_to && data.type === 18)
+    for(let user in data.user_to)
+        if (data.user_to[user]['session_name'] === user_from ){
+            change_message_status();
             }
 };
 
@@ -156,10 +160,24 @@ function send_message() {
                     user_from: cookie,
                     user_to: user_chat_to,
                     message: message,
-                    type: 1
+                    type: 11
                 };
-                if(Number(userStatus) !== 0)
+                if(Number(userStatus) !== 0){
                     socket.send(JSON.stringify(messageJSON));
+                    let messageNOTIF = {
+                    user_from: cookie,
+                    user_to: get[1],
+                    message: message,
+                    type: 11
+                    };
+                    socketNotif.send(JSON.stringify(messageNOTIF));
+                }
+                else
+                    $.ajax({
+                        url: "/conversation/input_notification",
+                        method: "POST",
+                        data: {"chat_id": user_chat_to,
+                            "type": 1   }});
                 append_my_message(messageJSON)
             }})
          }
