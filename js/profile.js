@@ -42,7 +42,6 @@ let params = window
         },
         {}
     );
-alert(current_like_status);
 function like () {
     if(current_like_status) {
         current_like_status = 0;
