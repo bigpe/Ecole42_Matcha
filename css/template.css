@@ -30,7 +30,13 @@ header a{
 }
 #notification_count{
     font-size: .6em;
-    padding: 3px;
+    padding: 4px;
+    background: crimson;
+    border-radius: 100%;
+    position: absolute;
+    margin-left: -5px;
+    height: 10px;
+    text-align: center;
 }
 .header_buttons:hover{
     background: rgba(255, 255, 255, 0.1);
@@ -43,7 +49,7 @@ body{
     text-align: center;
 }
 #debug_block{
-    display: none;
+
 
 }
 #address{
@@ -61,7 +67,7 @@ body{
     outline: none;
 }
 #filter{
-    background: honeydew;
+    background: #f0f0f0;
     padding: 10px;
 }
 footer, #push{

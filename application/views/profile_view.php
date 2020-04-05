@@ -1,12 +1,8 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
-<h3><?php
-    $ini = include('./config/config.php');
-    $token = $ini['city_parser']['token'];
-    isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1;
-    ?>
-</h3>
+<?php $ini = include('./config/config.php'); $token = $ini['city_parser']['token'];
+isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
 <div id="profile_block">
     <div id="add_to_profile_block">
         <?php

@@ -46,8 +46,10 @@ let params = window
 function like () {
     if(current_like_status) {
         current_like_status = 0;
+        console.log(current_like_status);
         like_block.removeAttribute("class");
         let cookie = document.cookie.split('=', 2)[1];
+        let messageJSON = {};
         messageJSON = {
             user_from: cookie,
             user_to: get[1],
@@ -57,8 +59,10 @@ function like () {
     }
     else {
         current_like_status = 1;
+        console.log(current_like_status);
         like_block.setAttribute("class", "like_filled");
         let cookie = document.cookie.split('=', 2)[1];
+        let messageJSON = {};
         messageJSON = {
             user_from: cookie,
             user_to: get[1],
@@ -107,7 +111,7 @@ function change_current_photo() {
     photo.id = user_photos[current_photo]['photo_token'];
     let photo_path = 'url("' + user_photos[current_photo]['photo_src'] + '")';
     let image = new Image();
-    image.src = user_photos[current_photo]['photo_src'];
+    image.src = user_photos[current_photo]['photo_src'].replace(".", "");
     image.onerror = function(){
         photo.style.backgroundImage = "url('/images/placeholder.png')";
     };
@@ -264,6 +268,7 @@ function add_photo() {
 
 function like_status(l) {
     current_like_status = l;
+    console.log(current_like_status);
 }
 function load_user_photos(photo_array) {
     for(let i = 0; i < photo_array.length; i++) {

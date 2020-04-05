@@ -132,20 +132,16 @@ class Model_Profile extends Model{
     }
     function put_like($omega_user_login)
     {
-        if(!$this->check_block_user($omega_user_login)) {
             $omega_user_id = $this->get_user_id($omega_user_login);
             $alfa_user_login = $_SESSION['login'];
             $alfa_user_id = $this->get_user_id($alfa_user_login);
             $like_id = $this->check_like_exist($alfa_user_id, $omega_user_id);
-            if ($like_id){
-                $this->input_history($alfa_user_id, $omega_user_id, 3);
+            if ($like_id)
                 $this->delete_like($like_id);
-            }
             else{
-                $this->insert_like($alfa_user_id, $omega_user_id);
-                $this->input_history($alfa_user_id, $omega_user_id, 2);
+                if(!$this->check_block_user($omega_user_login))
+                    $this->input_history($alfa_user_id, $omega_user_id, 2);
             }
-        }
     }
     function check_like_exist($alfa_user_id, $omega_user_id)
     {

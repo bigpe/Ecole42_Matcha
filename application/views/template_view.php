@@ -12,13 +12,13 @@
     <header>
         <div id="header_buttons">
             <a href="/" id="logo"><i class="fas fa-heartbeat"></i> Matcha <i class="fas fa-theater-masks"></i></a>
-            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/settings'><i class=\"fas fa-cogs\"></i></a>"); ?>
-            <?php isset($_SESSION['login']) ? print('<a class="header_buttons" href="/"><i class="fas fa-dice"></i></a>') : ""?>
-            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/find_advanced'><i class=\"fas fa-search\"></i></a>"); ?>
-            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/conversation'><i class=\"fas fa-envelope\"></i></a>"); ?>
-            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' id='notification' href='/history'>
+            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/Settings'><i class=\"fas fa-cogs\"></i></a>"); ?>
+            <?php isset($_SESSION['login']) ? print('<a class="header_buttons" href="/Matcha"><i class="fas fa-dice"></i></a>') : ""?>
+            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/Find_Advanced'><i class=\"fas fa-search\"></i></a>"); ?>
+            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/Conversation'><i class=\"fas fa-envelope\"></i></a>"); ?>
+            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' id='notification' href='/History'>
                                 <i class=\"fas fa-bell\"></i><span id='notification_count'>1</span></a>"); ?>
-            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/auth/sign_out'><i class=\"fas fa-sign-out-alt\"></i></a>"); ?>
+            <?php if(isset($_SESSION['login'])) print("<a class='header_buttons' href='/Auth/Sign_out'><i class=\"fas fa-sign-out-alt\"></i></a>"); ?>
         </div>
     </header>
 

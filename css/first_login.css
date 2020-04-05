@@ -1,3 +1,15 @@
+#first_login_block{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#geo_block, #full_name_block, #age_block{
+    margin: auto;
+}
+#geo_block i, #full_name_block i, #age_block i{
+    position: absolute;
+    margin-top: 15px;
+    font-size: 1.5em;
+}
 .highlight{
     animation-name: highlight;
     animation-duration: 2s;
@@ -35,9 +47,6 @@
     transition: opacity .6s cubic-bezier(.18,.89,.32,1.28);
     opacity: .6;
 }
-#load_tags_button{
-    margin-top: 15px;
-}
 .user_photo{
     text-align: center;
     width: 200px;
@@ -51,6 +60,8 @@ textarea{
     border: 3px dashed black;
     resize: none;
     outline: none;
+    text-align: center;
+    border-radius: 30px;
 }
 #user_photo_tips{
     padding: 10px;
@@ -74,7 +85,26 @@ textarea{
     align-items: center;
     border: 2px dashed black;
 }
-#geo_block{
-    width: 50%;
+#datepicker, #full_name{
+    height: 50px;
+    border: none;
+    border-bottom: 3px dashed black;
+    text-align: center;
+    font-size: 1.2em;
+    background: transparent;
+}
+#age_block, #mandatory_form, #info_block, #user_photo_block, #full_name_block, #geo_block, summary{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#welcome_block{
+    background: #f7ebf3;
+    min-width: 300px;
     margin: auto;
+    border-radius: 20px;
+    max-width: 500px;
+    padding: 10px;
+}
+summary{
+    outline: none;
 }

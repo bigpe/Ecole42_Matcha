@@ -16,11 +16,13 @@
         });
     } );
 </script>
-<h2>Hello <?php print($data['login']) ?>, Welcome to Matcha!</h2>
-<p>This site help you to find your crush!</p>
-<p>At first let we know a little more about yourself</p>
-<p>Fulfil your profile to access to "Find mode"</p>
-<h2>Mandatory part</h2>
+<div id="first_login_block">
+    <div id="welcome_block">
+        <h2>Hello <?php print($_SESSION['login']) ?>, Welcome to Matcha!</h2>
+        <p>This site help you to find your crush!</p>
+        <p>At first let we know a little more about yourself</p>
+        <p>Fulfil your profile to access to "Find mode"</p>
+    </div>
 <form action="/first_login/end_tutorial" method="POST" id="mandatory_form">
     <h3 id="sex_block_pin">What's your sex?</h3>
     <div id="sex_block">
@@ -40,6 +42,7 @@
     </div>
     <h3>What's about your age?</h3>
     <div id="age_block">
+        <i class="fas fa-user-clock"></i>
         <input type="text" id="datepicker" name="user_age" required>
     </div>
     <h3>Few words about you</h3>
@@ -76,21 +79,25 @@
             <label for="user_photo_input"><button id="user_photo_button" type="button"><i class="fas fa-plus"></i></button></label>
         </div>
     </div>
-    <br>
     <h3>You can make fil additional entry's</h3>
-    <p>The more fields are filled, the more fame-rating!</p>
     <details>
+        <summary><i class="fas fa-info-circle"></i> The more fields are filled, the more fame-rating!</summary>
+        <h3>It's your city?</h3>
         <div id="geo_block">
-            <h3>It's your city?</h3>
+            <i class="fas fa-search-location"></i>
             <input id="address" name="user_geo" type="text" required>
+            <input id="geo_longitude" type="text" name="user_geo_longitude" required hidden>
+            <input id="geo_latitude" type="text" name="user_geo_latitude" required hidden>
         </div>
-        <div id="full_name">
-            <h3>Enter your full name</h3>
-            <input type="text" name="user_full_name">
+        <h3>Enter your full name</h3>
+        <div id="full_name_block">
+            <i class="fas fa-user-tie"></i>
+            <input id="full_name" type="text" name="user_full_name">
         </div>
     </details>
     <div id="submit_block"><input type="submit" id="mandatory_form_submit"></div>
 </form>
+</div>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
 <script type="text/javascript" src="../../js/first_login.js"></script>
