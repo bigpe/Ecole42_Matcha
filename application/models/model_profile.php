@@ -150,9 +150,8 @@ class Model_Profile extends Model{
     function check_like_exist($alfa_user_id, $omega_user_id)
     {
         $db = new database();
-        $like_id = $db->db_read("SELECT history_id FROM USER_HISTORY WHERE alfa_user_id='$alfa_user_id'
+        return  $db->db_read("SELECT history_id FROM USER_HISTORY WHERE alfa_user_id='$alfa_user_id'
                                       AND omega_user_id='$omega_user_id' AND action_id=2");
-        return ($like_id);
     }
     function insert_like($alfa_user_id, $omega_user_id){
         $db = new database();

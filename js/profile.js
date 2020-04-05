@@ -42,13 +42,13 @@ let params = window
         },
         {}
     );
-
+alert(current_like_status);
 function like () {
     if(current_like_status) {
         current_like_status = 0;
         like_block.removeAttribute("class");
         let cookie = document.cookie.split('=', 2)[1];
-        messageJSON = {
+        let messageJSON = {
             user_from: cookie,
             user_to: get[1],
             type: 3
@@ -59,7 +59,7 @@ function like () {
         current_like_status = 1;
         like_block.setAttribute("class", "like_filled");
         let cookie = document.cookie.split('=', 2)[1];
-        messageJSON = {
+        let messageJSON = {
             user_from: cookie,
             user_to: get[1],
             type: 2
@@ -82,6 +82,7 @@ function like () {
             }
         }
     });
+
 }
 
 function photo_forward(){

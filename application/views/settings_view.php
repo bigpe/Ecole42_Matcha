@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="../../css/settings.css">
 <div class="settings">
+
     <div class="change_pass" id="change_pass">
         <h3>Change password</h3>
         <form method="POST" action="/settings/change_password">

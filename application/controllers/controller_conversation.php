@@ -54,16 +54,8 @@ class Controller_Conversation extends Controller
     }
 
     function action_change_message_status(){
-        if ($this->check_post_arguments_exists(array("chat_id")))
-            $this->model->edit_message_status($_POST['chat_id']);
+        if ($this->check_post_arguments_exists(array("chat_to")))
+            $this->model->edit_message_status($_POST['chat_to']);
     }
 
-    function action_input_notification(){
-        if ($this->check_post_arguments_exists(array("chat_id")))
-            $this->model->input_message_notification($_POST['chat_id']);
-    }
-    function action_delete_notification(){
-        if ($this->check_post_arguments_exists(array("chat_id")))
-            $this->model->input_message_notification($_POST['chat_id']);
-    }
 }

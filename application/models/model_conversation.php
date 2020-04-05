@@ -35,21 +35,16 @@ class Model_Conversation extends Model{
     function get_login_chat($chat_id){
         $login = $_SESSION['login'];
         $db = new database();
-        $users = $db->db_read_multiple("SELECT login FROM CHATS
-                    JOIN USERS U on U.user_id=CHATS.user_id_one OR U.user_id=CHATS.user_id_two WHERE chat_id='$chat_id'");
-        if ($users[0]['login'] === $login)
-            $login_chat = $users[1]['login'];
-        else
-            $login_chat = $users[0]['login'];
-        return $login_chat;
+        return $db->db_read("SELECT login FROM CHATS
+                      JOIN USERS U on U.user_id=CHATS.user_id_one OR U.user_id=CHATS.user_id_two WHERE chat_id=$chat_id AND U.login!='$login'");
+
     }
     function get_chats($login){
         $db = new database();
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login = '$login'");
-        $chats = $db->db_read_multiple("SELECT DISTINCT CHATS.chat_id FROM CHATS
-        JOIN USER_MESSAGE UM on CHATS.chat_id = UM.chat_id WHERE user_id_two = '$user_id' OR  user_id_one = '$user_id'");
-        $chats = array_reverse($chats);
-        return $chats;
+        return $db->db_read_multiple("SELECT DISTINCT CHATS.chat_id FROM CHATS
+                                        JOIN USER_MESSAGE UM on CHATS.chat_id = UM.chat_id
+                                        WHERE user_id_two = $user_id OR  user_id_one = $user_id ORDER BY id_message DESC");
     }
     function get_chat_data($chat_id){
         $login_companion = $this->get_login_chat($chat_id);
@@ -59,6 +54,7 @@ class Model_Conversation extends Model{
             "online_status" => $this->check_online($login_companion),
             "login" => $login_companion);
         $this->edit_message_status($chat_id);
+        $this->delete_notification($chat_id);
         return($user_data);
     }
 
@@ -66,7 +62,7 @@ class Model_Conversation extends Model{
         $login = $_SESSION['login'];
         $db = new database();
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login = '$login'");
-        $db->db_change("UPDATE USER_MESSAGE SET status_message=1 WHERE chat_id=$chat_id AND user_id_from!='$user_id'");
+        $db->db_change("UPDATE USER_MESSAGE SET status_message=1 WHERE chat_id='$chat_id' AND user_id_to='$user_id'");
     }
 
 
@@ -110,24 +106,4 @@ class Model_Conversation extends Model{
         return $messages;
     }
 
-    function input_message_notification($chat_id_from){
-        $db = new database();
-        $login = $_POST['login'];
-        $user_id_to = $db->db_read("SELECT user_id FROM USERS
-JOIN CHATS C on USERS.user_id = C.user_id_one
-OR USERS.user_id = C.user_id_two
-WHERE login !='$login' AND chat_id='$chat_id_from'");
-        $db->db_change("INSERT INTO MESSAGE_NOTIFICATIONS (user_id_to, chat_id_from) VALUES ('$user_id_to', '$chat_id_from')");
-    }
-
-    function input_delete_notification($chat_id_from){
-        $db = new database();
-        $login = $_POST['login'];
-        $user_id_to = $db->db_read("SELECT user_id FROM USERS
-JOIN CHATS C on USERS.user_id = C.user_id_one
-OR USERS.user_id = C.user_id_two
-WHERE login !='$login' AND chat_id='$chat_id_from'");
-        $db->db_change("DELETE FROM MESSAGE_NOTIFICATIONS WHERE user_id_to = '$user_id_to' AND chat_id_to='$chat_id_from')");
-        $this->edit_message_status($chat_id_from);
-    }
 }

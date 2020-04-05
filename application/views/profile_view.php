@@ -7,6 +7,7 @@
     isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1;
     ?>
 </h3>
+
 <div id="profile_block">
     <div id="add_to_profile_block">
         <?php
@@ -153,6 +154,7 @@
         ?>
     </div>
 </div>
+
 <script src="../../js/profile.js"></script>
 <script type="text/javascript">
     like_status(<?php print($data['user_data']['check_like']); ?>);

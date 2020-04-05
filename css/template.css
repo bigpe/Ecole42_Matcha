@@ -32,6 +32,10 @@ header a{
     font-size: .6em;
     padding: 3px;
 }
+#notification_mess{
+    font-size: .6em;
+    padding: 3px;
+}
 .header_buttons:hover{
     background: rgba(255, 255, 255, 0.1);
 }
