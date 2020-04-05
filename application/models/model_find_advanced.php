@@ -31,7 +31,8 @@ class model_find_advanced extends Model{
                 $query_append = $query_append . " AND U.user_id!='$user_id_blocked'";
             }
         }
-        $users_data = $db->db_read_multiple("SELECT DISTINCT login, photo_src FROM USER_MAIN_PHOTO
+        $users_data = $db->db_read_multiple("SELECT DISTINCT login, photo_src, geo_longitude, geo_latitude 
+                    FROM USER_MAIN_PHOTO
                     JOIN USER_PHOTO UP on USER_MAIN_PHOTO.photo_id = UP.photo_id 
                     JOIN USERS U on UP.user_id = U.user_id 
                     JOIN USER_TAGS UT on U.user_id = UT.user_id
