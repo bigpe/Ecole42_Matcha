@@ -1,4 +1,4 @@
-let domain = "192.168.0.2";
+let domain = window.document.domain;
 let get = window
     .location
     .search
@@ -13,12 +13,12 @@ let get = window
 let address = window.location.pathname;
 
 let socketNotif = new WebSocket("ws://" + domain + ":6969/notification_ws/notification.php");
-console.log(domain);
+console.log(window.document.domain);
 
 socketNotif.onopen = function () {
     let cookie = document.cookie.split('=', 2)[1];
     let messageJSON = {};
-    if (get[0] === "login" && address === "/profile/view/") {
+    if (get[0] === "login" && address === "/profile/view/" && get[1] !== "") {
         messageJSON = {
             user_from: cookie,
             user_to: get[1],
@@ -44,22 +44,26 @@ socketNotif.onmessage = function (event) {
         for(let user in data.user_to){
             if (data.user_to[user]['session_name'] === cookie ){
                     appendNotifications("new message " + data.user_from + "\nmassage: " + data.message);
+                    appendCountNewMessage();
                 }
             }}
     if (data.type === 1)
         for(let user in data.user_to)
             if (data.user_to[user]['session_name'] === cookie ){
                 appendNotifications("new visit " + data.user_from);
+                appendCountNotifications();
             }
     if (data.type === 2)
         for(let user in data.user_to)
             if (data.user_to[user]['session_name'] === cookie ){
                 appendNotifications("new like " + data.user_from);
+                appendCountNotifications();
             }
     if (data.type === 3)
         for(let user in data.user_to)
             if (data.user_to[user]['session_name'] === cookie ){
                 appendNotifications("new dislike " + data.user_from);
+                appendCountNotifications();
             }
 
 
@@ -79,11 +83,25 @@ function closeNotifications() {
     $("#notif_content").remove();
     let notificationBlock = document.getElementById("notification_block");
     notificationBlock.style.visibility = "hidden";
-
-
 }
 
+function appendCountNewMessage() {
+    let newMessage = document.getElementById("notification_mess");
+    if (!newMessage.innerText)
+        newMessage.innerText = "1";
+    else{
+        newMessage.innerText = Number(newMessage.innerText) + 1 ;
+    }
+}
 
+function appendCountNotifications() {
+    let newMessage = document.getElementById("notification_count");
+    if (!newMessage.innerText)
+        newMessage.innerText = "1";
+    else{
+        newMessage.innerText = Number(newMessage.innerText) + 1 ;
+    }
+}
 
 
 

@@ -11,7 +11,8 @@
     text-decoration: none;
 }
 .people{
-
+    background: #8080800a;
+    border-radius: 10px;
 }
 .user_photo{
     border-radius: 100%;
@@ -35,4 +36,10 @@
     display: grid;
     align-items: center;
     height: 120px;
+}
+.message a{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

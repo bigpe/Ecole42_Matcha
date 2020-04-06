@@ -114,7 +114,6 @@ if (data.user_from === user_chat_to &&  data.type === 11){
                 url: "/conversation/change_message_status",
                 method: "POST",
                 data: {"chat_to": user_chat_to,
-                    "user_from": user_from,
                     "type": 2   },
             });
             let cookie = document.cookie.split('=', 2)[1];
@@ -129,11 +128,23 @@ if (data.user_from === user_chat_to && data.type === 19)
     for(let user in data.user_to)
         if (data.user_to[user]['session_name'] === user_from ){
             change_message_status();
+            $.ajax({
+                url: "/conversation/change_message_status",
+                method: "POST",
+                data: {"chat_to": user_chat_to,
+                    "type": 2   },
+            });
             }
 if (data.user_from === user_chat_to && data.type === 18)
     for(let user in data.user_to)
         if (data.user_to[user]['session_name'] === user_from ){
             change_message_status();
+            $.ajax({
+                url: "/conversation/change_message_status",
+                method: "POST",
+                data: {"chat_to": user_chat_to,
+                    "type": 2   },
+            });
             }
 };
 
@@ -172,12 +183,6 @@ function send_message() {
                     };
                     socketNotif.send(JSON.stringify(messageNOTIF));
                 }
-                else
-                    $.ajax({
-                        url: "/conversation/input_notification",
-                        method: "POST",
-                        data: {"chat_id": user_chat_to,
-                            "type": 1   }});
                 append_my_message(messageJSON)
             }})
          }

@@ -149,6 +149,7 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
         ?>
     </div>
 </div>
+
 <script src="../../js/profile.js"></script>
 <script type="text/javascript">
     like_status(<?php print($data['user_data']['check_like']); ?>);

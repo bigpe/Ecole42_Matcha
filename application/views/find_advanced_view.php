@@ -58,11 +58,15 @@
         !file_exists($main_photo) ? $main_photo = "./images/placeholder.png" : "";
         $main_photo_data = base64_encode(file_get_contents($main_photo));
         $photo_data = "'data: ". mime_content_type($main_photo) .";base64,$main_photo_data'";
+        $distance = $user_data['distance'];
+        $distance ? $distance_string = round($distance / 1000) . "km" : $distance_string = "Around you";
         print('<a href="/profile/view/?login=' . $user_data['login'] . '">
-        <div class="people" style="background: url(' . $photo_data . ') no-repeat center; 
-                background-size: cover;">
-                <span class="name"><i class="fas fa-circle" style="color:'.$user_data['online_status']['status'].'" title="'.$user_data['online_status']['last_online'].'"> </i> '
-            . $user_data['login'] . '</span></div></a>');
+        <div class="people" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;">
+                <span class="name"><i class="fas fa-circle" style="color:'.$user_data['online_status']['status'].'" 
+                title="'.$user_data['online_status']['last_online'].'"> 
+                </i> ' . $user_data['login'] . '</span>');
+        print("<span class='distance'>$distance_string</span>");
+        print("</div></a>");
     } ?>
 </div>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />

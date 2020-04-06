@@ -75,7 +75,7 @@ class Model
 
     function input_history($alfa_user_id, $omega_user_id, $action)
     {
-        if (isset($alfa_user_id) && isset($omega_user_id) && isset($action)){
+        if ($alfa_user_id != 0 && $omega_user_id != 0 && isset($action)){
         $db = new database();
         if ($alfa_user_id != $omega_user_id && $action != 11)
             $this->input_notification($alfa_user_id, $omega_user_id, $action);
@@ -84,7 +84,7 @@ class Model
     }
     function input_history_by_login($alfa_user_login, $omega_user_login, $action)
     {
-        if (isset($alfa_user_login) && isset($omega_user_login) && isset($action)) {
+        if (isset($alfa_user_login)  && isset($omega_user_login) && isset($action)) {
             $db = new database();
             $alfa_user_id= $db->db_read("SELECT user_id FROM USERS WHERE login='$alfa_user_login'");
             $omega_user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$omega_user_login'");
@@ -200,7 +200,8 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $db = new database();
         $db->db_change("INSERT INTO NOTIFICATIONS (user_id_to, user_id_from, action) VALUES('$user_id_to', '$user_id_from', '$action')");
     }
-    function calculateTheDistance($long_A, $lat_A, $long_B, $lat_B) {
+    function calculateTheDistance($long_A, $lat_A, $long_B, $lat_B)
+    {
         $earth_radius = 6372795;
         $lat1 = $lat_A * M_PI / 180;
         $lat2 = $lat_B * M_PI / 180;
@@ -220,7 +221,124 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
 
         $ad = atan2($y, $x);
         $distance = ceil($ad * $earth_radius);
-
         return ($distance);
+    }
+    function get_user_geo_coordinates($login){
+        $db = new database();
+        $user_geo_coordinates = $db->db_read_multiple("SELECT geo_latitude, geo_longitude 
+                                                    FROM USERS WHERE login='$login'")[0];
+        return($user_geo_coordinates);
+    }
+    function get_user_black_list($login){
+        $db = new database();
+        return($db->db_read_multiple("SELECT user_id_blocked FROM USER_BLACK_LIST 
+                            JOIN USERS U on USER_BLACK_LIST.user_id = U.user_id WHERE login='$login'"));
+    }
+    function get_user_main_photo($login){
+        $db = new database();
+        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $user_main_photo_id = $db->db_read("SELECT photo_id FROM USER_MAIN_PHOTO WHERE user_id='$user_id'");
+        $user_main_photo_src = $db->db_read("SELECT photo_src FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
+        $user_main_photo_token = $db->db_read("SELECT photo_token FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
+        if(!$user_main_photo_token)
+            $user_main_photo_token = 1;
+        if(!$user_main_photo_src)
+            $user_main_photo_src = "./images/placeholder.png";
+        return(array("photo_src" => $user_main_photo_src, "photo_token" => $user_main_photo_token));
+    }
+    function get_user_fame_rating($login){
+        $db = new database();
+        $user_fame_rating_count = $db->db_read("SELECT COUNT(DISTINCT A.user_id,O.user_id, 
+            DAY(USER_HISTORY.creation_date), USER_HISTORY.action_id) as COUNT
+                                                FROM USER_HISTORY
+                                                JOIN USERS A on alfa_user_id=A.user_id
+                                                JOIN USERS O on omega_user_id=O.user_id
+                                                JOIN USER_ACTIONS UA on USER_HISTORY.action_id = UA.action_id
+            WHERE (O.login='$login' AND USER_HISTORY.action_id=1 OR
+                USER_HISTORY.action_id=2 AND O.login='$login') AND day(USER_HISTORY.creation_date) 
+                    BETWEEN DAY(CURRENT_TIMESTAMP) AND (DAY(CURRENT_TIMESTAMP) + 3) 
+                    ORDER BY USER_HISTORY.creation_date DESC");
+        if($user_fame_rating_count >= 999)
+            $user_fame_rating_id = 5;
+        else
+            $user_fame_rating_id = $db->db_read_multiple("SELECT fame_rating_id, fame_rating_color, fame_rating_name, fame_rating_icon
+                FROM FAME_RATING WHERE '$user_fame_rating_count' >= fame_rating_start AND 
+                                        '$user_fame_rating_count' <= fame_rating_end")[0];
+        return($user_fame_rating_id);
+    }
+    function get_user_info($login){
+        $db = new database();
+        $user_info = $db->db_read("SELECT info FROM USERS WHERE login='$login'");
+        return ($user_info);
+    }
+    function get_user_real_name($login){
+        $db = new database();
+        $user_real_name = $db->db_read("SELECT full_name FROM USERS WHERE login='$login'");
+        return ($user_real_name);
+    }
+    function get_user_location($login){
+        $db = new database();
+        $user_location = $db->db_read("SELECT geo FROM USERS WHERE login='$login'");
+        return($user_location);
+    }
+    function get_user_tags($login){
+        $db = new database();
+        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+        $user_tags = $db->db_read_multiple("SELECT tag_name, tag_icon, tag_color 
+                FROM USER_TAGS JOIN TAGS T on USER_TAGS.tag_id = T.tag_id 
+                WHERE user_id='$user_id' ORDER BY tag_rate DESC");
+        return($user_tags);
+    }
+    function get_user_sex_preference($login){
+        $db = new database();
+        $user_sex = $db->db_read("SELECT sex FROM USERS WHERE login='$login'");
+        $user_sex_preference = $db->db_read("SELECT sex_preference from USERS WHERE login='$login'");
+        if(!(int)$user_sex_preference)
+            return($db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon, sex_preference_color
+                FROM SEX_PREFERENCE WHERE sex_preference_id='0'")[0]);
+        $math = (int)$user_sex + (int)$user_sex_preference;
+        $sex_preference = $db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon, sex_preference_color 
+                FROM SEX_PREFERENCE WHERE sex_preference_id='$math'")[0];
+        return($sex_preference);
+    }
+    function get_profile_filled($login){
+        $db = new database();
+        $user_profile_filled = array("value" => 0, "add_to_profile" => []);
+        $user_base_info = $db->db_read_multiple("SELECT full_name, info FROM USERS WHERE login='$login'")[0];
+        if($user_base_info['full_name'])
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Full Name",
+                "icon" => "<i class=\"fas fa-user-tie\"></i>");
+        if($user_base_info['info'])
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Info",
+                "icon" => "<i class=\"fas fa-info-circle\"></i>");
+        $user_photos = $db->db_read("SELECT COUNT(photo_id) FROM USER_PHOTO 
+                            JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login' ");
+        $user_profile_filled['value'] += $user_photos * 8;
+        if($user_photos < 5)
+            $user_profile_filled['add_to_profile'][] = array("value" => "Photos",
+                "icon" => "<i class=\"fas fa-camera\"></i>");
+        $user_tags = $db->db_read("SELECT COUNT(user_tag_id) FROM USER_TAGS 
+                        JOIN USERS U on USER_TAGS.user_id = U.user_id WHERE login='$login'");
+        if($user_tags >= 1)
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Tags",
+                "icon" => "<i class=\"fas fa-hashtag\"></i>");
+        return ($user_profile_filled);
+    }
+    function delete_notification($login){
+        $db = new database();
+        $db->db_change("DELETE NOTIFICATIONS FROM NOTIFICATIONS
+                            JOIN USERS U on U.user_id=user_id_to
+                            WHERE login='$login'");
+    }
+    function get_user_photos($login){
+        $db = new database();
+        return($db->db_read_multiple("SELECT photo_token, photo_src FROM USER_PHOTO 
+                                    JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login'"));
     }
 }

@@ -28,15 +28,15 @@ header a{
 .header_buttons{
     display: table-cell;
 }
-#notification_count{
+#notification_count, #notification_mess{
     font-size: .6em;
-    padding: 4px;
+    padding: 3px;
     background: crimson;
     border-radius: 100%;
     position: absolute;
     margin-left: -5px;
-    height: 10px;
     text-align: center;
+    min-width: 15px;
 }
 .header_buttons:hover{
     background: rgba(255, 255, 255, 0.1);
@@ -123,4 +123,7 @@ footer{
 @keyframes notification_anim {
     from{bottom: -160px}
     to{bottom: 0}
+}
+.sr-only {
+    display: none;
 }

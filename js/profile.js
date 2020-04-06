@@ -42,7 +42,6 @@ let params = window
         },
         {}
     );
-
 function like () {
     if(current_like_status) {
         current_like_status = 0;
@@ -86,6 +85,7 @@ function like () {
             }
         }
     });
+
 }
 
 function photo_forward(){
