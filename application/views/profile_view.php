@@ -5,7 +5,6 @@
 </script>
 <?php $ini = include('./config/config.php'); $token = $ini['city_parser']['token'];
 isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
-
 <div id="profile_block">
     <div id="add_to_profile_block">
         <?php
@@ -55,6 +54,7 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
                             print('<p id="block_user" onclick="block_user()"><i class="fas fa-user-lock"></i></p>');
                         else //User Blocked
                             print('<p id="block_user" onclick="unblock_user()"><i class="fas fa-lock-open"></i></p>');
+                        print('<p id="report_user" onclick="report_user()" title="Fake account"><i class="fas fa-exclamation"></i></p>');
                     }
                     ?>
                     <?php if($self_profile)
@@ -150,8 +150,8 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
         else
             $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : "";
         ?>
-        <div id="YMapsID" style="width: 450px; height: 350px;"></div>
     </div>
+    <div id="YMapsID" style="width: 450px; height: 350px;"></div>
 
 </div>
 

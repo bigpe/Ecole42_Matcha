@@ -1,5 +1,5 @@
 #people_block{
-
+    margin: 20px;
 }
 #people_block a{
     color: black;
@@ -23,6 +23,19 @@
     margin-left: -75px;
     width: 145px;
     height: 25px;
+}
+.distance{
+    position: absolute;
+    margin-top: 110px;
+    background: #a808f08a;
+    margin-left: -50px;
+    width: 100px;
+    height: 25px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
 }
 .name i{
     font-size: .5em;

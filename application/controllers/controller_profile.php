@@ -57,5 +57,10 @@ class Controller_Profile extends Controller
         if($this->model->check_session())
             print(json_encode($this->model->get_user_not_selected_tags($_SESSION['login'])));
     }
+    function action_report_fake(){
+        if($this->check_post_arguments_exists(array("login"))) {
+            print($this->model->report_user($_POST['login']));
+        }
+    }
 }
 ?>

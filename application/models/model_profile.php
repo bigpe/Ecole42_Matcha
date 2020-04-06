@@ -36,41 +36,6 @@ class Model_Profile extends Model{
         return($db->db_check("SELECT user_id_blocked FROM USER_BLACK_LIST 
                 JOIN USERS U on USER_BLACK_LIST.user_id_blocked = U.user_id WHERE login='$login'"));
     }
-    function get_user_main_photo($login){
-        $db = new database();
-        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
-        $user_main_photo_id = $db->db_read("SELECT photo_id FROM USER_MAIN_PHOTO WHERE user_id='$user_id'");
-        $user_main_photo_src = $db->db_read("SELECT photo_src FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
-        $user_main_photo_token = $db->db_read("SELECT photo_token FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
-        if(!$user_main_photo_token)
-            $user_main_photo_token = 1;
-        if(!$user_main_photo_src)
-            $user_main_photo_src = "./images/placeholder.png";
-        return(array("photo_src" => $user_main_photo_src, "photo_token" => $user_main_photo_token));
-    }
-    function get_user_info($login){
-        $db = new database();
-        $user_info = $db->db_read("SELECT info FROM USERS WHERE login='$login'");
-        return ($user_info);
-    }
-    function get_user_real_name($login){
-        $db = new database();
-        $user_real_name = $db->db_read("SELECT full_name FROM USERS WHERE login='$login'");
-        return ($user_real_name);
-    }
-    function get_user_location($login){
-        $db = new database();
-        $user_location = $db->db_read("SELECT geo FROM USERS WHERE login='$login'");
-        return($user_location);
-    }
-    function get_user_tags($login){
-        $db = new database();
-        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
-        $user_tags = $db->db_read_multiple("SELECT tag_name, tag_icon, tag_color 
-                FROM USER_TAGS JOIN TAGS T on USER_TAGS.tag_id = T.tag_id 
-                WHERE user_id='$user_id' ORDER BY tag_rate DESC");
-        return($user_tags);
-    }
     function get_user_not_selected_tags($login){
         $db = new database();
         $user_tags = $db->db_read_multiple("SELECT tag_id
@@ -87,18 +52,6 @@ class Model_Profile extends Model{
                 $query = "$query AND";
         }
         return($db->db_read_multiple($query));
-    }
-    function get_user_sex_preference($login){
-        $db = new database();
-        $user_sex = $db->db_read("SELECT sex FROM USERS WHERE login='$login'");
-        $user_sex_preference = $db->db_read("SELECT sex_preference from USERS WHERE login='$login'");
-        if(!(int)$user_sex_preference)
-            return($db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon, sex_preference_color
-                FROM SEX_PREFERENCE WHERE sex_preference_id='0'")[0]);
-        $math = (int)$user_sex + (int)$user_sex_preference;
-        $sex_preference = $db->db_read_multiple("SELECT sex_preference_name, sex_preference_icon, sex_preference_color 
-                FROM SEX_PREFERENCE WHERE sex_preference_id='$math'")[0];
-        return($sex_preference);
     }
     function get_user_fame_rating($login){
         $db = new database();
@@ -158,11 +111,6 @@ class Model_Profile extends Model{
     function delete_like($like_id){
         $db = new database();
         $db->db_change("UPDATE USER_HISTORY SET action_id=3 WHERE history_id = '$like_id';");
-    }
-    function get_user_photos($login){
-        $db = new database();
-        return($db->db_read_multiple("SELECT photo_token, photo_src FROM USER_PHOTO 
-                                    JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login'"));
     }
     function save_settings($settings, $login){
         $db = new database();
@@ -243,6 +191,7 @@ class Model_Profile extends Model{
                 $db->db_change($q);
         }
     }
+
     function get_profile_filled($login){
         $db = new database();
         $user_profile_filled = array("value" => 0, "add_to_profile" => []);
@@ -278,5 +227,29 @@ class Model_Profile extends Model{
         $coords = $db->db_read_multiple("SELECT geo_latitude, geo_longitude FROM USERS WHERE login = '$login'");
         return(array('longit'=> $coords[0]['geo_longitude'],
             "latit" => $coords[0]['geo_latitude']));
+    }
+
+    function report_user($login){
+        if (isset($_SESSION['login'])){
+            if (!$this->check_already_report($login, $_SESSION['login'])){
+                $this->new_report($login, $_SESSION['login']);
+                return "Report success";
+            }
+            else
+                return "You already left a complaint";
+        }
+        return "Only registered users can leave a complaint";
+    }
+    function check_already_report($login_to, $login_from){
+        $db = new database();
+        return $db->db_check("SELECT report_id FROM USER_REPORT WHERE login_to='$login_to'
+                                    AND login_from='$login_from'");
+    }
+
+    function new_report($login_to, $login_from){
+        $db = new database();
+        $db->db_change("INSERT INTO USER_REPORT (login_to, login_from) 
+                                VALUES ('$login_to', '$login_from')");
+
     }
 }
