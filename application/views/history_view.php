@@ -1,7 +1,4 @@
 <link rel="stylesheet" href="../../css/history.css">
-<details id="filter">
-    <summary><i class="fas fa-sliders-h"></i></summary>
-</details>
 <div id="people_block">
     <?php
     $users_data = $data['users_data'];

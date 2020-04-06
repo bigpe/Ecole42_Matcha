@@ -30,7 +30,13 @@ header a{
 }
 #notification_count{
     font-size: .6em;
-    padding: 3px;
+    padding: 4px;
+    background: crimson;
+    border-radius: 100%;
+    position: absolute;
+    margin-left: -5px;
+    height: 10px;
+    text-align: center;
 }
 #notification_mess{
     font-size: .6em;
@@ -47,7 +53,7 @@ body{
     text-align: center;
 }
 #debug_block{
-    display: none;
+
 
 }
 #address{
@@ -65,7 +71,7 @@ body{
     outline: none;
 }
 #filter{
-    background: honeydew;
+    background: #f0f0f0;
     padding: 10px;
 }
 footer, #push{

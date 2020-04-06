@@ -1,12 +1,10 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
-<h3><?php
-    $ini = include('./config/config.php');
-    $token = $ini['city_parser']['token'];
-    isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1;
-    ?>
-</h3>
+<script src="https://api-maps.yandex.ru/2.1?apikey=17d0e874-0be4-43ee-bffe-8e36cebfe040&load=package.full&lang=ru_RU">
+</script>
+<?php $ini = include('./config/config.php'); $token = $ini['city_parser']['token'];
+isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
 
 <div id="profile_block">
     <div id="add_to_profile_block">
@@ -152,12 +150,18 @@
         else
             $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : "";
         ?>
+        <div id="YMapsID" style="width: 450px; height: 350px;"></div>
     </div>
+
 </div>
+
+
 
 <script src="../../js/profile.js"></script>
 <script type="text/javascript">
     like_status(<?php print($data['user_data']['check_like']); ?>);
     load_user_photos(JSON.parse('<?php print(json_encode($data['user_data']['user_photos']))?>'));
     load_token("<?php print($token);?>");
+    userCoords(JSON.parse('<?php print(json_encode($data['user_data']['user_coords'])); ?>'));
 </script>
+

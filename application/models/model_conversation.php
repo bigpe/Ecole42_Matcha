@@ -52,7 +52,8 @@ class Model_Conversation extends Model{
             "messages" => $this->get_messages( $chat_id, 10),
             "main_photo" => $this->get_user_main_photo($login_companion),
             "online_status" => $this->check_online($login_companion),
-            "login" => $login_companion);
+            "login" => $login_companion,
+            "ready_to_chat" => $this->check_ready_to_chat_id($chat_id));
         $this->edit_message_status($chat_id);
         $this->delete_notification($chat_id);
         return($user_data);
@@ -77,17 +78,19 @@ class Model_Conversation extends Model{
     }
 
     function save_message($chat_id, $message){
-        $db = new database();
-        $message = quotemeta(htmlspecialchars($message, ENT_QUOTES));
-        $login = $_SESSION['login'];
-        $user_id_from = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
-        $user_id_to = $db->db_read("SELECT user_id FROM USERS
-                        JOIN CHATS on user_id_one=USERS.user_id OR user_id_two=USERS.user_id
-                        WHERE login!='$login' AND chat_id='$chat_id'");
-        $db->db_change("INSERT INTO USER_MESSAGE (chat_id, user_id_from, user_id_to, text_message) 
-                                VALUES ('$chat_id', '$user_id_from', '$user_id_to', '$message');");
-        $this->input_history($user_id_from, $user_id_to, 11);
-        $login_to = $db->db_read("SELECT login FROM USERS WHERE user_id='$user_id_to'");
+        if ($this->check_ready_to_chat_id($chat_id) > 0){
+            $db = new database();
+            $message = quotemeta(htmlspecialchars($message, ENT_QUOTES));
+            $login = $_SESSION['login'];
+            $user_id_from = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
+            $user_id_to = $db->db_read("SELECT user_id FROM USERS
+                            JOIN CHATS on user_id_one=USERS.user_id OR user_id_two=USERS.user_id
+                            WHERE login!='$login' AND chat_id='$chat_id'");
+            $db->db_change("INSERT INTO USER_MESSAGE (chat_id, user_id_from, user_id_to, text_message) 
+                                    VALUES ('$chat_id', '$user_id_from', '$user_id_to', '$message');");
+            $this->input_history($user_id_from, $user_id_to, 11);
+            $login_to = $db->db_read("SELECT login FROM USERS WHERE user_id='$user_id_to'");
+        }
         return($this->check_online($login_to));
     }
 

@@ -19,7 +19,7 @@
 .name{
     position: absolute;
     margin-top: 90px;
-    background: rgba(255, 255, 255, .9);
+    background: #f9f7f7;
     margin-left: -75px;
     width: 145px;
     height: 25px;
@@ -33,11 +33,11 @@
     min-width: 300px;
     margin: auto;
 }
-#geo_block{
-    margin: auto;
-}
 .name span{
     display: none;
+}
+#geo_block{
+    margin: auto;
 }
 #geo_block i{
     position: absolute;
@@ -84,7 +84,7 @@
     vertical-align: middle;
     text-align: center;
     font-weight: bold;
-    padding: 10px;
+    padding: 2px 10px 10px 10px;
     margin: 2px;
     border-radius: 5px;
 }

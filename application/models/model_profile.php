@@ -14,6 +14,7 @@ class Model_Profile extends Model{
             "user_info" => $this->get_user_info($login),
             "user_real_name" => $this->get_user_real_name($login),
             "user_geo" =>$this->get_user_location($login),
+            "user_coords"=> $this->get_user_coords($login),
             "user_tags" => $this->get_user_tags($login),
             "user_sex_preference" => $this->get_user_sex_preference($login),
             "user_fame_rating" => $this->get_user_fame_rating($login),
@@ -132,20 +133,16 @@ class Model_Profile extends Model{
     }
     function put_like($omega_user_login)
     {
-        if(!$this->check_block_user($omega_user_login)) {
             $omega_user_id = $this->get_user_id($omega_user_login);
             $alfa_user_login = $_SESSION['login'];
             $alfa_user_id = $this->get_user_id($alfa_user_login);
             $like_id = $this->check_like_exist($alfa_user_id, $omega_user_id);
-            if ($like_id){
-                $this->input_history($alfa_user_id, $omega_user_id, 3);
+            if ($like_id)
                 $this->delete_like($like_id);
-            }
             else{
-                $this->insert_like($alfa_user_id, $omega_user_id);
-                $this->input_history($alfa_user_id, $omega_user_id, 2);
+                if(!$this->check_block_user($omega_user_login))
+                    $this->input_history($alfa_user_id, $omega_user_id, 2);
             }
-        }
     }
     function check_like_exist($alfa_user_id, $omega_user_id)
     {
@@ -274,5 +271,12 @@ class Model_Profile extends Model{
             $user_profile_filled['add_to_profile'][] = array("value" => "Tags",
                 "icon" => "<i class=\"fas fa-hashtag\"></i>");
         return ($user_profile_filled);
+    }
+
+    function get_user_coords($login){
+        $db = new database();
+        $coords = $db->db_read_multiple("SELECT geo_latitude, geo_longitude FROM USERS WHERE login = '$login'");
+        return(array('longit'=> $coords[0]['geo_longitude'],
+            "latit" => $coords[0]['geo_latitude']));
     }
 }

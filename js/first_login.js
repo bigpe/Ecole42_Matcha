@@ -9,8 +9,9 @@ let user_photo_tips = document.getElementById("user_photo_tips");
 let sex_block = document.getElementById("sex_block");
 let sex_preference_block = document.getElementById("sex_preference_block");
 let geo = document.getElementById("address");
+let geo_longitude = document.getElementById("geo_longitude");
+let geo_latitude = document.getElementById("geo_latitude");
 let user_photo_count = 0;
-let tag_offset = 5;
 let timeout;
 let lastTap = 0;
 let animation_duration = parseFloat(find_pointer_for_style(".highlight").animationDuration) * 1000;
@@ -85,6 +86,27 @@ load_tags_button.onclick = function(){
 
 
 user_photo_input.onchange = function () {
+    load_photos();
+};
+
+function load_city_input(token) {
+    $("#address").suggestions({
+        token: token,
+        type: "ADDRESS",
+        bounds: "city",
+        constraints: {
+            label: "",
+            locations: { city_type: "город" }
+        },
+        onSelect: function(suggestion) {
+            geo.value = suggestion['data']['city'];
+            geo_latitude.value = suggestion['data']['geo_lat'];
+            geo_longitude.value = suggestion['data']['geo_lon'];
+        }
+    });
+}
+
+function load_photos() {
     if(user_photo_input.files.length >= 5)
         user_photo_button.setAttribute("disabled", "disabled");
     for (let i = 0; i < user_photo_input.files.length; i++){
@@ -146,21 +168,6 @@ user_photo_input.onchange = function () {
     location.hash = "#user_photo_button_block";
     user_photo_tips.style.display = "inherit";
     user_photo_tips.setAttribute("class", "highlight");
-};
-
-function load_city_input(token) {
-    $("#address").suggestions({
-        token: token,
-        type: "ADDRESS",
-        bounds: "city",
-        constraints: {
-            label: "",
-            locations: { city_type: "город" }
-        },
-        onSelect: function(suggestion) {
-            geo.value = suggestion['data']['city'];
-        }
-    });
 }
 
 function fill_tags() {
@@ -194,8 +201,10 @@ function get_location(token) {
         headers: {"Authorization": "Token " + token},
         success: function (data) {
             geo.value = data['location']['data']['city'];
+            geo_latitude.value = data['location']['data']['geo_lat'];
+            geo_longitude.value = data['location']['data']['geo_lon'];
         }})
 }
-// user_photo_button.onclick = function () {
-//     user_photo_input.click();
-// };
+user_photo_button.onclick = function () {
+    user_photo_input.click();
+};

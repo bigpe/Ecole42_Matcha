@@ -28,6 +28,7 @@ if(navigator.userAgent.match("Firefox"))
 else
     progress_bar_css = find_pointer_for_style("progress::-webkit-progress-value");
 progress_bar_value(0);
+let userCoordsLet = [];
 
 let params = window
     .location
@@ -47,7 +48,8 @@ function like () {
         current_like_status = 0;
         like_block.removeAttribute("class");
         let cookie = document.cookie.split('=', 2)[1];
-        let messageJSON = {
+        let messageJSON = {};
+        messageJSON = {
             user_from: cookie,
             user_to: get[1],
             type: 3
@@ -58,7 +60,8 @@ function like () {
         current_like_status = 1;
         like_block.setAttribute("class", "like_filled");
         let cookie = document.cookie.split('=', 2)[1];
-        let messageJSON = {
+        let messageJSON = {};
+        messageJSON = {
             user_from: cookie,
             user_to: get[1],
             type: 2
@@ -107,7 +110,7 @@ function change_current_photo() {
     photo.id = user_photos[current_photo]['photo_token'];
     let photo_path = 'url("' + user_photos[current_photo]['photo_src'] + '")';
     let image = new Image();
-    image.src = user_photos[current_photo]['photo_src'];
+    image.src = user_photos[current_photo]['photo_src'].replace(".", "");
     image.onerror = function(){
         photo.style.backgroundImage = "url('/images/placeholder.png')";
     };
@@ -264,6 +267,11 @@ function add_photo() {
 
 function like_status(l) {
     current_like_status = l;
+
+}
+
+function userCoords(c) {
+    userCoordsLet = c;
 }
 function load_user_photos(photo_array) {
     for(let i = 0; i < photo_array.length; i++) {
@@ -522,3 +530,15 @@ function fill_tags() {
                 }
             }})
 }
+ymaps.ready(function () {
+    console.log(userCoordsLet);
+    let myMap = new ymaps.Map("YMapsID", {
+        center: [userCoordsLet['latit'], userCoordsLet['longit']],
+        zoom: 10
+    });
+    let myPlacemark = new ymaps.Placemark([userCoordsLet['latit'], userCoordsLet['longit']]);
+    myMap.geoObjects.add(myPlacemark);
+
+});
+
+

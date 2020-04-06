@@ -13,7 +13,7 @@ let get = window
 let address = window.location.pathname;
 
 let socketNotif = new WebSocket("ws://" + domain + ":6969/notification_ws/notification.php");
-console.log(window.document.domain);
+
 
 socketNotif.onopen = function () {
     let cookie = document.cookie.split('=', 2)[1];

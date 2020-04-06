@@ -95,6 +95,7 @@ class Model
     }
     function check_online($login)
     {
+        date_default_timezone_set("Europe/Moscow");
         $db = new database();
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
         $last = $db->db_read("SELECT update_date FROM USER_HISTORY WHERE alfa_user_id = '$user_id' order by update_date desc;");
@@ -200,10 +201,36 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $db->db_change("INSERT INTO NOTIFICATIONS (user_id_to, user_id_from, action) VALUES('$user_id_to', '$user_id_from', '$action')");
     }
 
+
     function delete_notification($login){
         $db = new database();
         $db->db_change("DELETE NOTIFICATIONS FROM NOTIFICATIONS
                             JOIN USERS U on U.user_id=user_id_to
                             WHERE login='$login'");
+}
+
+    function calculateTheDistance($long_A, $lat_A, $long_B, $lat_B) {
+        $earth_radius = 6372795;
+        $lat1 = $lat_A * M_PI / 180;
+        $lat2 = $lat_B * M_PI / 180;
+        $long1 = $long_A * M_PI / 180;
+        $long2 = $long_B * M_PI / 180;
+
+        $cl1 = cos($lat1);
+        $cl2 = cos($lat2);
+        $sl1 = sin($lat1);
+        $sl2 = sin($lat2);
+        $delta = $long2 - $long1;
+        $cdelta = cos($delta);
+        $sdelta = sin($delta);
+
+        $y = sqrt(pow($cl2 * $sdelta, 2) + pow($cl1 * $sl2 - $sl1 * $cl2 * $cdelta, 2));
+        $x = $sl1 * $sl2 + $cl1 * $cl2 * $cdelta;
+
+        $ad = atan2($y, $x);
+        $distance = ceil($ad * $earth_radius);
+
+        return ($distance);
+
     }
 }
