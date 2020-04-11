@@ -1,4 +1,3 @@
-<?php include '/config/config.php'?>
 <div style="display: grid;
     min-height: calc(100vh - 69px - 100px - 60px);
     align-items: center;
