@@ -13,7 +13,9 @@ class Model_Profile extends Model{
             "main_photo" => $this->get_user_main_photo($login),
             "user_info" => $this->get_user_info($login),
             "user_real_name" => $this->get_user_real_name($login),
+            "user_age" => $this->get_user_age($login),
             "user_geo" =>$this->get_user_location($login),
+            "user_coords"=> $this->get_user_coords($login),
             "user_tags" => $this->get_user_tags($login),
             "user_sex_preference" => $this->get_user_sex_preference($login),
             "user_fame_rating" => $this->get_user_fame_rating($login),
@@ -189,5 +191,41 @@ class Model_Profile extends Model{
             foreach ($query as $q)
                 $db->db_change($q);
         }
+    }
+    function get_profile_filled($login){
+        $db = new database();
+        $user_profile_filled = array("value" => 0, "add_to_profile" => []);
+        $user_base_info = $db->db_read_multiple("SELECT full_name, info FROM USERS WHERE login='$login'")[0];
+        if($user_base_info['full_name'])
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Full Name",
+                "icon" => "<i class=\"fas fa-user-tie\"></i>");
+        if($user_base_info['info'])
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Info",
+                "icon" => "<i class=\"fas fa-info-circle\"></i>");
+        $user_photos = $db->db_read("SELECT COUNT(photo_id) FROM USER_PHOTO 
+                            JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login' ");
+        $user_profile_filled['value'] += $user_photos * 8;
+        if($user_photos < 5)
+            $user_profile_filled['add_to_profile'][] = array("value" => "Photos",
+                "icon" => "<i class=\"fas fa-camera\"></i>");
+        $user_tags = $db->db_read("SELECT COUNT(user_tag_id) FROM USER_TAGS 
+                        JOIN USERS U on USER_TAGS.user_id = U.user_id WHERE login='$login'");
+        if($user_tags >= 1)
+            $user_profile_filled['value'] += 20;
+        else
+            $user_profile_filled['add_to_profile'][] = array("value" => "Tags",
+                "icon" => "<i class=\"fas fa-hashtag\"></i>");
+        return ($user_profile_filled);
+    }
+
+    function get_user_coords($login){
+        $db = new database();
+        $coords = $db->db_read_multiple("SELECT geo_latitude, geo_longitude FROM USERS WHERE login = '$login'");
+        return(array('longit'=> $coords[0]['geo_longitude'],
+            "latit" => $coords[0]['geo_latitude']));
     }
 }

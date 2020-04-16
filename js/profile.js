@@ -28,6 +28,7 @@ if(navigator.userAgent.match("Firefox"))
 else
     progress_bar_css = find_pointer_for_style("progress::-webkit-progress-value");
 progress_bar_value(0);
+let userCoordsLet = [];
 
 let params = window
     .location
@@ -45,7 +46,6 @@ let params = window
 function like () {
     if(current_like_status) {
         current_like_status = 0;
-        console.log(current_like_status);
         like_block.removeAttribute("class");
         let cookie = document.cookie.split('=', 2)[1];
         let messageJSON = {};
@@ -57,8 +57,8 @@ function like () {
         socketNotif.send(JSON.stringify(messageJSON));
     }
     else {
+        user_matched();
         current_like_status = 1;
-        console.log(current_like_status);
         like_block.setAttribute("class", "like_filled");
         let cookie = document.cookie.split('=', 2)[1];
         let messageJSON = {};
@@ -85,7 +85,6 @@ function like () {
             }
         }
     });
-
 }
 
 function photo_forward(){
@@ -268,7 +267,11 @@ function add_photo() {
 
 function like_status(l) {
     current_like_status = l;
-    console.log(current_like_status);
+
+}
+
+function userCoords(c) {
+    userCoordsLet = c;
 }
 function load_user_photos(photo_array) {
     for(let i = 0; i < photo_array.length; i++) {
@@ -339,17 +342,6 @@ function add_to_profile(id, name, icon, step) {
         add_to_profile_block.append(add_to_profile);
         progress_bar_value(-step);
     }
-}
-function progress_bar_value(step) {
-    profile_filled_progress_bar.value += step;
-    if(profile_filled_progress_bar.value <= 30)
-        progress_bar_css.backgroundColor = "crimson";
-    if(profile_filled_progress_bar.value > 30 && profile_filled_progress_bar.value < 70)
-        progress_bar_css.backgroundColor = "rgb(255, 131, 21)";
-    if(profile_filled_progress_bar.value > 70 && profile_filled_progress_bar.value < 100)
-        progress_bar_css.backgroundColor = "rgb(7, 255, 46)";
-    if(profile_filled_progress_bar.value == 100)
-        progress_bar_css.backgroundColor = "rgb(255, 7, 251)";
 }
 
 function change_info() {
@@ -527,3 +519,23 @@ function fill_tags() {
                 }
             }})
 }
+function load_map() {
+    ymaps.ready(function () {
+        let myMap = new ymaps.Map("YMapsID", {
+            center: [userCoordsLet['latit'], userCoordsLet['longit']],
+            zoom: 15
+        });
+        let myPlacemark = new ymaps.Placemark([userCoordsLet['latit'], userCoordsLet['longit']]);
+        myMap.geoObjects.add(myPlacemark);
+
+    })
+};
+function user_matched(){
+    $.ajax({
+        url: "/Matcha/user_matched",
+        method: "POST",
+        data: {"login" : get[1]}
+    });
+}
+
+

@@ -45,7 +45,6 @@ class Controller_Profile extends Controller
             print $this->model->check_ready_to_chat($_POST['login']);
         }
     }
-
     function action_save_settings(){
         if($this->check_post_arguments_exists(array("settings"))) {
             if($this->model->check_session())

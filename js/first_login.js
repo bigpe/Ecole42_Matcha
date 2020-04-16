@@ -26,7 +26,6 @@ function set_highlight(node) {
     location.hash = "#" + node.id.toString() + "_pin";
 }
 function remove_highlight (node){
-    console.log(node.animation);
     node.removeAttribute("class");
 }
 

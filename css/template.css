@@ -1,3 +1,11 @@
+#main_site_block{
+    display: grid;
+    min-height: calc(100vh - 69px - 100px - 60px - 5px);
+    align-items: center;
+    align-content: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 *{
     margin: 0;
 }
@@ -13,6 +21,8 @@ html, body {
 header{
     text-align: center;
     min-width: 300px;
+    border-bottom: 5px solid white;
+    box-shadow: 0 0 2px black;
 }
 header a{
     text-decoration: none;
@@ -49,8 +59,7 @@ body{
     text-align: center;
 }
 #debug_block{
-
-
+    /*display: none;*/
 }
 #address{
     background: transparent;
@@ -126,4 +135,47 @@ footer{
 }
 .sr-only {
     display: none;
+}
+#geo details{
+    font-size: .8em;
+    font-weight: normal;
+    margin-top: 10px;
+}
+#YMapsID{
+    margin: auto;
+    width: 90%;
+    height: 200px;
+    margin-top: 15px;
+    border: 2px solid wheat;
+}
+details[open] summary ~ *{
+    animation-name: showed_up_anim;
+    animation-duration: 1s;
+}
+@keyframes showed_up_anim {
+    from{opacity: 0}
+    to{opacity: 1}
+}
+#system_message{
+    padding: 20px;
+    background: crimson;
+    border-radius: 5px;
+    min-width: 300px;
+    margin: auto auto 10px;
+    color: white;
+    animation-name: showed_up_anim;
+    animation-duration: 1s;
+}
+#auth_login, #auth_password, #auth_submit{
+    min-width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    margin: 5px;
+    text-align: center;
+    font-size: 1em;
+}
+#auth_form{
+    display: grid;
+    margin: auto;
 }

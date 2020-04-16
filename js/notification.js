@@ -13,7 +13,7 @@ let get = window
 let address = window.location.pathname;
 
 let socketNotif = new WebSocket("ws://" + domain + ":6969/notification_ws/notification.php");
-console.log(window.document.domain);
+
 
 socketNotif.onopen = function () {
     let cookie = document.cookie.split('=', 2)[1];
@@ -28,11 +28,14 @@ socketNotif.onopen = function () {
         }
 };
 
-socketNotif.onclose = function () {
-    setTimeout(function() {
-        socketNotif = new WebSocket("ws://" + domain + ":6969/ws/server.php");
-    }, 1000);
-};
+// socketNotif.onclose = function () {
+//     setTimeout(function() {
+//         socketNotif = new WebSocket("ws://" + domain + ":6969/ws/server.php");
+//     }, 1000);
+// };
+$(window).on('beforeunload', function(){
+    socketNotif.close();
+});
 
 socketNotif.onerror = function (error) {
 };

@@ -10,7 +10,8 @@ class model_find_advanced extends Model{
         }
         if(isset($user_filters['geo'])){
             $geo = $user_filters['geo'];
-            $query_append = $query_append . " AND geo='$geo'";
+            if($geo)
+                $query_append = $query_append . " AND geo='$geo'";
         }
         if(isset($user_filters['tags'])) {
             $tags = unserialize($user_filters['tags']);
@@ -24,6 +25,11 @@ class model_find_advanced extends Model{
                 $query_append = $query_append . ")";
             }
         }
+        if(isset($user_filters['sex_preference'])){
+            $sex_preference = $user_filters['sex_preference'];
+            if($sex_preference)
+                $query_append = "$query_append AND U.sex='$sex_preference'";
+        }
         $user_black_list = $this->get_user_black_list($login);
         if($user_black_list){
             foreach ($user_black_list as $ubl) {
@@ -31,27 +37,30 @@ class model_find_advanced extends Model{
                 $query_append = $query_append . " AND U.user_id!='$user_id_blocked'";
             }
         }
-        $users_data = $db->db_read_multiple("SELECT DISTINCT login, photo_src, geo_longitude, geo_latitude 
+        $users_data = $db->db_read_multiple("SELECT DISTINCT login, photo_src, geo_longitude, geo_latitude, 
+                (YEAR(CURRENT_DATE) - YEAR(age)) AS age
                     FROM USER_MAIN_PHOTO
                     JOIN USER_PHOTO UP on USER_MAIN_PHOTO.photo_id = UP.photo_id 
                     JOIN USERS U on UP.user_id = U.user_id 
                     JOIN USER_TAGS UT on U.user_id = UT.user_id
-                    JOIN TAGS T on UT.tag_id = T.tag_id WHERE login!='$login'" . $query_append);
+                    JOIN TAGS T on UT.tag_id = T.tag_id WHERE login!='$login' $query_append");
         for ($i = 0; $i < count($users_data); $i++) {
             $users_data[$i]['online_status'] = $this->check_online($users_data[$i]['login']);
             $users_data[$i]['fame_rating'] = $this->get_user_fame_rating($users_data[$i]['login']);
         }
-        $users_data_to_delete = [];
-        for ($i = 0; $i < count($users_data); $i++) {
-            $user_fame_rating = $users_data[$i]['fame_rating']['fame_rating_id'];
-            if($user_filters['fame_rating'] != $user_fame_rating && $user_filters['fame_rating'])
-                $users_data_to_delete[] = $i;
+        if($user_filters['fame_rating'] >= 0) {
+            $users_data_to_delete = [];
+            for ($i = 0; $i < count($users_data); $i++) {
+                $user_fame_rating = $users_data[$i]['fame_rating']['fame_rating_id'];
+                if ($user_filters['fame_rating'] != $user_fame_rating && $user_filters['fame_rating'])
+                    $users_data_to_delete[] = $i;
+            }
+            if ($users_data_to_delete) {
+                for ($i = 0; $i < count($users_data_to_delete); $i++)
+                    unset($users_data[$users_data_to_delete[$i]]);
+            }
+            sort($users_data);
         }
-        if($users_data_to_delete) {
-            for($i = 0; $i < count($users_data_to_delete); $i++)
-                unset($users_data[$users_data_to_delete[$i]]);
-        }
-        sort($users_data);
         $user_geo_coordinates = $this->get_user_geo_coordinates($login);
         $user_geo_long = $user_geo_coordinates['geo_longitude'];
         $user_geo_lat = $user_geo_coordinates['geo_latitude'];
@@ -63,17 +72,37 @@ class model_find_advanced extends Model{
             $users_data[$i]['distance'] = $distance;
             $i++;
         }
-        usort($users_data, function($a, $b){
-            return ($a['distance'] - $b['distance']);
-        });
+        if($user_filters['age_sort'] == -1) {
+            usort($users_data, function ($a, $b) {
+                return ($a['age'] - $b['age']);
+            });
+        }
+        else{
+            usort($users_data, function ($a, $b) {
+                return ($b['age'] - $a['age']);
+            });
+        }
+//        usort($users_data, function($a, $b){
+//            return ($a['distance'] - $b['distance']);
+//        });
+        if($user_filters['fame_rating'] == -1) {
+            usort($users_data, function ($a, $b) {
+                return ($a['fame_rating']['fame_rating_id'] - $b['fame_rating']['fame_rating_id']);
+            });
+        }
+        elseif ($user_filters['fame_rating'] == -2){
+            usort($users_data, function ($a, $b) {
+                return ($b['fame_rating']['fame_rating_id'] - $a['fame_rating']['fame_rating_id']);
+            });
+        }
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
         $this->input_history($user_id, $user_id, 14);
         return($users_data);
     }
     function get_user_filters($login){
         $db = new database();
-        $user_filters = $db->db_read_multiple("SELECT age_from, age_to, USER_FILTERS.geo, fame_rating, tags FROM USER_FILTERS 
-                JOIN USERS U on USER_FILTERS.user_id = U.user_id WHERE U.login='$login'")[0];
+        $user_filters = $db->db_read_multiple("SELECT age_from, age_to, USER_FILTERS.geo, fame_rating, tags, 
+                sex_preference, age_sort FROM USER_FILTERS JOIN USERS U on USER_FILTERS.user_id = U.user_id WHERE U.login='$login'")[0];
         return($user_filters);
     }
     function save_filters($user_filters){
@@ -102,6 +131,14 @@ class model_find_advanced extends Model{
             $tags = serialize($user_filters['tags_filter']['tags']);
             $db->db_change("UPDATE USER_FILTERS JOIN USERS U on USER_FILTERS.user_id = U.user_id 
                                     SET tags='$tags' WHERE login='$login'");
+        }
+        if(isset($user_filters['sex_filter'])) {
+            $sex_preference = $user_filters['sex_filter']['sex_preference'];
+            $db->db_change("UPDATE USERS SET sex_preference='$sex_preference' WHERE login='$login'");
+        }
+        if(isset($user_filters['age_filter_sort'])) {
+            $age_sort = $user_filters['age_filter_sort']['age_sort'];
+            $db->db_change("UPDATE USER_FILTERS JOIN USERS SET age_sort='$age_sort' WHERE login='$login'");
         }
         $users_data = $this->get_users_data($login, $this->get_user_filters($login));
         return($users_data);

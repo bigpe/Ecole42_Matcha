@@ -31,6 +31,17 @@ function find_pointer_for_style(css_rule){
     }
 }
 
+function progress_bar_value(step) {
+    profile_filled_progress_bar.value += step;
+    if(profile_filled_progress_bar.value <= 30)
+        progress_bar_css.backgroundColor = "crimson";
+    if(profile_filled_progress_bar.value > 30 && profile_filled_progress_bar.value < 70)
+        progress_bar_css.backgroundColor = "rgb(255, 131, 21)";
+    if(profile_filled_progress_bar.value > 70 && profile_filled_progress_bar.value < 100)
+        progress_bar_css.backgroundColor = "rgb(7, 255, 46)";
+    if(profile_filled_progress_bar.value == 100)
+        progress_bar_css.backgroundColor = "rgb(255, 7, 251)";
+}
 
 onresize = function () {
     width = document.body.clientWidth;

@@ -1,83 +1,70 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
-<div id="profile_block">
+<link rel="stylesheet" type="text/css" href="/css/matcha.css">
+<script src="https://api-maps.yandex.ru/2.1?apikey=17d0e874-0be4-43ee-bffe-8e36cebfe040&load=package.full&lang=ru_RU"></script>
+<?php $users_count = $data['users_count'];?>
+<div id="users_wasted" style="display: <?php $users_count ? print("none") : print("grid"); ?>">
+    <div id="system_message">
+        <h1>Recommend Users is Wasted</h1>
+        <h2>Try Another Time <i class="fas fa-sad-cry"></i></h2>
+    </div>
+</div>
+<div id="matcha_load" style="display: <?php !$users_count ? print("none") : print("grid"); ?>">
+    <div id="load_block">
+        <h2><i class="fas fa-hourglass-half"></i> Throwing the Dice</h2>
+    </div>
+    <span id="dice_load"><i class="fas fa-dice-four"></i></span>
+</div>
+<div id="profile_block" style="display: none">
+    <div id="miss_match_block">
+        <div id="match" onclick="match_user()"><i class="fas fa-heart"></i></div>
+        <div id="miss" onclick="miss_user()"><i class="fas fa-times"></i></div>
+    </div>
     <div id="photo_block">
-        <div class="photo" style="background:
-            url('<?php $image = $data['user_data']['main_photo']['photo_src'];
-        !file_exists($image) ? $image = "./images/placeholder.png" : "";
-        $image_data = base64_encode(file_get_contents($image));
-        print("data: ".mime_content_type($image).";base64,$image_data"); ?>') no-repeat center;
-            background-size: cover;" id="<?php print($data['user_data']['main_photo']['photo_token']);?>"></div>
+        <div class="photo"></div>
     </div>
     <div id="photo_button">
         <div id="profile_filled">
-            <progress id='profile_filled_progress_bar' value="<?php print($data['user_data']['profile_filled']['value']);?>" max="100"></progress>
+            <progress id='profile_filled_progress_bar' max="100"></progress>
         </div>
-        <?php count($data['user_data']['user_photos']) > 1 ?
-            print('<div id="left_arrow" onclick="photo_backward()"><i class="fas fa-arrow-left"></i></div>') :
-            print('<div id="left_arrow" onclick="photo_backward()" style="visibility: hidden"><i class="fas fa-arrow-left"></i></div>');?>
-        <?php count($data['user_data']['user_photos']) > 1 ?
-            print('<div id="right_arrow" onclick="photo_forward()"><i class="fas fa-arrow-right"></i></div>') :
-            print('<div id="right_arrow" onclick="photo_forward()" style="visibility: hidden"><i class="fas fa-arrow-right"></i></div>');?>
-        <div id="options" <?php
-        if(!isset($_SESSION['login'])) print('style="display:none"'); ?>>
+        <div id="left_arrow" onclick="photo_backward()" style="visibility: hidden"><i class="fas fa-arrow-left"></i></div>
+        <div id="right_arrow" onclick="photo_forward()" style="visibility: hidden"><i class="fas fa-arrow-right"></i></div>
+        <div id="options">
             <input type="checkbox" id="options_input">
             <label for="options_input" id="options_label">
                 <i class="fas fa-ellipsis-h"></i>
                 <span id="options_menu">
-                    <?php print('<p id="block_user" onclick="block_user()"><i class="fas fa-user-lock"></i></p>'); ?>
+                    <p id="block_user" onclick="block_user()"><i class="fas fa-user-lock"></i></p>
                 </span>
             </label>
         </div>
     </div>
     <div id="main_block">
-        <div id="connect_status"><i class="fas fa-circle" style="color:<?php print($data['user_data']['online_status']['status'] . '" title="'. $data['user_data']['online_status']['last_online']); ?>"> </i> <span></span></div>
-        <div id="name"><?php print($data['user_data']['user_login']); ?></div>
-        <div id="sex_preference" style="color:
-        <?php print($data['user_data']['user_sex_preference']['sex_preference_color'])?>">
-            <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
-            <span class="tooltiptext">
-                <?php print($data['user_data']['user_sex_preference']['sex_preference_name']);?></span>
+        <div id="connect_status"><i class="fas fa-circle"> </i></div>
+        <div id="name">
+            <span id="login"></span>
+            <span id="age"></span>
         </div>
-        <div id="fame_rating" style="color: <?php print($data['user_data']['user_fame_rating']['fame_rating_color']);?>">
-            <?php print($data['user_data']['user_fame_rating']['fame_rating_icon']); ?><span class="tooltiptext">
-                        <?php print($data['user_data']['user_fame_rating']['fame_rating_name']); ?></span>
-        </div>
+        <div id="sex_preference"></div>
+        <div id="fame_rating"></div>
     </div>
     <div id="real_name_block">
         <h3><i class="fas fa-user-tie"></i> Can Call Me</h3>
-        <?php !$data['user_data']['user_real_name'] ? print('<div id="real_name"><i class="fas fa-user-ninja"></i> I\'m Anon') :
-            print('<div id="real_name">' . $data['user_data']['user_real_name']); print("</div>");?>
+        <div id="real_name"></div>
     </div>
     <div id="info_block">
         <h3><i class="fas fa-info-circle"></i> About Me</h3>
-        <?php !$data['user_data']['user_info'] ?
-            print('<div id="info"><i class="fas fa-user-ninja"></i> I\'m Very Shy') :
-            print('<div id="info">' . $data['user_data']['user_info']); print("</div>");?>
+        <div id="info"></div>
     </div>
     <div id="geo_block">
         <div id="geo">
-            <i class="fas fa-location-arrow"></i> <?php print($data['user_data']['user_geo']);?>
+            <i class="fas fa-location-arrow"></i>
         </div>
+        <details><summary>Show on Map</summary><div id="YMapsID"></div></details>
     </div>
     <div id="tags_block">
-        <?php
-        if(isset($data['user_data']['user_tags'])) {
-            $i = 1;
-            foreach ($data['user_data']['user_tags'] as $tag) {
-                $tag_name = $tag['tag_name'];
-                $tag_icon = $tag['tag_icon'];
-                $tag_color = $tag['tag_color'];
-                print("<input class='tags' id='$tag_name' value='$i'>");
-                print("<label class='tags_labels_another' for='$tag_name' style='color: $tag_color'>$tag_icon $tag_name</label>");
-                $i++;
-            }
-            !$data['user_data']['user_tags'] ? print("<i class=\"fas fa-user-ninja\"></i> My interesting is empty <br> I'm not Interesting") : "";
-        }
-        ?>
     </div>
 </div>
-<script src="../../js/profile.js"></script>
-<script type="text/javascript">
-    load_user_photos(JSON.parse('<?php print(json_encode($data['user_data']['user_photos']))?>'));
-    load_token("<?php print($token);?>");
+<script src="../../js/matcha.js"></script>
+<script>
+    <?php $users_count ? print("load_matcha();") : ""?>
 </script>

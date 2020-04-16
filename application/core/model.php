@@ -200,8 +200,16 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $db = new database();
         $db->db_change("INSERT INTO NOTIFICATIONS (user_id_to, user_id_from, action) VALUES('$user_id_to', '$user_id_from', '$action')");
     }
-    function calculateTheDistance($long_A, $lat_A, $long_B, $lat_B)
-    {
+
+
+    function delete_notification($login){
+        $db = new database();
+        $db->db_change("DELETE NOTIFICATIONS FROM NOTIFICATIONS
+                            JOIN USERS U on U.user_id=user_id_to
+                            WHERE login='$login'");
+}
+
+    function calculateTheDistance($long_A, $lat_A, $long_B, $lat_B) {
         $earth_radius = 6372795;
         $lat1 = $lat_A * M_PI / 180;
         $lat2 = $lat_B * M_PI / 180;
@@ -271,6 +279,11 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $user_info = $db->db_read("SELECT info FROM USERS WHERE login='$login'");
         return ($user_info);
     }
+    function get_user_age($login){
+        $db = new database();
+        $user_age = $db->db_read("SELECT (YEAR(CURRENT_DATE) - YEAR(age)) FROM USERS WHERE login='$login'");
+        return ($user_age);
+    }
     function get_user_real_name($login){
         $db = new database();
         $user_real_name = $db->db_read("SELECT full_name FROM USERS WHERE login='$login'");
@@ -330,15 +343,15 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
                 "icon" => "<i class=\"fas fa-hashtag\"></i>");
         return ($user_profile_filled);
     }
-    function delete_notification($login){
-        $db = new database();
-        $db->db_change("DELETE NOTIFICATIONS FROM NOTIFICATIONS
-                            JOIN USERS U on U.user_id=user_id_to
-                            WHERE login='$login'");
-    }
     function get_user_photos($login){
         $db = new database();
         return($db->db_read_multiple("SELECT photo_token, photo_src FROM USER_PHOTO 
                                     JOIN USERS U on USER_PHOTO.user_id = U.user_id WHERE login='$login'"));
+    }
+    function user_matched($login_src, $login_dst){
+        $db = new database();
+        $user_id_src = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_src'");
+        $user_id_dst = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_dst'");
+        $db->db_change("INSERT IGNORE INTO USERS_MATCHED (user_id_one, user_id_two) VALUES ('$user_id_src', '$user_id_dst')");
     }
 }

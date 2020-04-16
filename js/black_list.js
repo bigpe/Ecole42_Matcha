@@ -4,9 +4,9 @@ function unblock_user() {
     setTimeout(function () {
         node.parentNode.remove();
         if(!document.getElementsByClassName("people").length){
-            document.getElementById("people_block").innerHTML = "<h2>Not blocked Users</h2>";
+            document.getElementById("people_block").innerHTML = "<div id='system_message'><h2>Not Blocked Users</h2></div>";
         }
-    }, 1000);
+    }, 500);
     $.ajax({
         url: "/settings/black_list_remove",
         method: "POST",
