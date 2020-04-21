@@ -9,72 +9,71 @@ let get = window
             let a = e.split('=');
             //p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
             return a;}, {});
-
+let cookie = document.cookie.split('=', 2)[1];;
 let address = window.location.pathname;
-
-let socketNotif = new WebSocket("ws://" + domain + ":6969/notification_ws/notification.php");
-
-
-socketNotif.onopen = function () {
-    let cookie = document.cookie.split('=', 2)[1];
-    let messageJSON = {};
-    if (get[0] === "login" && address === "/profile/view/" && get[1] !== "") {
+let socket = new WebSocket("wss://matcha.fun:6969");
+let messageJSON = {};
+socket.onopen = function () {
+     if (get[0] === "login" && address === "/profile/view/" && get[1] !== "") {
         messageJSON = {
             user_from: cookie,
             user_to: get[1],
+            message: 'New visit :',
             type: 1
         };
-        socketNotif.send(JSON.stringify(messageJSON));
-        }
+        socket.send(JSON.stringify(messageJSON));
+     }
+    if (get[0] === "id" && address === "/conversation/chat_view/" && get[1] !== "") {
+        messageJSON = {
+            user_from: cookie,
+            user_to: get[1],
+            message: '',
+            type: 19
+        };
+        socket.send(JSON.stringify(messageJSON));
+    }
 };
 
-socketNotif.onclose = function () {
-    setTimeout(function() {
-        socketNotif = new WebSocket("ws://" + domain + ":6969/ws/server.php");
-    }, 1000);
+socket.onclose = function () {
+   // socket.close();
 };
 
-socketNotif.onerror = function (error) {
+socket.onerror = function (error) {
+    console.log(error);
 };
 
-socketNotif.onmessage = function (event) {
+socket.onmessage = function (event) {
     let data = JSON.parse(event.data);
-    let cookie = document.cookie.split('=', 2)[1];
-    if (data.type === 11 && get[1] != data.chat_id){
+    if (data.type === 13 && get[1] !== data.chat_id){
         for(let user in data.user_to){
             if (data.user_to[user]['session_name'] === cookie ){
-                    appendNotifications("new message " + data.user_from + "\nmassage: " + data.message);
-                    appendCountNewMessage();
+                appendNotifications("New message from <a href='/conversation/chat_view/?id="+ data.chat_id +"'>" +
+                    data.user_from + "</a>\nmassage: " +
+                    data.message);
+                appendCountNewMessage();
+                soundClick();
                 }
             }}
-    if (data.type === 1)
+    if (data.type === 2 || data.type === 3 || data.type === 1 || data.type === 4)
         for(let user in data.user_to)
             if (data.user_to[user]['session_name'] === cookie ){
-                appendNotifications("new visit " + data.user_from);
+                appendNotifications(data.message + " <a href='/profile/view/?login=" + data.user_from + "'>"+data.user_from+"</a>");
                 appendCountNotifications();
+                soundClick();
             }
-    if (data.type === 2)
-        for(let user in data.user_to)
-            if (data.user_to[user]['session_name'] === cookie ){
-                appendNotifications("new like " + data.user_from);
-                appendCountNotifications();
-            }
-    if (data.type === 3)
-        for(let user in data.user_to)
-            if (data.user_to[user]['session_name'] === cookie ){
-                appendNotifications("new dislike " + data.user_from);
-                appendCountNotifications();
-            }
-
-
 };
 
+function soundClick() {
+    let audio = new Audio();
+    audio.src = '../03087.mp3';
+    audio.autoplay = true;
+}
 
 function appendNotifications(data) {
     let notificationBlock = document.getElementById("notification_block");
     div = document.createElement("div");
     div.setAttribute("id", "notif_content");
-    div.innerText = data;
+    div.innerHTML = data;
     notificationBlock.append(div);
     notificationBlock.style.visibility = "visible";
 }
@@ -104,4 +103,6 @@ function appendCountNotifications() {
 }
 
 
-
+window.addEventListener('beforeunload', function (e) {
+    socket.close();
+});

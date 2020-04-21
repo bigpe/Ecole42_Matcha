@@ -157,6 +157,12 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
                 if (!$chat_id){
                     $this->create_chat($alfa_user_id, $omega_user_id);
                     $chat_id = $this->search_chat($alfa_user_id, $omega_user_id);
+                    $main_photo_omega = $this->get_user_main_photo($omega_user_login);
+                    if ($main_photo_omega['photo_token'] == 1)
+                        return false;
+                    $main_photo_alfa = $this->get_user_main_photo($alfa_user_login);
+                    if ($main_photo_alfa['photo_token'] == 1)
+                        return false;
                 }
                 return ($chat_id);
             }

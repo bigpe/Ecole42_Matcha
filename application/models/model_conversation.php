@@ -48,12 +48,15 @@ class Model_Conversation extends Model{
     }
     function get_chat_data($chat_id){
         $login_companion = $this->get_login_chat($chat_id);
+        $my_id = $this->get_user_id($_SESSION['login']);
+        $companion_id = $this->get_user_id($login_companion);
         $user_data = array(
             "messages" => $this->get_messages( $chat_id, 10),
             "main_photo" => $this->get_user_main_photo($login_companion),
             "online_status" => $this->check_online($login_companion),
             "login" => $login_companion,
             "block_status" => $this->check_block_status($login_companion),
+            "like_status" => $this->check_like_exist($my_id, $companion_id),
             "ready_to_chat" => $this->check_ready_to_chat_id($chat_id));
         $this->edit_message_status($chat_id);
         $this->delete_notification($chat_id);

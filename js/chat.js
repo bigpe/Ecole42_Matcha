@@ -8,14 +8,13 @@ let params = window
             let a = e.split('=');
             p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
             return p;}, {});
-let user_chat_to = params['id'];
+let chat_id = params['id'];
 let user_from = document.cookie.split('=', 2)[1];
 let block_user_option = document.getElementById("block_user");
 let login = document.getElementById('login_from').innerText;
 let buttonSend = document.getElementById('send_button');
 let textarea = document.getElementById('text');
 let blockButton = document.getElementById('block_button');
-
 
 function append_message(data) {
     let messages = $.parseJSON(data);
@@ -83,74 +82,44 @@ function append_my_message(data){
     messageDiv.append(i);
     $('.messages').append(messageDiv);
 }
-let socket = new WebSocket("ws://" + domain + ":8888");
-
-socket.onopen = function () {
-    let cookie = document.cookie.split('=', 2)[1];
-    let messageJSON = {
-        user_from: cookie,
-        user_to: user_chat_to,
-        type: 18
-    };
-    socket.send(JSON.stringify(messageJSON));
-};
-
-socket.onclose = function () {
-    setTimeout(function() {
-        socket = new WebSocket("ws://" + domain + ":8888/ws/server.php");
-    }, 1000);
-};
-
-socket.onerror = function (error) {
-};
 
 socket.onmessage = function (event) {
-let data = JSON.parse(event.data);
-if (data.user_from === user_chat_to &&  data.type === 11){
-    for(let user in data.user_to){
-        if (data.user_to[user]['session_name'] === user_from ){
-            append_other_message(data);
-            $.ajax({
-                url: "/conversation/change_message_status",
-                method: "POST",
-                data: {"chat_to": user_chat_to,
-                    "type": 2   },
-            });
-            let cookie = document.cookie.split('=', 2)[1];
-            let messageJSON = {
-                user_from: cookie,
-                user_to: user_chat_to,
-                type: 19
-            };
-            socket.send(JSON.stringify(messageJSON));
-}}}
-if (data.user_from === user_chat_to && data.type === 19)
-    for(let user in data.user_to)
-        if (data.user_to[user]['session_name'] === user_from ){
-            change_message_status();
-            $.ajax({
-                url: "/conversation/change_message_status",
-                method: "POST",
-                data: {"chat_to": user_chat_to,
-                    "type": 2   },
-            });
-            }
-if (data.user_from === user_chat_to && data.type === 18)
-    for(let user in data.user_to)
-        if (data.user_to[user]['session_name'] === user_from ){
-            change_message_status();
-            $.ajax({
-                url: "/conversation/change_message_status",
-                method: "POST",
-                data: {"chat_to": user_chat_to,
-                    "type": 2   },
-            });
-            }
+    let data = JSON.parse(event.data);
+    console.log(data);
+    if (data.user_from === chat_id && data.type === 11){
+        for(let user in data.user_to){
+            if (data.user_to[user]['session_name'] === user_from ){
+                append_other_message(data);
+                $.ajax({
+                    url: "/conversation/change_message_status",
+                    method: "POST",
+                    data: {"chat_to": chat_id,
+                        "type": 2},
+                });
+                messageJSON = {
+                    user_from: cookie,
+                    user_to: chat_id,
+                    type: 19
+                };
+                socket.send(JSON.stringify(messageJSON));
+    }}}
+    if (data.user_from === chat_id && data.type === 19)
+        for(let user in data.user_to)
+            if (data.user_to[user]['session_name'] === user_from ){
+                change_message_status();
+                $.ajax({
+                    url: "/conversation/change_message_status",
+                    method: "POST",
+                    data: {"chat_to": chat_id,
+                        "type": 2},
+                });
+                }
 };
 
 function change_message_status(){
     let elements = document.getElementsByClassName("fas fa-check");
-    for (i = 0, len = elements.length; i < len; i++) {
+    let len = 0;
+    for (let i = 0, len = elements.length; i < len; i++) {
         elements[i].style.color = '#2C81B7';
     }
 }
@@ -161,14 +130,13 @@ function send_message() {
          $.ajax({
             url: "/conversation/save_message",
             method: "POST",
-            data: {"user_to": user_chat_to,
+            data: {"user_to": chat_id,
             "message": message,
             "type": 1   }, //type 1  - личное сообщение
             success: function (userStatus) {
-                let cookie = document.cookie.split('=', 2)[1];
-                let messageJSON = {
+                messageJSON = {
                     user_from: cookie,
-                    user_to: user_chat_to,
+                    user_to: chat_id,
                     message: message,
                     type: 11
                 };
@@ -178,9 +146,9 @@ function send_message() {
                     user_from: cookie,
                     user_to: get[1],
                     message: message,
-                    type: 11
+                    type: 13
                     };
-                    socketNotif.send(JSON.stringify(messageNOTIF));
+                    socket.send(JSON.stringify(messageNOTIF));
                 }
                 append_my_message(messageJSON)
             }})
@@ -188,7 +156,6 @@ function send_message() {
             document.getElementById("text").value = '';
 
 }
-
 document.getElementById('text').addEventListener('keydown', function (k){
     if (k.keyCode === 13){
         send_message();
@@ -197,14 +164,12 @@ document.getElementById('text').addEventListener('keydown', function (k){
 
 });
 
-
-
 let lastMessage = 10;
 document.getElementById('load_more_message').addEventListener('click', function () {
     $.ajax({
         url: '/conversation/handler_message',
         method: 'POST',
-        data: {'chat_id': user_chat_to,
+        data: {'chat_id': chat_id,
         'start_message':lastMessage},
         success: function (messages) {
             lastMessage += 10;

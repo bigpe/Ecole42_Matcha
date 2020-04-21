@@ -6,7 +6,7 @@
         $main_photo = "./images/placeholder.png";
     $main_photo_data = base64_encode(file_get_contents($main_photo));
     $messages = $users_data['messages'];
-    if ($users_data['ready_to_chat'] > 0)
+    if ($users_data['like_status'] > 0)
         $i_like = "fas fa-heart-broken";
     else
         $i_like = "fas fa-heart";

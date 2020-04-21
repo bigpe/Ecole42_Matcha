@@ -1,4 +1,5 @@
 let current_like_status = 0;
+let chat_status = null;
 let current_photo = 0;
 let count_photo;
 let main_photo;
@@ -45,30 +46,6 @@ let params = window
         {}
     );
 function like () {
-    if(current_like_status) {
-        current_like_status = 0;
-        like_block.removeAttribute("class");
-        let cookie = document.cookie.split('=', 2)[1];
-        let messageJSON = {};
-        messageJSON = {
-            user_from: cookie,
-            user_to: get[1],
-            type: 3
-        };
-        socketNotif.send(JSON.stringify(messageJSON));
-    }
-    else {
-        current_like_status = 1;
-        like_block.setAttribute("class", "like_filled");
-        let cookie = document.cookie.split('=', 2)[1];
-        let messageJSON = {};
-        messageJSON = {
-            user_from: cookie,
-            user_to: get[1],
-            type: 2
-        };
-        socketNotif.send(JSON.stringify(messageJSON));
-    }
     $.ajax({
         url: '/profile/like',
         method: 'POST',
@@ -83,9 +60,46 @@ function like () {
                 chat_block.removeAttribute("class");
                 chat_block.innerHTML = "<i class=\"fas fa-comment-dots\" aria-hidden=\"true\"></i>";
             }
+            return data;
+        }
+    }).done(function (data) {
+        let chat_status = data.trim();
+        console.log(chat_status !== '' && current_like_status === 0);
+        console.log(current_like_status);
+        if(current_like_status) {
+            current_like_status = 0;
+            like_block.removeAttribute("class");
+            messageJSON = {        //dislike
+                user_from: cookie,
+                user_to: get[1],
+                message: 'New dislike :',
+                type: 3
+            };
+            socket.send(JSON.stringify(messageJSON));
+        }
+        else if(chat_status !== '' && current_like_status === 0){
+            current_like_status = 1;
+            like_block.setAttribute("class", "like_filled");
+            messageJSON = {  //like
+                user_from: cookie,
+                user_to: get[1],
+                message: 'Like back! Now you can chat :',
+                type: 2
+            };
+            socket.send(JSON.stringify(messageJSON));
+        }
+        else if(chat_status === '' && current_like_status === 0){
+            current_like_status = 1;
+            like_block.setAttribute("class", "like_filled");
+            messageJSON = {  //like
+                user_from: cookie,
+                user_to: get[1],
+                message: 'New like:',
+                type: 2
+            };
+            socket.send(JSON.stringify(messageJSON));
         }
     });
-
 }
 
 function photo_forward(){
@@ -542,7 +556,6 @@ function fill_tags() {
             }})
 }
 ymaps.ready(function () {
-    console.log(userCoordsLet);
     let myMap = new ymaps.Map("YMapsID", {
         center: [userCoordsLet['latit'], userCoordsLet['longit']],
         zoom: 10
