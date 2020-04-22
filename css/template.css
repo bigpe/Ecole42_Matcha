@@ -70,6 +70,7 @@ body{
     font-size: 1.5em;
     min-width: 300px;
     width: 300px;
+    margin-bottom: 10px;
 }
 #filter summary{
     font-size: 1.5em;
@@ -170,12 +171,42 @@ details[open] summary ~ *{
     min-width: 300px;
     padding: 10px;
     border-radius: 10px;
-    border: none;
     margin: 5px;
     text-align: center;
     font-size: 1em;
+    border: 1px solid #80808059;
+    background: white;
+    -webkit-appearance: none;
+}
+#auth_submit{
+    background: #5ccd6e;
+    color: white;
 }
 #auth_form{
     display: grid;
     margin: auto;
+    max-width: 300px;
+}
+#welcome_block{
+    background: #f7ebf3;
+    min-width: 300px;
+    margin: auto;
+    border-radius: 20px;
+    max-width: 500px;
+    padding: 10px;
+}
+#auth_second_block{
+    display: table;
+    width: 300px;
+    margin: auto;
+}
+#auth_second_block a{
+    background: indianred;
+    display: table-cell;
+    width: 50%;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    border: 2px solid white;
+    border-radius: 10px;
 }

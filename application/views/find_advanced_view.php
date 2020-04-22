@@ -6,16 +6,30 @@
 <details id="filter">
     <summary><i class="fas fa-sliders-h"></i></summary>
     <div id="filter_block">
+        <div id="sort_block">
+            <input class="age_sort" type="radio" name="age_sort" id="desc_sort_age" value="-2"
+                <?php $data['user_filters']['age_sort'] == -2 ? print("checked") : ""; ?> onclick="change_age_sort()">
+            <label class="age_sort_label" for="desc_sort_age"><i class="fas fa-long-arrow-alt-up"></i> Older First</label>
+            <input class="age_sort" type="radio" name="age_sort" id="asc_sort_age" value="-1"
+                <?php $data['user_filters']['age_sort'] == -1 ? print("checked") : ""; ?> onclick="change_age_sort()">
+            <label class="age_sort_label" for="asc_sort_age"><i class="fas fa-long-arrow-alt-down"></i> Younger First</label>
+            <input class="geo_sort" type="radio" name="geo_sort" id="desc_geo_sort" value="-1"
+                <?php $data['user_filters']['geo_sort'] == -1 ? print("checked") : ""; ?> onclick="change_geo_sort()">
+            <label class="geo_sort_label" for="desc_geo_sort"><i class="fas fa-long-arrow-alt-down"></i> Closer First</label>
+            <input class="geo_sort" type="radio" name="geo_sort" id="asc_geo_sort" value="-2"
+                <?php $data['user_filters']['geo_sort'] == -2 ? print("checked") : ""; ?> onclick="change_geo_sort()">
+            <label class="geo_sort_label" for="asc_geo_sort"><i class="fas fa-long-arrow-alt-up"></i> Farthest First</label>
+            <input class="fame_rating" type="radio" name="fame_rating" id="asc_fame_rating" value="-1"
+                <?php $data['user_filters']['fame_rating'] == -1 ? print("checked") : ""; ?> onclick="change_fame()">
+            <label class="fame_rating_label" for="asc_fame_rating"><i class="fas fa-long-arrow-alt-down"></i> Unfamous First</label>
+            <input class="fame_rating" type="radio" name="fame_rating" id="desc_fame_rating" value="-2"
+                <?php $data['user_filters']['fame_rating'] == -2 ? print("checked") : ""; ?> onclick="change_fame()">
+            <label class="fame_rating_label" for="desc_fame_rating"><i class="fas fa-long-arrow-alt-up"></i> Famous First</label>
+        </div>
         <div id="age_block">
-            <div id="age_sort_block">
-                <input class="age_sort" type="radio" name="age_sort" id="desc_sort_age" value="-2"
-                    <?php $data['user_filters']['age_sort'] == -2 ? print("checked") : ""; ?> onclick="change_age_sort()">
-                <label class="age_sort_label" for="desc_sort_age"><i class="fas fa-sort-amount-up-alt"></i></label>
-                <input class="age_sort" type="radio" name="age_sort" id="asc_sort_age" value="-1"
-                    <?php $data['user_filters']['age_sort'] == -1 ? print("checked") : ""; ?> onclick="change_age_sort()">
-                <label class="age_sort_label" for="asc_sort_age"><i class="fas fa-sort-amount-down-alt"></i></label>
-            </div>
             <input type="text" class="js-range-slider" id="age_sort_slider">
+            <br>
+            <input type="text" class="js-range-slider" id="geo_sort_slider">
         </div>
         <div id="sex_preference_block">
             <input class="sex_preference" name="sex_preference" type="radio" id="preference_male"
@@ -29,9 +43,6 @@
             <label class="sex_preference_label" for="preference_bisexual"><i class="fas fa-male"></i> + <i class="fas fa-female"></i></label>
         </div>
         <div id="fame_block">
-            <input class="fame_rating" type="radio" name="fame_rating" id="desc_fame_rating" value="-2"
-                <?php $data['user_filters']['fame_rating'] == -2 ? print("checked") : ""; ?> onclick="change_fame()">
-            <label class="fame_rating_label" for="desc_fame_rating"><i class="fas fa-sort-amount-up-alt"></i></label>
             <input class="fame_rating" type="radio" name="fame_rating" id="any_fame_rating" value="0"
                 <?php !$data['user_filters']['fame_rating'] ? print("checked") : ""; ?> onclick="change_fame()">
             <label class="fame_rating_label" for="any_fame_rating"><i class="fas fa-infinity"></i></label>
@@ -47,22 +58,10 @@
             <input class="fame_rating" type="radio" name="fame_rating" id="famous_fame_rating" value="5" onclick="change_fame()"
                 <?php $data['user_filters']['fame_rating'] == 5 ? print("checked") : ""; ?>>
             <label class="fame_rating_label" for="famous_fame_rating"><i class="fas fa-battery-full"></i></label>
-            <input class="fame_rating" type="radio" name="fame_rating" id="asc_fame_rating" value="-1"
-                <?php $data['user_filters']['fame_rating'] == -1 ? print("checked") : ""; ?> onclick="change_fame()">
-            <label class="fame_rating_label" for="asc_fame_rating"><i class="fas fa-sort-amount-down-alt"></i></label>
         </div>
         <div id="geo_block">
             <span id="search_icon"><i class="fas fa-search-location"></i></span>
             <input id="address" name="address" type="text" value="<?php print($data['user_filters']['geo']);?>"/>
-            <div id="geo_sort_block">
-                <input class="geo_sort" type="radio" name="geo_sort" id="desc_geo_sort" value="-2"
-                    <?php $data['user_filters']['age_sort'] == -2 ? print("checked") : ""; ?> onclick="change_geo_sort()">
-                <label class="geo_sort_label" for="desc_geo_sort"><i class="fas fa-sort-amount-up-alt"></i></label>
-                <input class="geo_sort" type="radio" name="geo_sort" id="asc_geo_sort" value="-1"
-                    <?php $data['user_filters']['age_sort'] == -1 ? print("checked") : ""; ?> onclick="change_geo_sort()">
-                <label class="geo_sort_label" for="asc_geo_sort"><i class="fas fa-sort-amount-down-alt"></i></label>
-            </div>
-            <input type="text" class="js-range-slider" id="geo_sort_slider">
         </div>
         <div id="tags_block">
             <i class="fas fa-hashtag"></i>
@@ -114,7 +113,8 @@
 <script type="text/javascript" src="../../js/find_advanced.js"></script>
 <script type="text/javascript">
     load_slider("age_sort_slider", "18", "50", <?php print($data['user_filters']['age_from']);?>,
-        <?php print($data['user_filters']['age_to']);?>, "+");
-    load_slider("geo_sort_slider", "1", "50", "1", "50", "km+");
+        <?php print($data['user_filters']['age_to']);?>, "Age: ", "y.o", "age");
+    load_slider("geo_sort_slider", "1", "50", <?php print($data['user_filters']['geo_from']);?>,
+        <?php print($data['user_filters']['geo_to']);?>, "Distance: ", "km", "geo");
     load_city_input("<?php print($token);?>");
 </script>

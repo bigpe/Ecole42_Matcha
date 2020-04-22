@@ -53,7 +53,7 @@
     font-size: .5em;
 }
 #age_block, #geo_block{
-    width: 50%;
+    width: 40%;
     max-width: 500px;
     min-width: 300px;
     margin: auto;
@@ -78,18 +78,13 @@
     margin-right: -5px;
     opacity: 0;
 }
-#age_sort_block, #geo_sort_block{
-    margin-top: 15px;
-    margin-bottom: -20px;
-    z-index: 2;
-    position: relative;
-    display: table;
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
+#sort_block{
+    margin: 25px auto 25px auto;
+    width: 90%;
 }
-.age_sort_label, .geo_sort_label{
-    display: table-cell;
+.age_sort_label, .geo_sort_label, .fame_rating_label{
+    display: inline-table;
+    margin: 5px;
 }
 #sex_preference_block{
     margin: 15px;
@@ -110,13 +105,23 @@
 #famous_fame_rating + .fame_rating_label{
     color: #c640a4;
 }
-.fame_rating:checked + .fame_rating_label, .sex_preference:checked + .sex_preference_label,
-.age_sort:checked + .age_sort_label, .geo_sort:checked + .geo_sort_label{
+.fame_rating:checked + .fame_rating_label, .sex_preference:checked + .sex_preference_label{
     background: rgba(0, 0, 0, .1);
 }
+.age_sort:checked + .age_sort_label, .geo_sort:checked + .geo_sort_label,
+#sort_block .fame_rating:checked + .fame_rating_label{
+    background: #9705ea91;
+    color: white;
+}
 .fame_rating_label, .sex_preference_label, .age_sort_label, .geo_sort_label{
-    padding: 9px 5px 5px 5px;
+    padding: 5px;
     border-radius: 5px;
+}
+#sort_block .fame_rating_label, .age_sort_label, .geo_sort_label{
+    padding: 10px;
+}
+.sex_preference_label{
+    padding-top: 9px;
 }
 #tags_block{
     font-size: 1.5em;

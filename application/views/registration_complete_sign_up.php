@@ -1,4 +1,4 @@
-<form method="POST" action="/registration/sign_up">
+<form method="POST" action="/registration/sign_up" id="auth_form">
     <input readonly hidden value="<?php print($_GET['token']); ?>" name="token">
     <input type="text" value="<?php print($data['email']); ?>" readonly name="email">
     <input type="text" placeholder="Login" name="login">

@@ -1,8 +1,0 @@
-.settings{
-    display: grid;
-    min-height: calc(100vh - 69px - 100px - 60px);
-    align-items: center;
-    align-content: center;
-    padding-top: 30px;
-    padding-bottom: 30px;
-}

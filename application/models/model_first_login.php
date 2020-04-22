@@ -25,7 +25,7 @@ class model_first_login extends Model{
             $db->db_change("UPDATE TAGS SET tag_rate=tag_rate+1 WHERE tag_name='$tag'");
         }
         $db->db_change("INSERT IGNORE INTO USER_MAIN_PHOTO (user_id, photo_id) VALUES ('$user_id', '$user_photo_id')");
-        $db->db_change("INSERT IGNORE INTO USER_FILTERS (user_id, age_from, age_to, geo) VALUES ('$user_id', '18', '30', '$user_geo')");
+        $db->db_change("INSERT IGNORE INTO USER_FILTERS (user_id, age_from, age_to, geo, geo_from, geo_to) VALUES ('$user_id', '18', '30', '$user_geo', '1', '50')");
     }
     function get_tags(){
         $db = new database();

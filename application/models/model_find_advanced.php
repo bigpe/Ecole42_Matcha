@@ -64,14 +64,27 @@ class model_find_advanced extends Model{
         $user_geo_coordinates = $this->get_user_geo_coordinates($login);
         $user_geo_long = $user_geo_coordinates['geo_longitude'];
         $user_geo_lat = $user_geo_coordinates['geo_latitude'];
+        $users_data_to_delete = [];
         $i = 0;
         foreach ($users_data as $user_data){
             $user_to_geo_long = $user_data['geo_longitude'];
             $user_to_geo_lat = $user_data['geo_latitude'];
             $distance = $this->calculateTheDistance($user_geo_long, $user_geo_lat, $user_to_geo_long, $user_to_geo_lat);
+            if(isset($user_filters['geo_from']) && isset($user_filters['geo_to'])){
+                $distance ? $distance_km = round($distance / 1000) : $distance_km = 1;
+                if($user_filters['geo_from'] >= 1 && $distance_km < $user_filters['geo_from'])
+                    $users_data_to_delete[] = $i;
+                if($user_filters['geo_to'] < 50 && $distance_km > $user_filters['geo_to'])
+                    $users_data_to_delete[] = $i;
+            }
             $users_data[$i]['distance'] = $distance;
             $i++;
         }
+        if ($users_data_to_delete) {
+            for ($i = 0; $i < count($users_data_to_delete); $i++)
+                unset($users_data[$users_data_to_delete[$i]]);
+        }
+        sort($users_data);
         if($user_filters['age_sort'] == -1) {
             usort($users_data, function ($a, $b) {
                 return ($a['age'] - $b['age']);
@@ -82,9 +95,6 @@ class model_find_advanced extends Model{
                 return ($b['age'] - $a['age']);
             });
         }
-//        usort($users_data, function($a, $b){
-//            return ($a['distance'] - $b['distance']);
-//        });
         if($user_filters['fame_rating'] == -1) {
             usort($users_data, function ($a, $b) {
                 return ($a['fame_rating']['fame_rating_id'] - $b['fame_rating']['fame_rating_id']);
@@ -95,25 +105,44 @@ class model_find_advanced extends Model{
                 return ($b['fame_rating']['fame_rating_id'] - $a['fame_rating']['fame_rating_id']);
             });
         }
+        if($user_filters['geo_sort'] == -1) {
+            usort($users_data, function ($a, $b) {
+                return ($a['distance'] - $b['distance']);
+            });
+        }
+        else{
+            usort($users_data, function ($a, $b) {
+                return ($b['distance'] - $a['distance']);
+            });
+        }
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
         $this->input_history($user_id, $user_id, 14);
         return($users_data);
     }
     function get_user_filters($login){
         $db = new database();
-        $user_filters = $db->db_read_multiple("SELECT age_from, age_to, USER_FILTERS.geo, fame_rating, tags, 
-                sex_preference, age_sort FROM USER_FILTERS JOIN USERS U on USER_FILTERS.user_id = U.user_id WHERE U.login='$login'")[0];
+        $user_filters = $db->db_read_multiple("SELECT age_from, age_to, USER_FILTERS.geo, fame_rating, tags, geo_from, geo_to, 
+                sex_preference, age_sort, geo_sort FROM USER_FILTERS JOIN USERS U on USER_FILTERS.user_id = U.user_id WHERE U.login='$login'")[0];
         return($user_filters);
     }
     function save_filters($user_filters){
         $db = new database();
         $login = $_SESSION['login'];
-        if(isset($user_filters['age_filter'])) {
-            $age_from = $user_filters['age_filter']['age_from'];
-            $age_to = $user_filters['age_filter']['age_to'];
-            $db->db_change("UPDATE USER_FILTERS 
+        if(isset($user_filters['slider_filter']['filter_name'])) {
+            if ($user_filters['slider_filter']['filter_name'] == "age_filter") {
+                $age_from = $user_filters['slider_filter']['from'];
+                $age_to = $user_filters['slider_filter']['to'];
+                $db->db_change("UPDATE USER_FILTERS 
                                     JOIN USERS U on USER_FILTERS.user_id = U.user_id 
                                     SET age_from='$age_from', age_to='$age_to' WHERE U.login='$login'");
+            }
+            if ($user_filters['slider_filter']['filter_name'] == "geo_filter") {
+                $geo_from = $user_filters['slider_filter']['from'];
+                $geo_to = $user_filters['slider_filter']['to'];
+                $db->db_change("UPDATE USER_FILTERS 
+                                    JOIN USERS U on USER_FILTERS.user_id = U.user_id 
+                                    SET geo_from='$geo_from', geo_to='$geo_to' WHERE U.login='$login'");
+            }
         }
         if(isset($user_filters['geo_filter'])){
             $geo = $user_filters['geo_filter']['geo'];
@@ -138,7 +167,13 @@ class model_find_advanced extends Model{
         }
         if(isset($user_filters['age_filter_sort'])) {
             $age_sort = $user_filters['age_filter_sort']['age_sort'];
-            $db->db_change("UPDATE USER_FILTERS JOIN USERS SET age_sort='$age_sort' WHERE login='$login'");
+            $db->db_change("UPDATE USER_FILTERS JOIN USERS U on USER_FILTERS.user_id = U.user_id 
+                                    SET age_sort='$age_sort' WHERE login='$login'");
+        }
+        if(isset($user_filters['geo_filter_sort'])) {
+            $geo_sort = $user_filters['geo_filter_sort']['geo_sort'];
+            $db->db_change("UPDATE USER_FILTERS JOIN USERS U on USER_FILTERS.user_id = U.user_id 
+                                    SET geo_sort='$geo_sort' WHERE login='$login'");
         }
         $users_data = $this->get_users_data($login, $this->get_user_filters($login));
         return($users_data);

@@ -8,6 +8,9 @@
     animation-name: showed_up_anim;
     animation-duration: 2s;
 }
+#options_menu{
+    border-top-right-radius: 10px;
+}
 #photo_block{
     border-radius: 10px 10px 0 0;
     width: 100%;

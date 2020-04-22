@@ -97,14 +97,6 @@ textarea{
     margin-top: 15px;
     margin-bottom: 15px;
 }
-#welcome_block{
-    background: #f7ebf3;
-    min-width: 300px;
-    margin: auto;
-    border-radius: 20px;
-    max-width: 500px;
-    padding: 10px;
-}
 summary{
     outline: none;
 }

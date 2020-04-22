@@ -5,6 +5,7 @@ let geo = document.getElementById("address");
 let fame_rating = document.getElementsByClassName("fame_rating");
 let sex_preference = document.getElementsByClassName("sex_preference");
 let age_sort = document.getElementsByClassName("age_sort");
+let geo_sort = document.getElementsByClassName("geo_sort");
 let tags_add = document.getElementById("tags_add");
 let tags_input_button = document.getElementById("tags_input_button");
 let tags_input = document.getElementById("tags_input");
@@ -13,6 +14,7 @@ let tags_block = document.getElementById("tags_block");
 let system_message = document.getElementById("system_message");
 let tags = new Array();
 let image_error = 0;
+let prettify_postfix;
 
 onload = function () {
     if(document.getElementsByClassName("tags_labels")){
@@ -38,15 +40,17 @@ function change_fame() {
     }
 }
 
-function load_slider(slider_name, min_value, max_value, chosen_min_value, chosen_max_value, postfix) {
+function load_slider(slider_name, min_value, max_value, chosen_min_value,
+                     chosen_max_value, prefix, postfix, filter_name) {
     $("#" + slider_name).ionRangeSlider({
         type: "double",
         min: min_value,
         max: max_value,
-        max_postfix: postfix,
+        max_postfix: "+",
         from: chosen_min_value,
         to: chosen_max_value,
         grid: true,
+        prefix: prefix,
         onFinish: function (data) {
             if (time != null)
                 clearTimeout(time);
@@ -55,9 +59,10 @@ function load_slider(slider_name, min_value, max_value, chosen_min_value, chosen
                 $.ajax({
                     url: "/find_advanced/save_filters",
                     method: "POST",
-                    data: {"age_filter":
-                            {"age_from": data['from'],
-                            "age_to": data['to']}},
+                    data: {"slider_filter": {
+                                "filter_name": filter_name + "_filter",
+                                "from": data['from'],
+                                "to": data['to']}},
                     success: function (data) {
                         data = JSON.parse(data);
                         fill_users(data);
@@ -254,6 +259,20 @@ function change_age_sort() {
                 url: "/find_advanced/save_filters",
                 method: "POST",
                 data: {"age_filter_sort": {"age_sort": age_sort[i].value}},
+                success: function (data) {
+                    data = JSON.parse(data);
+                    fill_users(data);
+                }
+            })
+    }
+}
+function change_geo_sort() {
+    for (let i = 0; i < geo_sort.length; i++){
+        if(geo_sort[i]['checked'])
+            $.ajax({
+                url: "/find_advanced/save_filters",
+                method: "POST",
+                data: {"geo_filter_sort": {"geo_sort": geo_sort[i].value}},
                 success: function (data) {
                     data = JSON.parse(data);
                     fill_users(data);
