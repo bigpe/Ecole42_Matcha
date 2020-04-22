@@ -43,5 +43,9 @@ class Controller_Auth extends Controller
             header("Location: /");
         }
     }
+
+    function action_with_FB(){
+
+    }
 }
 ?>

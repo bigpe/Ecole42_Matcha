@@ -53,6 +53,7 @@ class Model_Conversation extends Model{
             "main_photo" => $this->get_user_main_photo($login_companion),
             "online_status" => $this->check_online($login_companion),
             "login" => $login_companion,
+            "block_status" => $this->check_block_status($login_companion),
             "ready_to_chat" => $this->check_ready_to_chat_id($chat_id));
         $this->edit_message_status($chat_id);
         $this->delete_notification($chat_id);

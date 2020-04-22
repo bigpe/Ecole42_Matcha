@@ -18,6 +18,7 @@ let tags = document.getElementById("tags_block");
 let add_to_profile_block = document.getElementById("add_to_profile_block");
 let profile_filled_progress_bar = document.getElementById("profile_filled_progress_bar");
 let block_user_option = document.getElementById("block_user");
+let report_user_option = document.getElementById('report_user');
 let current_token;
 let main_photo_index = 0;
 let tag_delete = false;
@@ -203,6 +204,16 @@ function unblock_user() {
     block_user_option.innerHTML = "<i class=\"fas fa-user-lock\"></i>";
     like_block.setAttribute("onclick", "like()");
     block_user_option.setAttribute("onclick", "block_user()");
+}
+function report_user() {
+    $.ajax({ url: '/profile/report_fake',
+        method : 'POST',
+        data: { "login": params['login']},
+        success: function (response) {
+            report_user_option.setAttribute('style', 'visibility:hidden');
+            alert(response);
+        }
+    })
 }
 
 function add_photo() {

@@ -53,6 +53,7 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
                             print('<p id="block_user" onclick="block_user()"><i class="fas fa-user-lock"></i></p>');
                         else //User Blocked
                             print('<p id="block_user" onclick="unblock_user()"><i class="fas fa-lock-open"></i></p>');
+                        print('<p id="report_user" onclick="report_user()" title="Fake account"><i class="fas fa-exclamation"></i></p>');
                     }
                     ?>
                     <?php if($self_profile)

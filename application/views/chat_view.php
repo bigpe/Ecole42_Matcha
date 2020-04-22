@@ -6,6 +6,18 @@
         $main_photo = "./images/placeholder.png";
     $main_photo_data = base64_encode(file_get_contents($main_photo));
     $messages = $users_data['messages'];
+    if ($users_data['ready_to_chat'] > 0)
+        $i_like = "fas fa-heart-broken";
+    else
+        $i_like = "fas fa-heart";
+    if ($users_data['block_status'] > 0) {
+        $i_block = 'fas fa-lock-open';
+        $block_on_click = "unblock_user()";
+       }
+    else{
+        $i_block = 'fas fa-user-lock';
+        $block_on_click = "block_user()";
+}
     $class = null;
     $photo_data = "'data: ". mime_content_type($main_photo) .";base64,$main_photo_data'";?>
         <div id="people_block">
@@ -25,8 +37,8 @@
 <?php print ('<a href=\'/profile/view/?login='.$users_data['login'].'\'><div class="people" style="background: 
                 url(' . $photo_data . ') no-repeat center; background-size: cover;">
         <span class="name" id="login_from"><i class="fas fa-circle" style="color:'.$users_data['online_status']['status'].'" 
-        title="'.$users_data['online_status']['last_online'].'"></i> '
-            . $users_data['login'] . '</span>
+        title="'.$users_data['online_status']['last_online'].'"></i>'
+            .$users_data['login'] . '</span>
         </a>
         </div>
         <div class="more_message" >
@@ -51,14 +63,15 @@
             <div class="'.$class.'" title="'.$message['creation_date'].'">'.$mini_photo.'<span>'.$message['text_message'].'</span>'.$status.'</div>');
     } ?>
         </div>
-<div id="message_block"></div>
+<div id="message_block">
 <div class="input_message">
     <?php
     if ($users_data['ready_to_chat'] > 0)
         print ("<div id=\"textarea\"><textarea id=\"text\"></textarea></div>
             <div id=\"send_message\" onclick=\"send_message()\"><i class=\"fas fa-arrow-circle-up\"></i></div>");
     else
-        print ("<div id=\"textarea\"><textarea id=\"text\" required disabled placeholder='Sorry, this user dont ready to chat'></textarea></div>");
+        print ("<div id=\"textarea\"><textarea id=\"text\" required disabled placeholder='Sorry, you need mutual sympathy to activate chat. And at least one real photo.'></textarea></div>
+        <div id=\"send_message\" onclick=\"send_message()\" style='visibility:hidden'><i class=\"fas fa-arrow-circle-up\" id='send_buttom'></i></div>");
     ?>
 </div></div>
 <script src="../../js/chat.js"></script>

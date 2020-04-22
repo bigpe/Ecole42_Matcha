@@ -11,7 +11,10 @@ let params = window
 let user_chat_to = params['id'];
 let user_from = document.cookie.split('=', 2)[1];
 let block_user_option = document.getElementById("block_user");
-let add_to_profile_block = document.getElementById("add_to_profile_block");
+let login = document.getElementById('login_from').innerText;
+let buttonSend = document.getElementById('send_button');
+let textarea = document.getElementById('text');
+let blockButton = document.getElementById('block_button');
 
 
 function append_message(data) {
@@ -220,17 +223,70 @@ document.getElementById('load_more_message').addEventListener('click', function 
 });
 
 function block_user() {
-    block_user_option.innerHTML = "<i class=\"fas fa-lock-open\"></i>";
-    block_user_option.setAttribute("onclick", "unblock_user()");
+    let className =  $('#like_user').attr("class");
+    if (confirm("If you block this user, he will not be able to write to you, nor will you be able to see him on the site")) {
+        if (login) {
+            $.ajax({
+                url: '/profile/save_settings',
+                method: 'POST',
+                data: {'login': login,
+                    "settings": {'setting_type': 10, 'setting_value' : login}},
+                success: function () {
+                    if (className === "fas fa-heart-broken")
+                        dislike_user();
+                    block_user_option.innerHTML = "<i class=\"fas fa-lock-open\" id=\"block_button\"></i>";
+                    block_user_option.setAttribute("onclick", "unblock_user()");
+                    block_user_option.setAttribute('title', 'Unblock user');
+                }
+            });
+        }
+    }
 }
 function unblock_user() {
-    block_user_option.innerHTML = "<i class=\"fas fa-user-lock\"></i>";
-    block_user_option.setAttribute("onclick", "block_user()");
+    if (login) {
+        $.ajax({
+            url: '/profile/save_settings',
+            method: 'POST',
+            data: {'login': login,
+                "settings": {'setting_type': 11, 'setting_value' : login}},
+            success: function () {
+                block_user_option.innerHTML = "<i class=\"fas fa-user-lock\"></i>";
+                block_user_option.setAttribute("onclick", "block_user()");
+                block_user_option.setAttribute('title', 'Block user');
+            }
+        });
+    }
 }
 
 function dislike_user() {
-
-}
-function report_user() {
-
+        let like_buttom = document.getElementById('like_user');
+        let className = $('#block_button').attr("class");
+        if (className === 'fas fa-lock-open')
+            alert("Please remove this user from the black list.");
+        else {
+            if (login){
+            $.ajax({
+                url: '/profile/like',
+                method: 'POST',
+                data: {'login': login},
+                success: function (chat_id) {
+                    if (Number(chat_id) > 0){
+                        alert("Like");
+                        textarea.removeAttribute('disabled');
+                        textarea.removeAttribute('placeholder');
+                        buttonSend.setAttribute('style', 'visibility:visible');
+                        like_buttom.setAttribute('class', 'fas fa-heart-broken');
+                        like_buttom.setAttribute('title', 'Like user');
+                    }
+                    else {
+                        if (confirm("To start communication, mutual sympathy is needed.")) {
+                            alert("Dislike");
+                            textarea.setAttribute('disabled', 'true');
+                            textarea.setAttribute('placeholder', 'Sorry, you need mutual "like" to activate chat. And at least one real photo.');
+                            buttonSend.setAttribute('style', 'visibility:hidden');
+                            like_buttom.setAttribute('class', 'fas fa-heart');
+                            like_buttom.setAttribute('title', 'Dislike user');
+                            }}
+                }});
+    }}
 }

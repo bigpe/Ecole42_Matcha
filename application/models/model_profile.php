@@ -228,4 +228,28 @@ class Model_Profile extends Model{
         return(array('longit'=> $coords[0]['geo_longitude'],
             "latit" => $coords[0]['geo_latitude']));
     }
+
+    function report_user($login){
+        if (isset($_SESSION['login'])){
+            if (!$this->check_already_report($login, $_SESSION['login'])){
+                $this->new_report($login, $_SESSION['login']);
+                return "Report success";
+            }
+            else
+                return "You already left a complaint";
+        }
+        return "Only registered users can leave a complaint";
+    }
+    function check_already_report($login_to, $login_from){
+        $db = new database();
+        return $db->db_check("SELECT report_id FROM USER_REPORT WHERE login_to='$login_to'
+                                    AND login_from='$login_from'");
+    }
+
+    function new_report($login_to, $login_from){
+        $db = new database();
+        $db->db_change("INSERT INTO USER_REPORT (login_to, login_from) 
+                                VALUES ('$login_to', '$login_from')");
+
+    }
 }

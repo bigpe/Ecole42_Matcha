@@ -176,14 +176,7 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
     }
     function create_chat($user_id_one, $user_id_two){
         $db = new database();
-        $id_chat = $db->db_read("SELECT chat_id FROM CHATS WHERE user_id_one=$user_id_one 
-                                                        AND user_id_two=$user_id_two OR
-                                                        user_id_one=$user_id_two AND 
-                                                        user_id_two=$user_id_one ");
-        if (!$id_chat)
-            return $db->db_change("INSERT INTO CHATS (user_id_one, user_id_two) VALUES ($user_id_one, $user_id_two)");
-        else
-            return $id_chat;
+        $db->db_change("INSERT INTO CHATS (user_id_one, user_id_two) VALUES ($user_id_one, $user_id_two)");
     }
 
     function check_like_status($omega_login, $alpha_login){
@@ -231,6 +224,7 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $distance = ceil($ad * $earth_radius);
         return ($distance);
     }
+
     function get_user_geo_coordinates($login){
         $db = new database();
         $user_geo_coordinates = $db->db_read_multiple("SELECT geo_latitude, geo_longitude 
@@ -241,6 +235,17 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $db = new database();
         return($db->db_read_multiple("SELECT user_id_blocked FROM USER_BLACK_LIST 
                             JOIN USERS U on USER_BLACK_LIST.user_id = U.user_id WHERE login='$login'"));
+    }
+    function check_block_status($login){
+        if (isset($_SESSION['login'])){
+            $user_id = $this->get_user_id($login);
+            $black_list = $this->get_user_black_list($_SESSION['login']);
+            for ($i = 0; $i < count($black_list); $i++){
+                if ($user_id === $black_list[$i]['user_id_blocked'])
+                    return 1;
+            }
+            return 0;
+        }
     }
     function get_user_main_photo($login){
         $db = new database();
@@ -343,6 +348,7 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
                 "icon" => "<i class=\"fas fa-hashtag\"></i>");
         return ($user_profile_filled);
     }
+
     function get_user_photos($login){
         $db = new database();
         return($db->db_read_multiple("SELECT photo_token, photo_src FROM USER_PHOTO 
