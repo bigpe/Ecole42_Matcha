@@ -22,18 +22,20 @@
     $photo_data = "'data: ". mime_content_type($main_photo) .";base64,$main_photo_data'";?>
         <div id="people_block">
             <div id="photo_button">
-            <div id="options">
-            <input type="checkbox" id="options_input">
-            <label for="options_input" id="options_label">
-            <i class="fas fa-ellipsis-h" ></i>
-            <span id="options_menu">
-                <p id="dislike_user" onclick="dislike_user()" title="Dislike user"><i class="<?php print $i_like;?>" id="like_user"></i></p>
-            <p id="block_user" onclick="<?php print $block_on_click;?>" title="Block user"><i class="<?php print $i_block;?>" id="block_button"></i></p>
-            </span>
-            </label>
-        </div>
-        </div>
-<?php print ('<a href=\'/profile/view/?login='.$users_data['login'].'\'><div class="people" style="background: url(' . $photo_data . ') no-repeat center; background-size: cover;">
+                <div id="options">
+                    <input type="checkbox" id="options_input">
+                    <label for="options_input" id="options_label">
+                        <i class="fas fa-ellipsis-h" ></i>
+                        <span id="options_menu">
+                            <p id="dislike_user" onclick="dislike_user()" title="Dislike user"><i class="fas fa-heart-broken"></i></p>
+                            <p id="block_user" onclick="block_user()" title="Block user"><i class="fas fa-user-lock" ></i></p>
+                            <p id="report_user" onclick="report_user()" title="Fake account"><i class="fas fa-exclamation"></i></p>
+                        </span>
+                    </label>
+                </div>
+            </div>
+<?php print ('<a href=\'/profile/view/?login='.$users_data['login'].'\'><div class="people" style="background: 
+                url(' . $photo_data . ') no-repeat center; background-size: cover;">
         <span class="name" id="login_from"><i class="fas fa-circle" style="color:'.$users_data['online_status']['status'].'" 
         title="'.$users_data['online_status']['last_online'].'"></i>'
             .$users_data['login'] . '</span>
@@ -48,7 +50,7 @@
         $status = null;
         if ($message['author'] == "You"){
             $class = "my_message";
-            $status = '<i class="fas fa-check" style="color:#2C81B7"></i>';
+            $status = '<i class="fas fa-check" style="color:#16b713"></i>';
             if ($message['status_message'] == 0){
                 $status = '<i class="fas fa-check" style="color:white" ></i>';
             }
@@ -65,12 +67,11 @@
 <div class="input_message">
     <?php
     if ($users_data['ready_to_chat'] > 0)
-        print ("<div id=\"textarea\"><textarea id=\"text\" required></textarea></div>
-            <div id=\"send_message\" onclick=\"send_message()\" style='visibility:visible'><i class=\"fas fa-arrow-circle-up\" id='send_button'></i></div>");
+        print ("<div id=\"textarea\"><textarea id=\"text\"></textarea></div>
+            <div id=\"send_message\" onclick=\"send_message()\"><i class=\"fas fa-arrow-circle-up\"></i></div>");
     else
         print ("<div id=\"textarea\"><textarea id=\"text\" required disabled placeholder='Sorry, you need mutual sympathy to activate chat. And at least one real photo.'></textarea></div>
         <div id=\"send_message\" onclick=\"send_message()\" style='visibility:hidden'><i class=\"fas fa-arrow-circle-up\" id='send_buttom'></i></div>");
     ?>
-</div></div></div>
-
+</div></div>
 <script src="../../js/chat.js"></script>

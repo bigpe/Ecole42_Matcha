@@ -108,3 +108,16 @@ textarea{
 summary{
     outline: none;
 }
+#system_message{
+    max-width: 500px;
+}
+#geo_detect_button{
+    position: absolute;
+    margin-left: 115px;
+    margin-top: -55px;
+}
+#geo_detect_button i{
+    background: #c8c8c8;
+    border-radius: 10px;
+    padding: 5px;
+}

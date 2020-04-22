@@ -1,6 +1,9 @@
 #people_block{
     margin: 20px;
 }
+#main_site_block{
+    min-height: calc(100vh - 69px - 100px - 60px - 44px - 5px);
+}
 #people_block a{
     color: black;
     text-decoration: none;
@@ -14,7 +17,13 @@
     padding: 100px;
     margin: 20px;
     display: inline-block;
+    animation-name: showed_up_anim;
+    animation-duration: 1s;
     /*box-shadow: 1px 1px 5px gray;*/
+}
+@keyframes showed_up_anim {
+    from{opacity: 0}
+    to{opacity: 1}
 }
 .name{
     position: absolute;
@@ -29,7 +38,7 @@
     margin-top: 110px;
     background: #a808f08a;
     margin-left: -50px;
-    width: 100px;
+    width: 110px;
     height: 25px;
     border-radius: 15px;
     display: flex;
@@ -37,10 +46,13 @@
     align-items: center;
     color: white;
 }
+.distance i{
+    padding-right: 5px;
+}
 .name i{
     font-size: .5em;
 }
-#age_block{
+#age_block, #geo_block{
     width: 50%;
     max-width: 500px;
     min-width: 300px;
@@ -52,22 +64,39 @@
 #geo_block{
     margin: auto;
 }
-#geo_block i{
+#geo_block #search_icon{
     position: absolute;
     margin-top: 15px;
     font-size: 1.5em;
 }
 #fame_block{
-    margin: 15px;
-    margin-left: auto;
-    margin-right: auto;
     font-size: 1.5em;
     min-width: 300px;
 }
-.fame_rating{
+.fame_rating, .sex_preference, .age_sort, .geo_sort{
     width: 1px;
     margin-right: -5px;
     opacity: 0;
+}
+#age_sort_block, #geo_sort_block{
+    margin-top: 15px;
+    margin-bottom: -20px;
+    z-index: 2;
+    position: relative;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+.age_sort_label, .geo_sort_label{
+    display: table-cell;
+}
+#sex_preference_block{
+    margin: 15px;
+    font-size: 1.2em;
+}
+#sex_preference_block i{
+    min-width: 20px;
 }
 #low_fame_rating + .fame_rating_label{
     color: crimson;
@@ -81,11 +110,12 @@
 #famous_fame_rating + .fame_rating_label{
     color: #c640a4;
 }
-.fame_rating:checked + .fame_rating_label{
+.fame_rating:checked + .fame_rating_label, .sex_preference:checked + .sex_preference_label,
+.age_sort:checked + .age_sort_label, .geo_sort:checked + .geo_sort_label{
     background: rgba(0, 0, 0, .1);
 }
-.fame_rating_label{
-    padding: 5px;
+.fame_rating_label, .sex_preference_label, .age_sort_label, .geo_sort_label{
+    padding: 9px 5px 5px 5px;
     border-radius: 5px;
 }
 #tags_block{

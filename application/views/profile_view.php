@@ -1,8 +1,7 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css">
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/js/jquery.suggestions.min.js"></script>
-<script src="https://api-maps.yandex.ru/2.1?apikey=17d0e874-0be4-43ee-bffe-8e36cebfe040&load=package.full&lang=ru_RU">
-</script>
+<script src="https://api-maps.yandex.ru/2.1?apikey=17d0e874-0be4-43ee-bffe-8e36cebfe040&load=package.full&lang=ru_RU"></script>
 <?php $ini = include('./config/config.php'); $token = $ini['city_parser']['token'];
 isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
 <div id="profile_block">
@@ -72,7 +71,14 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
     </div>
     <div id="main_block">
         <div id="connect_status"><i class="fas fa-circle" style="color:<?php print($data['user_data']['online_status']['status'] . '" title="'. $data['user_data']['online_status']['last_online']); ?>"> </i> <span></span></div>
-        <div id="name"><?php print($data['user_data']['user_login']); ?></div>
+        <div id="name">
+            <span id="login">
+                <?php print($data['user_data']['user_login']); ?>
+            </span>
+            <span id="age">
+                <?php print($data['user_data']['user_age']); ?>
+            </span>
+        </div>
         <div id="sex_preference" style="color:
         <?php print($data['user_data']['user_sex_preference']['sex_preference_color'])?>">
             <?php print($data['user_data']['user_sex_preference']['sex_preference_icon']);?>
@@ -127,6 +133,7 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
         <div id="geo">
             <i class="fas fa-location-arrow"></i> <?php print($data['user_data']['user_geo']);?>
             <?php $self_profile ? print('<span id="geo_change" onclick="change_geo()"><i class="fas fa-pencil-alt"></i></span>') : "" ?>
+            <?php !$self_profile ? print('<details><summary>Show on Map</summary><div id="YMapsID"></div></details>') : "" ?>
         </div>
     </div>
     <div id="tags_block">
@@ -151,8 +158,6 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
             $self_profile ? print("<div onclick='load_tags_button()' id='add_new_tag'><i class=\"fas fa-plus-circle\"></i></div>") : "";
         ?>
     </div>
-    <div id="YMapsID" style="width: 450px; height: 350px;"></div>
-
 </div>
 
 
@@ -163,5 +168,6 @@ isset($_GET['login']) ? $self_profile = 0 : $self_profile = 1; ?>
     load_user_photos(JSON.parse('<?php print(json_encode($data['user_data']['user_photos']))?>'));
     load_token("<?php print($token);?>");
     userCoords(JSON.parse('<?php print(json_encode($data['user_data']['user_coords'])); ?>'));
+    <?php !$self_profile ? print("load_map()") : "";?>
 </script>
 

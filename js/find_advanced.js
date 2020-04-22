@@ -3,11 +3,14 @@ let tags_button_pressed = false;
 let people_block = document.getElementById("people_block");
 let geo = document.getElementById("address");
 let fame_rating = document.getElementsByClassName("fame_rating");
+let sex_preference = document.getElementsByClassName("sex_preference");
+let age_sort = document.getElementsByClassName("age_sort");
 let tags_add = document.getElementById("tags_add");
 let tags_input_button = document.getElementById("tags_input_button");
 let tags_input = document.getElementById("tags_input");
 let tags_suggestion_block = document.getElementById("tags_suggestion_block");
 let tags_block = document.getElementById("tags_block");
+let system_message = document.getElementById("system_message");
 let tags = new Array();
 let image_error = 0;
 
@@ -29,20 +32,20 @@ function change_fame() {
                 data: {"fame_filter": {"fame_rating": fame_rating[i].value}},
                 success: function (data) {
                     data = JSON.parse(data);
-                    fil_users(data);
+                    fill_users(data);
                 }
             })
     }
 }
 
-function load_slider(age_from, age_to) {
-    $(".js-range-slider").ionRangeSlider({
+function load_slider(slider_name, min_value, max_value, chosen_min_value, chosen_max_value, postfix) {
+    $("#" + slider_name).ionRangeSlider({
         type: "double",
-        min: 18,
-        max: 50,
-        max_postfix: "+",
-        from: age_from,
-        to: age_to,
+        min: min_value,
+        max: max_value,
+        max_postfix: postfix,
+        from: chosen_min_value,
+        to: chosen_max_value,
         grid: true,
         onFinish: function (data) {
             if (time != null)
@@ -57,12 +60,14 @@ function load_slider(age_from, age_to) {
                             "age_to": data['to']}},
                     success: function (data) {
                         data = JSON.parse(data);
-                        fil_users(data);
+                        fill_users(data);
                     }})
             }
         }
     })
 }
+
+
 function load_city_input(token) {
     $("#address").suggestions({
         token: token,
@@ -80,14 +85,18 @@ function load_city_input(token) {
                 data: {"geo_filter": {"geo": suggestion['data']['city']}},
                 success: function (data) {
                     data = JSON.parse(data);
-                    fil_users(data);
+                    fill_users(data);
                 }})
         }
     });
 }
 
-function fil_users(data) {
+function fill_users(data) {
     people_block.innerHTML = "";
+    if(data.length)
+        system_message.style.display = "none";
+    else
+        system_message.style.display = "grid";
     for (let i=0; i < data.length; i++) {
         image_error = 0;
         let url = document.createElement("a");
@@ -109,8 +118,18 @@ function fil_users(data) {
                 "no-repeat center; background-size: cover;");
         let name = document.createElement("span");
         name.setAttribute("class", "name");
-        name.innerHTML = '<i class="fas fa-circle" style="color:'+ data[i]['online_status']['status']+'" title="'+data[i]['online_status']['last_online']+'"> </i> ' + data[i]['login'];
+        name.innerHTML = '<i class="fas fa-circle" style="color:'+ data[i]['online_status']['status']+'" ' +
+            'title="' + data[i]['online_status']['last_online']+'"> </i> ' + data[i]['login'];
         people.append(name);
+        let distance = document.createElement("span");
+        distance.setAttribute("class", "distance");
+        let distance_string;
+        if(data[i]['distance'])
+            distance_string = Math.round(data[i]['distance'] / 1000).toString() + "km";
+        else
+            distance_string = "Around you";
+        distance.innerHTML = "<i class=\"fas fa-map-marker-alt\"></i>" + distance_string;
+        people.append(distance);
         url.append(people);
         people_block.append(url);
     }
@@ -195,7 +214,7 @@ function save_tag(data) {
             data: {"filter_to_delete": "tags"},
             success: function (data) {
                 data = JSON.parse(data);
-                fil_users(data);
+                fill_users(data);
             }
         });
     }
@@ -209,8 +228,36 @@ function save_tag(data) {
             },
             success: function (data) {
                 data = JSON.parse(data);
-                fil_users(data);
+                fill_users(data);
             }
         });
+    }
+}
+function change_sex_preference() {
+    for (let i = 0; i < sex_preference.length; i++){
+        if(sex_preference[i]['checked'])
+            $.ajax({
+                url: "/find_advanced/save_filters",
+                method: "POST",
+                data: {"sex_filter": {"sex_preference": sex_preference[i].value}},
+                success: function (data) {
+                    data = JSON.parse(data);
+                    fill_users(data);
+                }
+            })
+    }
+}
+function change_age_sort() {
+    for (let i = 0; i < age_sort.length; i++){
+        if(age_sort[i]['checked'])
+            $.ajax({
+                url: "/find_advanced/save_filters",
+                method: "POST",
+                data: {"age_filter_sort": {"age_sort": age_sort[i].value}},
+                success: function (data) {
+                    data = JSON.parse(data);
+                    fill_users(data);
+                }
+            })
     }
 }

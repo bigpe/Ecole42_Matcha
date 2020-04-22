@@ -1,12 +1,20 @@
 <link rel="stylesheet" href="../../css/history.css">
-<div id="people_block">
+<h2 class='date_block'>
+    <?php if($data['users_data']){
+        $date_one = date("j", strtotime($data['users_data'][0]['update_date']));
+        $calendar = "<i class=\"far fa-calendar-alt\"></i>";
+        print("$calendar $date_one");
+    }
+    ?>
+</h2>
+<div id="main_site_block">
     <?php
     $users_data = $data['users_data'];
     if($users_data){
         $calendar = "<i class=\"far fa-calendar-alt\"></i>";
         $date_one = date("j", strtotime($users_data[0]['update_date']));
         $time_icon = "<i class=\"fas fa-clock\"></i>";
-        print("<h2 class='date_block'>$calendar $date_one</h2>");
+        print("<div id=\"people_block\">");
         foreach($users_data as $user_data) {
             $main_photo = $user_data['photo_src'];
             !file_exists($main_photo) ? $main_photo = "./images/placeholder.png" : "";
@@ -28,8 +36,9 @@
             if ($date_one != $date_two && $date_two != 1)
                 print("<h2 class='date_block'>$calendar $date_two</h2>");
         }
+        print("</div>");
     }
     else
-        print("Not Activity Yet");?>
+        print("<div id='system_message'><h2>Not Activity Yet</h2></div>");?>
 </div>
 

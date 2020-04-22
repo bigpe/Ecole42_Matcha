@@ -34,12 +34,7 @@ socket.onopen = function () {
     }
 };
 
-socket.onclose = function () {
-   // socket.close();
-};
-
 socket.onerror = function (error) {
-    console.log(error);
 };
 
 socket.onmessage = function (event) {

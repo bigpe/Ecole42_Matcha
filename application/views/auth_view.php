@@ -1,18 +1,21 @@
-<div style="display: grid;
-    min-height: calc(100vh - 69px - 100px - 60px);
-    align-items: center;
-    align-content: center;
-    padding-top: 30px;
-    padding-bottom: 30px;">
-    <h2>Login</h2>
-    <form action="/auth/sign_in" method="POST">
-        <input type="text" placeholder="Login" name="login"><br>
-        <input type="password" placeholder="Password" name="password"><br>
-        <input type="submit" value="Sign in">
+<div id="main_site_block">
+    <h2>Auth</h2>
+    <form action="/auth/sign_in" method="POST" id="auth_form">
+        <input type="text" placeholder="Login" name="login" id="auth_login" required>
+        <input type="password" placeholder="Password" name="password" id="auth_password" required>
+        <input type="submit" value="Sign in" id="auth_submit">
     </form>
     <a href="/registration/">Sign Up</a>
     <a href="/registration/pre_restore_password">Restore password</a>
-    <a href='https://www.facebook.com/v6.0/dialog/oauth?client_id=821000615077304&redirect_uri=https://matcha.fun/Auth/with_FB&state=bda7da561adf35d16563e653e60df8cb'>
-        Join with FB
-    </a>
+    <?php
+    $params = array(
+        'client_id'     => '158115967922-0g334aa81m1bk7e09a3go97oiquo80cs.apps.googleusercontent.com',
+        'redirect_uri'  => 'https://matcha.fun/auth/with_google',
+        'response_type' => 'code',
+        'scope'         => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
+    );
+    $url = 'https://accounts.google.com/o/oauth2/auth?' . urldecode(http_build_query($params));
+    echo '<a href="' . $url . '">Авторизация через Google</a>';
+    ?>
 </div>
+<!--A9pF_X-KAWrnfIZwfJLaf_uE-->

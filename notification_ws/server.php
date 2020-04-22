@@ -34,18 +34,18 @@ while (true) {
     }
     foreach($read as $connect) {
         $data = fread($connect, 10000000);
-        if (!$data) { //соединение было закрыто
+        if (!$data) {
             fclose($connect);
             unset($connects[ array_search($connect, $connects) ]);
-            onClose($connect, $info);//вызываем пользовательский сценарий
+            onClose($connect, $info);
             continue;
         }
-       onMessage($connects, $data, $connects_info);//вызываем пользовательский сценарий
+       onMessage($connects, $data, $connects_info);
     }
 }
 fclose($socket);
 
-function handshake($connect) { //Функция рукопожатия
+function handshake($connect) {
     $info = array();
     $line = fgets($connect);
     $header = explode(" ", $line);
@@ -58,7 +58,7 @@ function handshake($connect) { //Функция рукопожатия
             break;
         }
     }
-    $address = explode(":", stream_socket_get_name($connect, true)); //получаем адрес клиента
+    $address = explode(":", stream_socket_get_name($connect, true));
     $info['ip'] = $address[0];
     $info['port'] = $address[1];
     if (empty($info["Sec-WebSocket-Key"])) {
@@ -76,7 +76,6 @@ function handshake($connect) { //Функция рукопожатия
 function encode($socketData, $type = "text", $masked = false){
     $b1 = 0x80 | (0x1 & 0x0f);
     $length = strlen($socketData);
-
     if ($length <= 125)
         $header = pack('CC', $b1, $length);
     elseif ($length > 125 && $length < 65536)
@@ -118,49 +117,25 @@ function onMessage($connect, $data, $info) {
         $f = decode($data);
         $messageObj = json_decode($f);
         if (isset($messageObj)) {
-            if ($messageObj->type == 1 || $messageObj->type == 2 || $messageObj->type == 3) {
+            if ($messageObj->type == 1 || $messageObj->type == 2 || $messageObj->type == 3)
                 $chat_box_message = createNewNotification($messageObj->user_from, $messageObj->user_to, $messageObj->type, $messageObj->message);
-                foreach ($info as $users) {
-                    foreach ($chat_box_message['user_to'] as $cookie) {
-                        if ($cookie['session_name'] === $users['info'] && is_resource($users['socket'])) {
-                            fwrite($users['socket'], encode(json_encode($chat_box_message)));
-                        }
-                    }
-                }
-            }
-            if ($messageObj->type == 19 || $messageObj->type == 18) {
+            else if($messageObj->type == 19 || $messageObj->type == 18)
                 $chat_box_message = createChatBoxStatus1($messageObj->user_from, $messageObj->user_to, $messageObj->type);
-                foreach ($info as $users) {
-                    foreach ($chat_box_message['user_to'] as $cookie) {
-                        if ($cookie['session_name'] === $users['info'] && is_resource($users['socket'])) {
-                            fwrite($users['socket'], encode(json_encode($chat_box_message)));
-                        }
-                    }
-                }
-            }
-            if ( $messageObj->type == 11) {
+            else if ( $messageObj->type == 11)
                 $chat_box_message = createChatBoxMessage($messageObj->user_from, $messageObj->user_to, $messageObj->message, $messageObj->type);
-                foreach ($info as $users) {
-                    foreach ($chat_box_message['user_to'] as $cookie) {
-                        if ($cookie['session_name'] === $users['info'] && is_resource($users['socket'])) {
-                            fwrite($users['socket'], encode(json_encode($chat_box_message)));
-                        }
-                    }
-                }
-            }
-            if ($messageObj->type == 13 ) {
+            else if ($messageObj->type == 13)
                 $chat_box_message = createChatNotification($messageObj->user_from, $messageObj->user_to, $messageObj->message, $messageObj->type);
-                foreach ($info as $users) {
-                    foreach ($chat_box_message['user_to'] as $cookie) {
-                        if ($cookie['session_name'] === $users['info'] && is_resource($users['socket'])) {
-                            fwrite($users['socket'], encode(json_encode($chat_box_message)));
-                        }
+            foreach ($info as $users) {
+                foreach ($chat_box_message['user_to'] as $cookie) {
+                    if ($cookie['session_name'] === $users['info'] && is_resource($users['socket'])) {
+                        fwrite($users['socket'], encode(json_encode($chat_box_message)));
                     }
                 }
             }
         }
     }
 }
+
 
 function createChatNotification($user_from_session, $chat_id, $message, $type)
 {
@@ -173,8 +148,7 @@ function createChatNotification($user_from_session, $chat_id, $message, $type)
                                 OR C.user_id_two=USERS_SESSIONS.user_id
                                 WHERE  C.chat_id = $chat_id AND USERS_SESSIONS.session_name !='$user_from_session'
                                 ");
-    $messageArray = array('user_from' => $user_from, 'user_to' => $user_to,'chat_id' => $chat_id, 'message' => $message, 'type' => $type);
-    return $messageArray;
+    return array('user_from' => $user_from, 'user_to' => $user_to,'chat_id' => $chat_id, 'message' => $message, 'type' => $type);
 }
 
 function createNewNotification($user_from_session, $user_login_to, $type, $message)
@@ -186,8 +160,7 @@ function createNewNotification($user_from_session, $user_login_to, $type, $messa
     $user_from = $db->db_read("SELECT login FROM USERS
                                     JOIN USERS_SESSIONS US on USERS.user_id = US.user_id
                                     WHERE US.session_name = '$user_from_session'");
-    $messageArray = array('user_from' => $user_from, 'user_to' => $user_to, 'type' => $type, 'message' => $message);
-    return $messageArray;
+    return array('user_from' => $user_from, 'user_to' => $user_to, 'type' => $type, 'message' => $message);
 }
 
 function createChatBoxMessage($user_session, $chat_id, $message, $type)
@@ -198,8 +171,7 @@ function createChatBoxMessage($user_session, $chat_id, $message, $type)
                                 OR C.user_id_two=USERS_SESSIONS.user_id
                                 WHERE  C.chat_id = $chat_id AND USERS_SESSIONS.session_name !='$user_session'
                                 ");
-    $messageArray = array('user_from' => $chat_id, 'user_to' => $user_to, 'message' => $message, 'type' => $type);
-    return $messageArray;
+    return array('user_from' => $chat_id, 'user_to' => $user_to, 'message' => $message, 'type' => $type);
 }
 
 function createChatBoxStatus1($user_session, $chat_id, $type)
@@ -210,8 +182,6 @@ function createChatBoxStatus1($user_session, $chat_id, $type)
                                 OR C.user_id_two=USERS_SESSIONS.user_id
                                 WHERE  C.chat_id = $chat_id AND USERS_SESSIONS.session_name !='$user_session' 
                                 ");
-
-    $messageArray = array('user_from' => $chat_id, 'user_to' => $user_to, 'type' => $type);
-    return $messageArray;
+    return array('user_from' => $chat_id, 'user_to' => $user_to, 'type' => $type);
 }
 

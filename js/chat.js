@@ -72,7 +72,7 @@ function append_other_message(data){
 }
 function append_my_message(data){
     let messageDiv = document.createElement("div");
-    messageDiv.setAttribute("class", 'my_message');
+    messageDiv.setAttribute("class", 'my_message message_send');
     let span = document.createElement("span");
     let i = document.createElement("i");
     i.setAttribute('class', 'fas fa-check');
@@ -82,6 +82,16 @@ function append_my_message(data){
     messageDiv.append(i);
     $('.messages').append(messageDiv);
 }
+
+socket.onopen = function () {
+    let cookie = document.cookie.split('=', 2)[1];
+    let messageJSON = {
+        user_from: cookie,
+        user_to: get[1],
+        type: 18
+    };
+    socket.send(JSON.stringify(messageJSON));
+};
 
 socket.onmessage = function (event) {
     let data = JSON.parse(event.data);
@@ -153,7 +163,7 @@ function send_message() {
                 append_my_message(messageJSON)
             }})
          }
-            document.getElementById("text").value = '';
+        document.getElementById("text").value = '';
 
 }
 document.getElementById('text').addEventListener('keydown', function (k){

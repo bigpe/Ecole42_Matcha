@@ -1,13 +1,15 @@
 #profile_block{
-    width: 98%;
-    max-width: 500px;
+    /*width: 98%;*/
+    /*max-width: 500px;*/
     min-width: 300px;
-    border-radius: 15px;
-    box-shadow: 1px 1px 20px gray;
-    margin: 50px auto 50px auto;
+    /*border-radius: 15px;*/
+    /*box-shadow: 1px 1px 20px gray;*/
+    /*margin: 50px auto 50px auto;*/
+    animation-name: showed_up_anim;
+    animation-duration: 2s;
 }
 #photo_block{
-    border-radius: 10px 10px 0 0;
+    /*border-radius: 10px 10px 0 0;*/
     width: 100%;
     height: 300px;
     margin: auto;
@@ -15,7 +17,7 @@
 .photo{
     width: 100%;
     height: 100%;
-    border-radius: 10px 10px 0 0;
+    /*border-radius: 10px 10px 0 0;*/
 }
 #chat_block a{
     text-decoration: none;
@@ -298,9 +300,6 @@
     height: 10px;
     border: none;
 }
-progress::-moz-progress-bar {
-    background: #06cc25;
-}
 .add_to_profile{
     background: black;
     padding: 15px;
@@ -319,6 +318,10 @@ progress::-moz-progress-bar {
     color: #ffffff70;
     opacity: .5;
 }
+#age{
+    color: greenyellow;
+    font-size: .7em;
+}
 progress{
     background: #e8e8e8;
 }
@@ -326,5 +329,8 @@ progress::-webkit-progress-bar {
     background: #e8e8e8;
 }
 progress::-webkit-progress-value {
+    background: #06cc25;
+}
+progress::-moz-progress-bar {
     background: #06cc25;
 }

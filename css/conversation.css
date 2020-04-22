@@ -1,18 +1,16 @@
 #people_block{
-    padding: 20px;
-    background: #f9f7f7;
-    min-height: calc(100vh - 69px - 100px - 40px);
-    display: grid;
-    align-items: center;
-}
 
-#people_block a{
+}
+#main_site_block a{
     color: black;
     text-decoration: none;
 }
 .people{
     background: #8080800a;
     border-radius: 10px;
+    margin: 10px 22px 10px 22px;
+    animation-name: showed_up_anim;
+    animation-duration: 1s;
 }
 .user_photo{
     border-radius: 100%;

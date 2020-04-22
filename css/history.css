@@ -1,11 +1,12 @@
-
+#main_site_block{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    min-height: calc(100vh - 69px - 100px - 40px);
+}
 #people_block{
-    padding: 20px;
 }
 .date_block{
-    width: 100%;
     background: #d3d3d33b;
-    margin-top: -20px;
     padding: 5px 24px 5px 24px;
     margin-left: -29px;
 }
@@ -14,7 +15,7 @@
     margin-left: 25px;
     margin-top: -20px;
 }
-#people_block a{
+#main_site_block a{
     color: black;
     text-decoration: none;
 }
@@ -23,6 +24,8 @@
     border-radius: 360px;
     padding: 50px;
     display: inline-block;
+    animation-name: showed_up_anim;
+    animation-duration: 1s;
 }
 .name span{
     display: none;

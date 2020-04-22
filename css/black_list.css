@@ -1,16 +1,20 @@
 #people_block{
-    padding: 20px;
-    background: #f9f7f7;
-    min-height: calc(100vh - 69px - 100px - 40px);
-    display: flex;
-    justify-content: center;
+    display: table;
+    min-height: calc(100vh - 69px - 100px - 60px);
     align-items: center;
+    align-content: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin: auto;
 }
 .people{
     height: 40px;
-    display: table;
-    margin: auto;
-    padding: 5px;
+    min-width: 200px;
+    display: inline-table;
+    background: gainsboro;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
 }
 .photo{
     height: 40px;
@@ -29,7 +33,7 @@
 }
 #remove_user{
     animation-name: remove_user_anim;
-    animation-duration: 1s;
+    animation-duration: .5s;
 }
 
 @keyframes remove_user_anim {

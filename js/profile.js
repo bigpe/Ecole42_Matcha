@@ -51,6 +51,7 @@ function like () {
         method: 'POST',
         data: {"login": params['login']},
         success: function (data) {
+            user_matched();
             if(data.trim()){
                 let href = '/conversation/chat_view/?id=' + data;
                 chat_block.setAttribute("class", "chat_available");
@@ -368,17 +369,6 @@ function add_to_profile(id, name, icon, step) {
         progress_bar_value(-step);
     }
 }
-function progress_bar_value(step) {
-    profile_filled_progress_bar.value += step;
-    if(profile_filled_progress_bar.value <= 30)
-        progress_bar_css.backgroundColor = "crimson";
-    if(profile_filled_progress_bar.value > 30 && profile_filled_progress_bar.value < 70)
-        progress_bar_css.backgroundColor = "rgb(255, 131, 21)";
-    if(profile_filled_progress_bar.value > 70 && profile_filled_progress_bar.value < 100)
-        progress_bar_css.backgroundColor = "rgb(7, 255, 46)";
-    if(profile_filled_progress_bar.value == 100)
-        progress_bar_css.backgroundColor = "rgb(255, 7, 251)";
-}
 
 function change_info() {
     info = document.getElementById("info");
@@ -555,14 +545,23 @@ function fill_tags() {
                 }
             }})
 }
-ymaps.ready(function () {
-    let myMap = new ymaps.Map("YMapsID", {
-        center: [userCoordsLet['latit'], userCoordsLet['longit']],
-        zoom: 10
-    });
-    let myPlacemark = new ymaps.Placemark([userCoordsLet['latit'], userCoordsLet['longit']]);
-    myMap.geoObjects.add(myPlacemark);
 
-});
+function load_map() {
+    ymaps.ready(function () {
+        let myMap = new ymaps.Map("YMapsID", {
+            center: [userCoordsLet['latit'], userCoordsLet['longit']],
+            zoom: 15
+        });
+        let myPlacemark = new ymaps.Placemark([userCoordsLet['latit'], userCoordsLet['longit']]);
+        myMap.geoObjects.add(myPlacemark);
+    })
+};
+function user_matched(){
+    $.ajax({
+        url: "/Matcha/user_matched",
+        method: "POST",
+        data: {"login" : get[1]}
+    });
+}
 
 
