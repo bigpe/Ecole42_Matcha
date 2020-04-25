@@ -116,7 +116,7 @@
             <input id="full_name" type="text" name="user_full_name">
         </div>
     </details>
-    <div id="submit_block"><input type="submit" id="mandatory_form_submit"></div>
+    <div id="submit_block"><input type="submit" id="mandatory_form_submit" id="auth_submit"></div>
 </form>
 </div>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.2.2/dist/css/suggestions.min.css" rel="stylesheet" />

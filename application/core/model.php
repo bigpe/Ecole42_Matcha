@@ -128,8 +128,8 @@ class Model
         $db = new database();
         $login = $_SESSION['login'];
         return  $db->db_read("SELECT DISTINCT login FROM USERS
-JOIN CHATS C on C.user_id_one = USERS.user_id OR C.user_id_two = USERS.user_id 
-WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
+            JOIN CHATS C on C.user_id_one = USERS.user_id OR C.user_id_two = USERS.user_id 
+            WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
 
     }
     function get_user_id($login){
@@ -158,6 +158,8 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
                     $this->create_chat($alfa_user_id, $omega_user_id);
                     $chat_id = $this->search_chat($alfa_user_id, $omega_user_id);
                 }
+                if($this->check_both_block_status($omega_user_login, $alfa_user_login))
+                    return (false);
                 return ($chat_id);
             }
             else
@@ -246,6 +248,21 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
             }
             return 0;
         }
+    }
+    function check_both_block_status($login_src, $login_dst){
+        $user_id_src = $this->get_user_id($login_src);
+        $user_id_dst = $this->get_user_id($login_dst);
+        $black_list_src = $this->get_user_black_list($login_src);
+        $black_list_dst = $this->get_user_black_list($login_dst);
+        for ($i = 0; $i < count($black_list_src); $i++){
+            if ($user_id_dst === $black_list_src[$i]['user_id_blocked'])
+                return 1;
+        }
+        for ($i = 0; $i < count($black_list_dst); $i++){
+            if ($user_id_src === $black_list_dst[$i]['user_id_blocked'])
+                return 1;
+        }
+        return 0;
     }
     function get_user_main_photo($login){
         $db = new database();
