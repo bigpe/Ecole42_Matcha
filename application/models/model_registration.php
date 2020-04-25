@@ -108,10 +108,7 @@ class Model_Registration extends Model{
             return (0);
         return (1);
     }
-    function create_token($email){
-        $token = hash('md5',"$email" . time());
-        return ($token);
-    }
+
     function check_email_fake($email){
         $db = new database();
         $token_id = $db->db_read("SELECT token_id FROM USER_TEMP WHERE email='$email'");

@@ -84,7 +84,6 @@
     align-items: center;
     grid-template-areas: "main sd";
     min-width: 300px;
-
 }
 #textarea{
     margin: 10px;

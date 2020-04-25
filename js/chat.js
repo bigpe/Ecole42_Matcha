@@ -95,7 +95,6 @@ socket.onopen = function () {
 
 socket.onmessage = function (event) {
     let data = JSON.parse(event.data);
-    console.log(data);
     if (data.user_from === chat_id && data.type === 11){
         for(let user in data.user_to){
             if (data.user_to[user]['session_name'] === user_from ){

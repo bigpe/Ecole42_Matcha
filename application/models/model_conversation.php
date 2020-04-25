@@ -70,17 +70,6 @@ class Model_Conversation extends Model{
         $db->db_change("UPDATE USER_MESSAGE SET status_message=1 WHERE chat_id='$chat_id' AND user_id_to='$user_id'");
     }
 
-
-    function get_user_main_photo($login)
-    {
-        $db = new database();
-        $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
-        $user_main_photo_id = $db->db_read("SELECT photo_id FROM USER_MAIN_PHOTO WHERE user_id='$user_id'");
-        $user_main_photo_src = $db->db_read("SELECT photo_src FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
-        $user_main_photo_token = $db->db_read("SELECT photo_token FROM USER_PHOTO WHERE photo_id='$user_main_photo_id'");
-        return (array("photo_src" => $user_main_photo_src, "photo_token" => $user_main_photo_token));
-    }
-
     function save_message($chat_id, $message){
         if ($this->check_ready_to_chat_id($chat_id) > 0){
             $db = new database();

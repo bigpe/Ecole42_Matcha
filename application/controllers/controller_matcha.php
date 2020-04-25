@@ -22,5 +22,12 @@ class Controller_Matcha extends Controller
                 $this->model->user_matched($_SESSION['login'], $_POST['login']);
         }
     }
+    function action_put_geo_users(){
+        if($this->model->check_session()){
+            if($this->check_post_arguments_exists(array("latitude"))){
+                $this->model->put_geo_user($_SESSION['login'], $_POST['latitude'], $_POST['longitude']);
+            }
+        }
+    }
 }
 ?>

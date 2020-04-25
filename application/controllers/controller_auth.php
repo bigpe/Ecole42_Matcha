@@ -43,43 +43,34 @@ class Controller_Auth extends Controller
             header("Location: /");
         }
     }
-
     function action_with_google(){
-        print_r($_GET);
-        if (!empty($_GET['code'])) {
-            $params = array(
-                'client_id'     => '158115967922-0g334aa81m1bk7e09a3go97oiquo80cs.apps.googleusercontent.com',
-                'client_secret' => 'A9pF_X-KAWrnfIZwfJLaf_uE',
-                'redirect_uri'  => 'https://matcha.fun/Auth/with_google',
-                'grant_type'    => 'authorization_code',
-                'code'          => $_GET['code']
-            );
-
-            $ch = curl_init('https://accounts.google.com/o/oauth2/token');
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            $data = curl_exec($ch);
-            curl_close($ch);
-
-            $data = json_decode($data, true);
-            if (!empty($data['access_token'])) {
-                // Токен получили, получаем данные пользователя.
-                $params = array(
-                    'access_token' => $data['access_token'],
-                    'id_token'     => $data['id_token'],
-                    'token_type'   => 'Bearer',
-                    'expires_in'   => 3599
-                );
-                $info = file_get_contents('https://www.googleapis.com/oauth2/v1/userinfo?' . urldecode(http_build_query($params)));
-                $info = json_decode($info, true);
-                var_dump($info);
-
+        if (isset($_GET['code'])) {
+            $ini = include($_SERVER['DOCUMENT_ROOT'] .'/config/config.php');
+            $client = new Google_Client();
+            $client->setClientId($ini['google']['clientID']);
+            $client->setClientSecret($ini['google']['clientSecret']);
+            $client->setRedirectUri($ini['google']['redirectUri']);
+            $client->addScope("email");
+            $client->addScope("profile");
+            $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+            $client->setAccessToken($token['access_token']);
+            $google_oauth = new Google_Service_Oauth2($client);
+            $google_account_info = $google_oauth->userinfo->get();
+            $email = $google_account_info->email;
+            $name = $google_account_info->name;
+            $login = $this->model->check_email_exist($email);
+            if ($login)
+            {
+                $_SESSION['login'] = $login;
+                header("Location: /");
+            }
+            else{
+                $token = $this->model->create_token($email);
+                $token_id = $this->model->save_token($token, 1);
+                $this->model->new_tmp_user($email, $token_id);
+                header("location: /registration/complete_sign_up/?token=$token");
             }
         }
-        $this->view->generate("test_view.php", "template_view.php", $info);
     }
 }
 ?>

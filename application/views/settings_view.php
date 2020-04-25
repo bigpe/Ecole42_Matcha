@@ -1,20 +1,21 @@
-<link rel="stylesheet" href="../../css/settings.css">
 <div id="main_site_block">
     <div class="change_pass" id="change_pass">
         <h3>Change password</h3>
-        <form method="POST" action="/settings/change_password">
-            <input type="password" name="old_pass" placeholder="Input your old password" required><br>
-            <input type="password" name="new_pass" placeholder="Input your new password" required><br>
-            <input type="password" name="new_pass_conf" placeholder="Input your new password again" required><br>
-            <input type="submit" value="Change">
+        <form method="POST" action="/settings/change_password" id="auth_form">
+            <input type="password" name="old_pass" placeholder="Old password" required id="auth_login">
+            <input type="password" name="new_pass" placeholder="New password" required id="auth_login">
+            <input type="password" name="new_pass_conf" placeholder="Confirm new password" required id="auth_login">
+            <input type="submit" value="Change" id="auth_submit">
         </form>
     </div>
     <div class="change_email" id="change_email ">
         <h3>Change email</h3>
-        <form method="POST" action="/settings/change_email" ><br>
-            <input type="email" name="new_email" placeholder="Input your new email" required><br>
-            <input type="submit" value="Change"><br>
+        <form method="POST" action="/settings/change_email" id="auth_form">
+            <input type="email" name="new_email" placeholder="New email" required id="auth_login">
+            <input type="submit" value="Change" id="auth_submit">
         </form>
     </div>
-    <div id="black_list"><a href="/settings/black_list">View Black List</a></div>
+    <div id="auth_second_block">
+        <a href="/settings/black_list">View Black List</a>
+    </div>
 </div>

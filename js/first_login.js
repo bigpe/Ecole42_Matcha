@@ -16,6 +16,7 @@ let timeout;
 let lastTap = 0;
 let animation_duration = parseFloat(find_pointer_for_style(".highlight").animationDuration) * 1000;
 let ajax_complete = false;
+let geo_detect_button = document.getElementById('geo_detect_button');
 
 
 function set_highlight(node) {
@@ -206,4 +207,23 @@ function get_location(token) {
 }
 user_photo_button.onclick = function () {
     user_photo_input.click();
+};
+
+if (!deviceDetect()){
+    geo_detect_button.style.display= 'none';
+}
+geo_detect_button.onclick = function(){
+    let startPos;
+    let geoOptions = {
+        enableHighAccuracy: true
+    };
+    let geoSuccess = function(position) {
+        startPos = position;
+        geo_latitude.value = startPos.coords.latitude;
+        geo_longitude.value = startPos.coords.longitude;
+    };
+    let geoError = function(error) {
+        console.log('Error occurred. Error code: ' + error.code);
+    };
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
 };

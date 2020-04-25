@@ -145,7 +145,7 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         return ($like_id);
     }
 
-    function  check_ready_to_chat($omega_user_login){
+    function check_ready_to_chat($omega_user_login){
         if (isset($omega_user_login)){
             $omega_user_id = $this->get_user_id($omega_user_login);
             $alfa_user_login = $_SESSION['login'];
@@ -157,13 +157,11 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
                 if (!$chat_id){
                     $this->create_chat($alfa_user_id, $omega_user_id);
                     $chat_id = $this->search_chat($alfa_user_id, $omega_user_id);
-                    $main_photo_omega = $this->get_user_main_photo($omega_user_login);
-                    if ($main_photo_omega['photo_token'] == 1)
-                        return false;
-                    $main_photo_alfa = $this->get_user_main_photo($alfa_user_login);
-                    if ($main_photo_alfa['photo_token'] == 1)
-                        return false;
                 }
+                $main_photo_omega = $this->get_user_main_photo($omega_user_login);
+                $main_photo_alfa = $this->get_user_main_photo($alfa_user_login);
+                if ($main_photo_omega['photo_token'] === 1 || $main_photo_alfa['photo_token'] === 1)
+                    return false;
                 return ($chat_id);
             }
             else
@@ -184,7 +182,10 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $db = new database();
         $db->db_change("INSERT INTO CHATS (user_id_one, user_id_two) VALUES ($user_id_one, $user_id_two)");
     }
-
+    function create_token($email){
+        $token = hash('md5',"$email" . time());
+        return ($token);
+    }
     function check_like_status($omega_login, $alpha_login){
         $db = new database();
         if($db->db_read("SELECT action_id FROM USER_HISTORY
@@ -365,5 +366,10 @@ WHERE C.chat_id=$chat_id AND USERS.login !='$login';");
         $user_id_src = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_src'");
         $user_id_dst = $db->db_read("SELECT user_id FROM USERS WHERE login='$login_dst'");
         $db->db_change("INSERT IGNORE INTO USERS_MATCHED (user_id_one, user_id_two) VALUES ('$user_id_src', '$user_id_dst')");
+    }
+
+    function new_tmp_user($email,$token_id){
+        $db = new database();
+        $db->db_change("INSERT IGNORE INTO USER_TEMP (email, token_id) VALUES ('$email', '$token_id')");
     }
 }

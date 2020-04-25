@@ -1,10 +1,16 @@
 let width;
-
-onload = function () {
-    width = document.body.clientWidth;
-    if (typeof window.orientation !== 'undefined' || width <= 550)
-        resize_header();
+window.onload = function () {
+    deviceDetect();
 };
+
+function deviceDetect() {
+    width = document.body.clientWidth;
+    if (typeof window.orientation !== 'undefined' || width <= 550) {
+        resize_header();
+        return 1;
+    }
+    return 0;
+}
 
 function find_pointer_for_style(css_rule){
     let styleSheetList = document.styleSheets;

@@ -65,8 +65,6 @@ function like () {
         }
     }).done(function (data) {
         let chat_status = data.trim();
-        console.log(chat_status !== '' && current_like_status === 0);
-        console.log(current_like_status);
         if(current_like_status) {
             current_like_status = 0;
             like_block.removeAttribute("class");

@@ -24,19 +24,39 @@ let current_photo = 0;
 let user_photos = [];
 let count_users = 0;
 
+if (deviceDetect()){
+    let startPos;
+    let geoOptions = {
+        enableHighAccuracy: true
+    };
+    let geoSuccess = function(position) {
+        startPos = position;
+        $.ajax({
+            url: "/matcha/put_geo_users",
+            method: "POST",
+            data: {'latitude' : startPos.coords.latitude,
+            'longitude' : startPos.coords.longitude},
+            complete: function () {
+                load_matcha();
+            }}
+        )
+    };
+    let geoError = function(error) {
+        console.log('Error occurred. Error code: ' + error.code);
+    };
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+}
+
+
 if(navigator.userAgent.match("Firefox"))
     progress_bar_css = find_pointer_for_style("progress::-moz-progress-bar");
 else
     progress_bar_css = find_pointer_for_style("progress::-webkit-progress-value");
 
-
 function load_matcha() {
     $.ajax({
         url: "/matcha/get_matcha_users",
         method: "POST",
-        beforeSend: function () {
-            console.log("sended");
-        },
         complete: function (data) {
             matched_users = JSON.parse(data.responseText);
             count_users = matched_users.length;
@@ -46,7 +66,6 @@ function load_matcha() {
 }
 function fill_user_profile() {
     if(matched_users[current_user]) {
-        console.log(matched_users[current_user]);
         fill_user_main_photo();
         load_user_photos(matched_users[current_user]['user_photos']);
         fill_user_profile_progress_bar();

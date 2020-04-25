@@ -44,4 +44,11 @@ WHERE session_name='$session_id'");
         $session_id = session_id();
         $db->db_change("DELETE FROM USERS_SESSIONS WHERE session_name='$session_id'");
     }
+    function check_email_exist($email){
+        $db = new database();
+        $login = $db->db_read("SELECT login FROM USERS WHERE email = '$email'");
+        if (!$login)
+            return 0;
+        return $login;
+    }
 }

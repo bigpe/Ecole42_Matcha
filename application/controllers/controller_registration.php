@@ -123,6 +123,7 @@ class Controller_Registration extends Controller{
                 $this->view->generate("registration_pre_restore_password_view.php", "template_view.php",
                     array("error" => $this->model->error_handler($this->model->error_id)));
             }
+
         }
     }
 }

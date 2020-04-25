@@ -60,7 +60,7 @@ socket.onmessage = function (event) {
 
 function soundClick() {
     let audio = new Audio();
-    audio.src = '../03087.mp3';
+    audio.src = '/../03087.mp3';
     audio.autoplay = true;
 }
 

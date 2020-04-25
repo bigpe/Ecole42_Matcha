@@ -38,5 +38,8 @@ class controller_first_login extends Controller{
     function action_save_photos(){
         $this->model->save_photos($_POST['images'], $_SESSION['login']);
     }
+    function action_with_google(){
+
+    }
 }
 ?>

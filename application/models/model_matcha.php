@@ -110,4 +110,9 @@ class Model_Matcha extends Model{
                     WHERE login!='$login' AND geo='$user_location' $query_append");
         return($users_count);
     }
+    function put_geo_user($login, $latitude, $longitude){
+        $db = new database();
+        $db->db_change("UPDATE USERS SET geo_longitude='$longitude', 
+                 geo_latitude='$latitude' WHERE login = '$login'");
+    }
 }
