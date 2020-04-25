@@ -8,3 +8,4 @@
         <input type="submit" value="Sign up" id="auth_submit">
     </form>
 </div>
+

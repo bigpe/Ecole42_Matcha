@@ -12,7 +12,7 @@ let chat_id = params['id'];
 let user_from = document.cookie.split('=', 2)[1];
 let block_user_option = document.getElementById("block_user");
 let login = document.getElementById('login_from').innerText;
-let buttonSend = document.getElementById('send_button');
+let buttonSend = document.getElementById('send_message');
 let textarea = document.getElementById('text');
 let blockButton = document.getElementById('block_button');
 
@@ -208,6 +208,9 @@ function block_user() {
                     block_user_option.innerHTML = "<i class=\"fas fa-lock-open\" id=\"block_button\"></i>";
                     block_user_option.setAttribute("onclick", "unblock_user()");
                     block_user_option.setAttribute('title', 'Unblock user');
+                    textarea.setAttribute('disabled', 'true');
+                    textarea.setAttribute('placeholder', 'Sorry, you don"t message to blocked user');
+                    buttonSend.setAttribute('style', 'visibility:hidden');
                 }
             });
         }
@@ -242,7 +245,6 @@ function dislike_user() {
                 data: {'login': login},
                 success: function (chat_id) {
                     if (Number(chat_id) > 0){
-                        alert("Like");
                         textarea.removeAttribute('disabled');
                         textarea.removeAttribute('placeholder');
                         buttonSend.setAttribute('style', 'visibility:visible');
@@ -251,9 +253,9 @@ function dislike_user() {
                     }
                     else {
                         if (confirm("To start communication, mutual sympathy is needed.")) {
-                            alert("Dislike");
                             textarea.setAttribute('disabled', 'true');
-                            textarea.setAttribute('placeholder', 'Sorry, you need mutual "like" to activate chat. And at least one real photo.');
+                            textarea.setAttribute('placeholder', 'Sorry, you need mutual "like" to activate chat. ' +
+                                'And at least one real photo.');
                             buttonSend.setAttribute('style', 'visibility:hidden');
                             like_buttom.setAttribute('class', 'fas fa-heart');
                             like_buttom.setAttribute('title', 'Dislike user');

@@ -27,8 +27,8 @@
                     <label for="options_input" id="options_label">
                         <i class="fas fa-ellipsis-h" ></i>
                         <span id="options_menu">
-                            <p id="dislike_user" onclick="dislike_user()" title="Dislike user"><i class="fas fa-heart-broken"></i></p>
-                            <p id="block_user" onclick="block_user()" title="Block user"><i class="fas fa-user-lock" ></i></p>
+                            <p id="dislike_user" onclick="dislike_user()" title="Dislike user"><i class="<?php print($i_like);?>"></i></p>
+                            <p id="block_user" onclick="<?php print($block_on_click);?>"><i class="<?php print($i_block);?>" ></i></p>
                             <p id="report_user" onclick="report_user()" title="Fake account"><i class="fas fa-exclamation"></i></p>
                         </span>
                     </label>

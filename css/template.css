@@ -181,6 +181,7 @@ details[open] summary ~ *{
 #auth_submit{
     background: #5ccd6e;
     color: white;
+    cursor: pointer;
 }
 #auth_form{
     display: grid;
