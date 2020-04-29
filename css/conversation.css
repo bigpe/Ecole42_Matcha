@@ -1,5 +1,7 @@
 #people_block{
-
+    display: table;
+    width: 300px;
+    margin: auto;
 }
 #main_site_block a{
     color: black;

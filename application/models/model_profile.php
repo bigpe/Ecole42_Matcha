@@ -171,7 +171,7 @@ class Model_Profile extends Model
             $photo_token = $settings['setting_value']['photo_token'];
             $photo_base64 = $settings['setting_value']['photo_base64'];
             $photo_name = md5($photo_token);
-            $photo_path = "./images/user_photo/$photo_name.jpg";
+            $photo_path =  "./images/user_photo/$photo_name.jpg";
             file_put_contents($photo_path, file_get_contents($photo_base64));
             $db->db_change("INSERT INTO USER_PHOTO(photo_token, photo_src, user_id) 
                         SELECT '$photo_token', '$photo_path', user_id FROM USERS WHERE login='$login'");

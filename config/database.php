@@ -33,5 +33,9 @@
                 return (1);
             return (0);
         }
+        public function db_import($file_path){
+            $file = file_get_contents("./database_dump/$file_path");
+            $this->db->exec($file);
+        }
     }
 ?>

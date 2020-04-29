@@ -1,2 +1,4 @@
-<h2>404 - Page not Found</h2>
-<a href="/">Back to Main Page</a>
+<div id="main_site_block">
+    <div id="system_message">404 - Page not Found</div>
+    <a href="/" id="welcome_block">Back to Main Page</a>
+</div>

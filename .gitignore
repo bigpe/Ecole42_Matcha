@@ -1,4 +1,5 @@
 /images/user_photo
-/config/config.php
+/config/config_1.php
 /images/.DS_Store
 /images/placeholder.png
+/vendor

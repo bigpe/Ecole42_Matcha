@@ -46,7 +46,7 @@
         <div id="push"></div>
     </div>
     <footer>
-
+        <a href="/Politics" style="text-decoration: none"><i class="fas fa-user-shield"></i></a>
     </footer>
     </body>
 <script type="text/javascript">

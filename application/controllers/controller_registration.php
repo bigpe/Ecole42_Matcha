@@ -56,9 +56,9 @@ class Controller_Registration extends Controller{
             if ($this->check_post_arguments_exists(array("token", "email", "login", "password", "password_confirm"))) {
                 $token = $_POST['token'];
                 $email = $_POST['email'];
-                $login = $_POST['login'];
-                $password = md5($_POST['password']);
-                $password_confirm = md5($_POST['password_confirm']);
+                $login = quotemeta(htmlspecialchars($_POST['login'], ENT_QUOTES));
+                $password = md5(quotemeta(htmlspecialchars($_POST['password'], ENT_QUOTES)));
+                $password_confirm = md5(quotemeta(htmlspecialchars($_POST['password_confirm'], ENT_QUOTES)));;
                 $password_len = strlen($_POST['password']);
                 $error_id = $this->model->sign_up($token, $email, $login, $password, $password_confirm, $password_len);
                 if (!$error_id){ #Success

@@ -41,8 +41,6 @@ class model_first_login extends Model{
         $db = new database();
         $photos = json_decode($photos, true);
         $user_id = $db->db_read("SELECT user_id FROM USERS WHERE login='$login'");
-        if(!file_exists("./images/user_photo"))
-            mkdir("./images/user_photo");
         foreach($photos as $photo){
             $photo_name = md5($photo['image_token']);
             $photo_token = $photo['image_token'];

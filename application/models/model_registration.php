@@ -5,7 +5,7 @@ class Model_Registration extends Model{
         $server_url = $_SERVER['HTTP_HOST'];
         $token = $this->create_token($email);
         $text = "<p>Registration Confirm</p>
-                    <a href='http://$server_url/activate/verify_sign_up/?token=$token'>Click to Complete Registration</a>";
+                    <a href='https://$server_url/activate/verify_sign_up/?token=$token'>Click to Complete Registration</a>";
         $message = parent::create_message($text);
         if(!$this->check_email($email))
             return($this->error_id = 3); #Error_code 3 - Mail is invalid
@@ -117,7 +117,7 @@ class Model_Registration extends Model{
         return (1);
     }
     function check_login_len($login){
-        if(strlen($login) < 4)
+        if(strlen($login) < 4 && strlen($login) > 12)
             return (0);
         return (1);
     }

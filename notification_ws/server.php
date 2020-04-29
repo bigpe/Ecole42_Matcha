@@ -1,15 +1,18 @@
 <?php
 ob_implicit_flush();
 require_once('../config/database.php');
+$ini = include('../config/config.php');
 $errstr = null;
 $errno = null;
 $context = stream_context_create();
+$ip = $ini['ip_ws'];
+var_dump($ip);
 
 stream_context_set_option($context, 'ssl', 'local_cert', '/etc/ssl/key.pem');
 stream_context_set_option($context, 'ssl', 'passphrase', '');
 stream_context_set_option($context, 'ssl', 'allow_self_signed', true);
 stream_context_set_option($context, 'ssl', 'verify_peer', false);
-$socket = stream_socket_server("ssl://192.168.0.191:6969", $errno, $errstr, STREAM_SERVER_BIND|STREAM_SERVER_LISTEN, $context);
+$socket = stream_socket_server("ssl://$ip:6969", $errno, $errstr, STREAM_SERVER_BIND|STREAM_SERVER_LISTEN, $context);
 if (!$socket) {
     echo ("socket unavailable<br />");
     die($errstr . "(" .$errno. ")\n");

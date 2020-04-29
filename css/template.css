@@ -59,7 +59,7 @@ body{
     text-align: center;
 }
 #debug_block{
-    /*display: none;*/
+    display: none;
 }
 #address{
     background: transparent;
@@ -86,6 +86,14 @@ footer, #push{
 footer{
     background: indianred;
     text-align: center;
+}
+footer a{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    color: #e8e8e8;
 }
 .notification{
     display: block;
@@ -167,7 +175,7 @@ details[open] summary ~ *{
     animation-name: showed_up_anim;
     animation-duration: 1s;
 }
-#auth_login, #auth_password, #auth_submit{
+#auth_login, #auth_password, #auth_submit, .auth_submit{
     min-width: 300px;
     padding: 10px;
     border-radius: 10px;
@@ -178,7 +186,7 @@ details[open] summary ~ *{
     background: white;
     -webkit-appearance: none;
 }
-#auth_submit{
+#auth_submit, .auth_submit{
     background: #5ccd6e;
     color: white;
     cursor: pointer;
@@ -210,4 +218,5 @@ details[open] summary ~ *{
     padding: 10px;
     border: 2px solid white;
     border-radius: 10px;
+    vertical-align: middle;
 }

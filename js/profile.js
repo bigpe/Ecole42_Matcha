@@ -233,6 +233,7 @@ function add_photo() {
     main_photo = 0;
     let file_input = document.createElement("input");
     file_input.type = "file";
+    file_input.setAttribute("accept", "image/*");
     file_input.setAttribute("multiple", "multiple");
     file_input.click();
     file_input.onchange = function () {

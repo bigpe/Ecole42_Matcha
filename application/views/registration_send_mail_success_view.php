@@ -1,1 +1,3 @@
-<h2>Activation link send, check your mail</h2>
+<div id="main_site_block">
+    <div id="system_message">Activation link send, check your mail</div>
+</div>

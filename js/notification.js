@@ -11,7 +11,7 @@ let get = window
             return a;}, {});
 let cookie = document.cookie.split('=', 2)[1];;
 let address = window.location.pathname;
-let socket = new WebSocket("wss://matcha.fun:6969");
+let socket = new WebSocket("wss://"+domain+":6969");
 let messageJSON = {};
 socket.onopen = function () {
      if (get[0] === "login" && address === "/profile/view/" && get[1] !== "") {
@@ -46,7 +46,6 @@ socket.onmessage = function (event) {
                     data.user_from + "</a>\nmassage: " +
                     data.message);
                 appendCountNewMessage();
-                soundClick();
                 }
             }}
     if (data.type === 2 || data.type === 3 || data.type === 1 || data.type === 4)
@@ -54,15 +53,8 @@ socket.onmessage = function (event) {
             if (data.user_to[user]['session_name'] === cookie ){
                 appendNotifications(data.message + " <a href='/profile/view/?login=" + data.user_from + "'>"+data.user_from+"</a>");
                 appendCountNotifications();
-                soundClick();
             }
 };
-
-function soundClick() {
-    let audio = new Audio();
-    audio.src = '/../03087.mp3';
-    audio.autoplay = true;
-}
 
 function appendNotifications(data) {
     let notificationBlock = document.getElementById("notification_block");

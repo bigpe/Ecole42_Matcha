@@ -17,8 +17,8 @@ class Controller_Auth extends Controller
     function action_sign_in()
     {
         if ($this->check_post_arguments_exists(array("login", "password"))) {
-            $login = $_POST['login'];
-            $password = md5($_POST['password']);
+            $login = quotemeta(htmlspecialchars($_POST['login'], ENT_QUOTES));
+            $password = md5(quotemeta(htmlspecialchars($_POST['password'], ENT_QUOTES)));
             $error_code = $this->model->sign_in($login, $password);
             if (!$error_code) #Success
                 header("Location: /");
@@ -62,6 +62,7 @@ class Controller_Auth extends Controller
             if ($login)
             {
                 $_SESSION['login'] = $login;
+                $this->model->save_session($login);
                 header("Location: /");
             }
             else{
