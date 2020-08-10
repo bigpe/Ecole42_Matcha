@@ -1,0 +1,115 @@
+#first_login_block{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#geo_block, #full_name_block, #age_block{
+    margin: auto;
+}
+#geo_block i, #full_name_block i, #age_block i{
+    position: absolute;
+    margin-top: 15px;
+    font-size: 1.5em;
+}
+.highlight{
+    animation-name: highlight;
+    animation-duration: 2s;
+    border-radius: 10px;
+}
+@keyframes highlight {
+    50%{background: rgba(255, 0, 0, 0.1)}
+    100%{background: rgba(255, 0, 0, 0);}
+}
+.tags_labels, .sex_label, .sex_preference_label{
+    display: inline-table;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 2em;
+}
+.tags_labels{
+    width: 50px;
+    font-size: 1em;
+}
+.tags, .sex, .sex_preference, #user_photo_input, .user_main_photo{
+    width: 1px;
+    margin-right: -5px;
+    opacity: 0;
+}
+.tags:checked + .tags_labels, .sex:checked + .sex_label, .sex_preference:checked + .sex_preference_label{
+    background: antiquewhite;
+    transition: background .5s cubic-bezier(.18,.89,.32,1.28);
+}
+
+.user_main_photo:checked + .user_photo{
+    transition: opacity .6s cubic-bezier(.18,.89,.32,1.28);
+    opacity: .6;
+}
+.user_photo{
+    text-align: center;
+    width: 200px;
+    padding: 10px;
+    border-radius: 20px;
+}
+textarea{
+    width: 80%;
+    height: 150px;
+    padding: 15px;
+    border: 3px dashed black;
+    resize: none;
+    outline: none;
+    text-align: center;
+    border-radius: 30px;
+}
+#user_photo_tips{
+    padding: 10px;
+    display: none;
+}
+#sex_block, #sex_preference_block, #info_block, #load_tags_block, #user_photo_button_block, #submit_block{
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+#user_photo_block{
+    padding: 5px;
+}
+#user_photo_button{
+    background: none;
+    font-size: 3em;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    border: 2px dashed black;
+}
+#datepicker, #full_name{
+    height: 50px;
+    border: none;
+    border-bottom: 3px dashed black;
+    text-align: center;
+    font-size: 1.2em;
+    background: transparent;
+}
+#age_block, #mandatory_form, #info_block, #user_photo_block, #full_name_block, #geo_block, summary{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+summary{
+    outline: none;
+}
+#system_message{
+    max-width: 500px;
+}
+#geo_detect_button{
+    position: absolute;
+    margin-left: 115px;
+    margin-top: -65px;
+}
+#geo_detect_button i{
+    background: #c8c8c8;
+    border-radius: 10px;
+    padding: 5px;
+}

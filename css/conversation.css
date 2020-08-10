@@ -1,0 +1,45 @@
+#people_block{
+    display: table;
+    width: 100%;
+    margin: auto;
+}
+#main_site_block a{
+    color: black;
+    text-decoration: none;
+}
+.people{
+    background: #8080800a;
+    border-radius: 10px;
+    margin: 10px 22px 10px 22px;
+    animation-name: showed_up_anim;
+    animation-duration: 1s;
+}
+.user_photo{
+    border-radius: 100%;
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    margin: 25px;
+}
+.name{
+    position: absolute;
+    margin-top: 95px;
+    width: 132px;
+    height: 25px;
+    left: 12px;
+}
+.name i{
+    font-size: .5em;
+}
+.message{
+    border-radius: 15px;
+    display: grid;
+    align-items: center;
+    height: 120px;
+}
+.message a{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

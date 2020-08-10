@@ -1,0 +1,60 @@
+#people_block, #reported_people_block{
+    display: table;
+    min-height: calc(100vh - 69px - 100px - 60px);
+    align-items: center;
+    align-content: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin: auto;
+}
+.people{
+    height: 40px;
+    min-width: 200px;
+    display: inline-table;
+    background: gainsboro;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+}
+.photo{
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+.people_name, .unblock_user{
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 20px;
+}
+.people_name a{
+    color: black;
+    text-decoration: none;
+}
+.unblock_user{
+    color: crimson;
+}
+#remove_user{
+    animation-name: remove_user_anim;
+    animation-duration: .5s;
+}
+
+@keyframes remove_user_anim {
+    from{opacity: 1}
+    to{opacity: 0}
+}
+.remove, .hijack{
+    padding: 5px;
+    background: snow;
+    border-radius: 8px;
+    display: table-cell;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.remove{
+    color: crimson;
+}
+.hijack{
+    color: #038e03;
+}
